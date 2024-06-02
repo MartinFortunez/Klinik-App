@@ -4,6 +4,19 @@ import { Modal, Form, Button, Row, Col } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 import * as yup from "yup";
 
+const validationSchema = yup.object().shape({
+  NIK: yup.string().required("NIK wajib diisi"),
+  nama: yup.string().required("nama wajib diisi"),
+  alamat: yup.string().required("alamat wajib diisi"),
+  nohp: yup.number().required("no hp wajib diisi"),
+  jeniskelamin: yup.string().required("jenis kelamin wajib diisi"),
+  tanggallahir: yup.string().required("tanggal lahir wajib diisi"),
+  golongandarah: yup.string().required("golongan darah wajib diisi"),
+  spesialis: yup.string().required("spesialis wajib diisi"),
+  dokter: yup.string().required("dokter wajib diisi"),
+  sesi: yup.string().required("sesi wajib diisi"),
+});
+
 function FormConsul(props) {
   return (
     <Modal
@@ -14,46 +27,54 @@ function FormConsul(props) {
     >
       <Modal.Header className="border-0" closeButton>
         <Modal.Title id="contained-modal-title-vcenter">
-          Modal heading
+          Pengajuan Konsultasi
         </Modal.Title>
       </Modal.Header>
       <Modal.Body>
         <Formik
-        // validationSchema={validationSchema}
-        // onSubmit={console.log("submit")}
-        // initialValues={{
-        //   username: "",
-        //   password: "",
-        // }}
+        validationSchema={validationSchema}
+        onSubmit={console.log("submit")}
+        initialValues={{
+          NIK: "",
+          nama: "",
+          alamat: "",
+          nohp: "",
+          jeniskelamin: "",
+          tanggallahir: "",
+          golongandarah: "",
+          spesialis: "",
+          dokter: "",
+          sesi: "",
+        }}
         >
           {({ handleSubmit, values, touched, errors, handleChange }) => (
             <Form
               noValidate
-              onSubmit={handleSubmit}
+              // onSubmit={handleSubmit}
               className="d-flex flex-column gap-2"
             >
               <Form.Group>
-                <Form.Group controlId="validationUsername" className="mb-3">
+                <Form.Group controlId="validationNIK" className="mb-3">
                   <Form.Label>NIK</Form.Label>
                   <Form.Control
-                    name="username"
+                    name="NIK"
                     type="text"
-                    placeholder="Username"
-                    // value={values.username}
-                    // onChange={handleChange}
-                    // isValid={touched.username && !errors.username}
-                    // isInvalid={touched.username && !!errors.username}
+                    placeholder="NIK"
+                    value={values.NIK}
+                    onChange={handleChange}
+                    isValid={touched.NIK && !errors.NIK}
+                    isInvalid={touched.NIK && !!errors.NIK}
                   />
                   <Form.Control.Feedback type="invalid">
-                    {/* {errors.username} */}
+                    {errors.NIK}
                   </Form.Control.Feedback>
                 </Form.Group>
-                <Form.Group controlId="validationUsername" className="mb-3">
+                <Form.Group controlId="validationNama" className="mb-3">
                   <Form.Label>Nama</Form.Label>
                   <Form.Control
-                    name="username"
+                    name="nama"
                     type="text"
-                    placeholder="Username"
+                    placeholder="nama"
                     // value={values.username}
                     // onChange={handleChange}
                     // isValid={touched.username && !errors.username}
@@ -63,12 +84,14 @@ function FormConsul(props) {
                     {/* {errors.username} */}
                   </Form.Control.Feedback>
                 </Form.Group>
-                <Form.Group controlId="validationUsername" className="mb-3">
+                <Row>
+                <Form.Group as={Col}
+                controlId="validationAlamat" className="mb-3">
                   <Form.Label>Alamat</Form.Label>
                   <Form.Control
-                    name="username"
+                    name="alamat"
                     type="text"
-                    placeholder="Username"
+                    placeholder="masukkan alamat"
                     // value={values.username}
                     // onChange={handleChange}
                     // isValid={touched.username && !errors.username}
@@ -78,57 +101,14 @@ function FormConsul(props) {
                     {/* {errors.username} */}
                   </Form.Control.Feedback>
                 </Form.Group>
-                <Form.Group controlId="validationUsername" className="mb-3">
-                  <Form.Label>Jenis Kelamin</Form.Label>
-                  <Form.Control
-                    name="username"
-                    type="text"
-                    placeholder="Username"
-                    // value={values.username}
-                    // onChange={handleChange}
-                    // isValid={touched.username && !errors.username}
-                    // isInvalid={touched.username && !!errors.username}
-                  />
-                  <Form.Control.Feedback type="invalid">
-                    {/* {errors.username} */}
-                  </Form.Control.Feedback>
-                </Form.Group>
-                <Form.Group controlId="validationUsername" className="mb-3">
-                  <Form.Label>Tanggal Lahir</Form.Label>
-                  <Form.Control
-                    name="username"
-                    type="text"
-                    placeholder="Username"
-                    // value={values.username}
-                    // onChange={handleChange}
-                    // isValid={touched.username && !errors.username}
-                    // isInvalid={touched.username && !!errors.username}
-                  />
-                  <Form.Control.Feedback type="invalid">
-                    {/* {errors.username} */}
-                  </Form.Control.Feedback>
-                </Form.Group>
-                <Form.Group controlId="validationUsername" className="mb-3">
-                  <Form.Label>Golongan Darah</Form.Label>
-                  <Form.Control
-                    name="username"
-                    type="text"
-                    placeholder="Username"
-                    // value={values.username}
-                    // onChange={handleChange}
-                    // isValid={touched.username && !errors.username}
-                    // isInvalid={touched.username && !!errors.username}
-                  />
-                  <Form.Control.Feedback type="invalid">
-                    {/* {errors.username} */}
-                  </Form.Control.Feedback>
-                </Form.Group>
-                <Form.Group controlId="validationUsername" className="mb-3">
+                <Form.Group as={Col}
+                controlId="validationNohp" 
+                className="mb-3">
                   <Form.Label>No Hp / WhatsApp</Form.Label>
                   <Form.Control
-                    name="username"
-                    type="text"
-                    placeholder="Username"
+                    name="nohp"
+                    type="number"
+                    placeholder="masukkan no hp"
                     // value={values.username}
                     // onChange={handleChange}
                     // isValid={touched.username && !errors.username}
@@ -138,13 +118,60 @@ function FormConsul(props) {
                     {/* {errors.username} */}
                   </Form.Control.Feedback>
                 </Form.Group>
+                </Row>
+                <Row>
+                <Form.Group as={Col}
+                controlId="validationJeniskelamin" className="mb-3">
+                  <Form.Label>Jenis Kelamin</Form.Label>
+                  <Form.Select aria-label="Default select example">
+                      <option>Pilih Jenis Kelamin</option>
+                      <option value="1">Laki-Laki</option>
+                      <option value="2">Perempuan</option>
+                    </Form.Select>
+                  <Form.Control.Feedback type="invalid">
+                    {/* {errors.username} */}
+                  </Form.Control.Feedback>
+                </Form.Group>
+                <Form.Group as={Col}
+                controlId="validationTanggallahir" className="mb-3">
+                  <Form.Label>Tanggal Lahir</Form.Label>
+                  <Form.Control
+                    name="tanggallahir"
+                    type="date"
+                    // value={values.username}
+                    // onChange={handleChange}
+                    // isValid={touched.username && !errors.username}
+                    // isInvalid={touched.username && !!errors.username}
+                  />
+                  <Form.Control.Feedback type="invalid">
+                    {/* {errors.username} */}
+                  </Form.Control.Feedback>
+                </Form.Group>
+                <Form.Group as={Col}
+                controlId="validationGolongandarah" 
+                className="mb-3">
+                  <Form.Label>Golongan Darah</Form.Label>
+                  <Form.Control
+                    name="golongandarah"
+                    type="text"
+                    placeholder="masukkan golongan darah"
+                    // value={values.username}
+                    // onChange={handleChange}
+                    // isValid={touched.username && !errors.username}
+                    // isInvalid={touched.username && !!errors.username}
+                  />
+                  <Form.Control.Feedback type="invalid">
+                    {/* {errors.username} */}
+                  </Form.Control.Feedback>
+                </Form.Group>
+                </Row>
               </Form.Group>
               <Form.Group>
                 <Form.Label className="fw-semibold">Pilih Dokter</Form.Label>
                 <Row>
                   <Form.Group
                     as={Col}
-                    controlId="validationUsername"
+                    controlId="validationSpesialis"
                     className="mb-3"
                   >
                     <Form.Label>Spesialis</Form.Label>
@@ -157,7 +184,7 @@ function FormConsul(props) {
                   </Form.Group>
                   <Form.Group
                     as={Col}
-                    controlId="validationUsername"
+                    controlId="validationDokter"
                     className="mb-3"
                   >
                     <Form.Label>Dokter</Form.Label>
@@ -171,7 +198,7 @@ function FormConsul(props) {
 
                   <Form.Group
                     as={Col}
-                    controlId="validationUsername"
+                    controlId="validationSesi"
                     className="mb-3"
                   >
                     <Form.Label>Sesi</Form.Label>
@@ -190,7 +217,7 @@ function FormConsul(props) {
                     variant="secondary"
                     type="button"
                     className="w-100 bg-transparent border-0"
-                    onClick={props.onHide}
+                    // onClick={props.onHide}
                   >
                     Batal
                   </Button>
@@ -202,7 +229,7 @@ function FormConsul(props) {
                     className="w-100 text-light"
                     // onClick={handleLogin}
                   >
-                    Login
+                    Kirim Konsultasi
                   </Button>
                 </Col>
               </Form.Group>
