@@ -1,4 +1,6 @@
 import React from "react";
+import FeedBack from "../common/FeedBack";
+import Footer from "../common/Footer";
 import Doctor from "../common/Doctor";
 import Navigation from "../common/landingpage/Navigation";
 import Hero from "../common/landingpage/Hero";
@@ -14,6 +16,8 @@ const LandingPage = () => {
       <Superiority />
       <About />
     <Doctor />
+          <FeedBack />
+      <Footer />
     </div>
   );
 };
