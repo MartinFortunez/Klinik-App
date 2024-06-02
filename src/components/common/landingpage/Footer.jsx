@@ -2,7 +2,7 @@ import React from "react";
 import { Container, Row, Col } from "react-bootstrap";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { FaInstagram, FaWhatsapp, FaEnvelope } from 'react-icons/fa';
-import '../sass/StyledFooter.scss';
+import '../../sass/StyledFooter.scss';
 
 const Footer = () => {
   return (
