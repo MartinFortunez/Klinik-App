@@ -32,25 +32,25 @@ function FormConsul(props) {
       </Modal.Header>
       <Modal.Body>
         <Formik
-        validationSchema={validationSchema}
-        onSubmit={console.log("submit")}
-        initialValues={{
-          NIK: "",
-          nama: "",
-          alamat: "",
-          nohp: "",
-          jeniskelamin: "",
-          tanggallahir: "",
-          golongandarah: "",
-          spesialis: "",
-          dokter: "",
-          sesi: "",
-        }}
+          validationSchema={validationSchema}
+          onSubmit={console.log("submit")}
+          initialValues={{
+            NIK: "",
+            nama: "",
+            alamat: "",
+            nohp: "",
+            jeniskelamin: "Pilih Jenis Kelamin",
+            tanggallahir: "",
+            golongandarah: "",
+            spesialis: "",
+            dokter: "",
+            sesi: "",
+          }}
         >
           {({ handleSubmit, values, touched, errors, handleChange }) => (
             <Form
               noValidate
-              // onSubmit={handleSubmit}
+              onSubmit={handleSubmit}
               className="d-flex flex-column gap-2"
             >
               <Form.Group>
@@ -75,95 +75,114 @@ function FormConsul(props) {
                     name="nama"
                     type="text"
                     placeholder="nama"
-                    // value={values.username}
-                    // onChange={handleChange}
-                    // isValid={touched.username && !errors.username}
-                    // isInvalid={touched.username && !!errors.username}
+                    value={values.nama}
+                    onChange={handleChange}
+                    isValid={touched.nama && !errors.nama}
+                    isInvalid={touched.nama && !!errors.nama}
                   />
                   <Form.Control.Feedback type="invalid">
-                    {/* {errors.username} */}
+                    {errors.nama}
                   </Form.Control.Feedback>
                 </Form.Group>
                 <Row>
-                <Form.Group as={Col}
-                controlId="validationAlamat" className="mb-3">
-                  <Form.Label>Alamat</Form.Label>
-                  <Form.Control
-                    name="alamat"
-                    type="text"
-                    placeholder="masukkan alamat"
-                    // value={values.username}
-                    // onChange={handleChange}
-                    // isValid={touched.username && !errors.username}
-                    // isInvalid={touched.username && !!errors.username}
-                  />
-                  <Form.Control.Feedback type="invalid">
-                    {/* {errors.username} */}
-                  </Form.Control.Feedback>
-                </Form.Group>
-                <Form.Group as={Col}
-                controlId="validationNohp" 
-                className="mb-3">
-                  <Form.Label>No Hp / WhatsApp</Form.Label>
-                  <Form.Control
-                    name="nohp"
-                    type="number"
-                    placeholder="masukkan no hp"
-                    // value={values.username}
-                    // onChange={handleChange}
-                    // isValid={touched.username && !errors.username}
-                    // isInvalid={touched.username && !!errors.username}
-                  />
-                  <Form.Control.Feedback type="invalid">
-                    {/* {errors.username} */}
-                  </Form.Control.Feedback>
-                </Form.Group>
+                  <Form.Group
+                    as={Col}
+                    controlId="validationAlamat"
+                    className="mb-3"
+                  >
+                    <Form.Label>Alamat</Form.Label>
+                    <Form.Control
+                      name="alamat"
+                      type="text"
+                      placeholder="masukkan alamat"
+                      value={values.alamat}
+                      onChange={handleChange}
+                      isValid={touched.alamat && !errors.alamat}
+                      isInvalid={touched.alamat && !!errors.alamat}
+                    />
+                    <Form.Control.Feedback type="invalid">
+                      {errors.alamat}
+                    </Form.Control.Feedback>
+                  </Form.Group>
+                  <Form.Group
+                    as={Col}
+                    controlId="validationNohp"
+                    className="mb-3"
+                  >
+                    <Form.Label>No Hp / WhatsApp</Form.Label>
+                    <Form.Control
+                      name="nohp"
+                      type="number"
+                      placeholder="masukkan no hp"
+                      value={values.nohp}
+                      onChange={handleChange}
+                      isValid={touched.nohp && !errors.nohp}
+                      isInvalid={touched.nohp && !!errors.nohp}
+                    />
+                    <Form.Control.Feedback type="invalid">
+                      {errors.nohp}
+                    </Form.Control.Feedback>
+                  </Form.Group>
                 </Row>
                 <Row>
-                <Form.Group as={Col}
-                controlId="validationJeniskelamin" className="mb-3">
-                  <Form.Label>Jenis Kelamin</Form.Label>
-                  <Form.Select aria-label="Default select example">
+                  <Form.Group
+                    as={Col}
+                    controlId="validationJeniskelamin"
+                    className="mb-3"
+                  >
+                    <Form.Label>Jenis Kelamin</Form.Label>
+                    <Form.Select
+                      aria-label="Default select example"
+                      onChange={handleChange}
+
+                    >
                       <option>Pilih Jenis Kelamin</option>
                       <option value="1">Laki-Laki</option>
                       <option value="2">Perempuan</option>
                     </Form.Select>
-                  <Form.Control.Feedback type="invalid">
-                    {/* {errors.username} */}
-                  </Form.Control.Feedback>
-                </Form.Group>
-                <Form.Group as={Col}
-                controlId="validationTanggallahir" className="mb-3">
-                  <Form.Label>Tanggal Lahir</Form.Label>
-                  <Form.Control
-                    name="tanggallahir"
-                    type="date"
-                    // value={values.username}
-                    // onChange={handleChange}
-                    // isValid={touched.username && !errors.username}
-                    // isInvalid={touched.username && !!errors.username}
-                  />
-                  <Form.Control.Feedback type="invalid">
-                    {/* {errors.username} */}
-                  </Form.Control.Feedback>
-                </Form.Group>
-                <Form.Group as={Col}
-                controlId="validationGolongandarah" 
-                className="mb-3">
-                  <Form.Label>Golongan Darah</Form.Label>
-                  <Form.Control
-                    name="golongandarah"
-                    type="text"
-                    placeholder="masukkan golongan darah"
-                    // value={values.username}
-                    // onChange={handleChange}
-                    // isValid={touched.username && !errors.username}
-                    // isInvalid={touched.username && !!errors.username}
-                  />
-                  <Form.Control.Feedback type="invalid">
-                    {/* {errors.username} */}
-                  </Form.Control.Feedback>
-                </Form.Group>
+                    <Form.Control.Feedback type="invalid">
+                      {errors.jeniskelamin}
+                    </Form.Control.Feedback>
+                  </Form.Group>
+                  <Form.Group
+                    as={Col}
+                    controlId="validationTanggallahir"
+                    className="mb-3"
+                  >
+                    <Form.Label>Tanggal Lahir</Form.Label>
+                    <Form.Control
+                      name="tanggallahir"
+                      type="date"
+                      value={values.tanggallahir}
+                      onChange={handleChange}
+                      // isValid={touched.tanggallahir && !errors.tanggallahir}
+                      isInvalid={touched.tanggallahir && !!errors.tanggallahir}
+                    />
+                    <Form.Control.Feedback type="invalid">
+                      {errors.tanggallahir}
+                    </Form.Control.Feedback>
+                  </Form.Group>
+                  <Form.Group
+                    as={Col}
+                    controlId="validationGolongandarah"
+                    className="mb-3"
+                  >
+                    <Form.Label>Golongan Darah</Form.Label>
+                    <Form.Control
+                      name="golongandarah"
+                      type="text"
+                      placeholder="masukkan golongan darah"
+                      value={values.golongandarah}
+                      onChange={handleChange}
+                      isValid={touched.golongandarah && !errors.golongandarah}
+                      isInvalid={
+                        touched.golongandarah && !!errors.golongandarah
+                      }
+                    />
+                    <Form.Control.Feedback type="invalid">
+                      {errors.golongandarah}
+                    </Form.Control.Feedback>
+                  </Form.Group>
                 </Row>
               </Form.Group>
               <Form.Group>
@@ -175,12 +194,18 @@ function FormConsul(props) {
                     className="mb-3"
                   >
                     <Form.Label>Spesialis</Form.Label>
-                    <Form.Select aria-label="Default select example">
+                    <Form.Select
+                      aria-label="Default select example"
+                      onChange={handleChange}
+                    >
                       <option>Pilih Spesialis</option>
                       <option value="1">Spesialis 1</option>
                       <option value="2">Spesialis 2</option>
                       <option value="3">Spesialis 3</option>
                     </Form.Select>
+                    <Form.Control.Feedback type="invalid">
+                      {errors.spesialis}
+                    </Form.Control.Feedback>
                   </Form.Group>
                   <Form.Group
                     as={Col}
@@ -188,12 +213,18 @@ function FormConsul(props) {
                     className="mb-3"
                   >
                     <Form.Label>Dokter</Form.Label>
-                    <Form.Select aria-label="Default select example">
+                    <Form.Select
+                      aria-label="Default select example"
+                      onChange={handleChange}
+                    >
                       <option>Pilih Dokter</option>
                       <option value="1">Dokter 1</option>
                       <option value="2">Dokter 2</option>
                       <option value="3">Dokter 3</option>
                     </Form.Select>
+                    <Form.Control.Feedback type="invalid">
+                      {errors.dokter}
+                    </Form.Control.Feedback>
                   </Form.Group>
 
                   <Form.Group
@@ -202,12 +233,18 @@ function FormConsul(props) {
                     className="mb-3"
                   >
                     <Form.Label>Sesi</Form.Label>
-                    <Form.Select aria-label="Default select example">
+                    <Form.Select
+                      aria-label="Default select example"
+                      onChange={handleChange}
+                    >
                       <option>Pilih Sesi</option>
                       <option value="1">Sesi 1</option>
                       <option value="2">Sesi 2</option>
                       <option value="3">Sesi 3</option>
                     </Form.Select>
+                    <Form.Control.Feedback type="invalid">
+                      {errors.sesi}
+                    </Form.Control.Feedback>
                   </Form.Group>
                 </Row>
               </Form.Group>
