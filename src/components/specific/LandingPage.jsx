@@ -1,10 +1,10 @@
 import React from "react";
-import Navigation from "../common/Navigation";
+import Doctor from "../common/Doctor";
 
 const LandingPage = () => {
   return (
     <div>
-      <Navigation />
+      <Doctor />
     </div>
   );
 };
