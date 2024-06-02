@@ -3,7 +3,7 @@ import PropTypes from "prop-types";
 import { Card, Col, Row } from "react-bootstrap";
 import { BiSolidQuoteLeft } from "react-icons/bi";
 import { BsStarFill } from "react-icons/bs";
-import "../sass/StyledFeedBack.scss";
+import "../../../sass/StyledFeedBack.scss";
 
 const CardFeedBack = ({ feedback, className }) => {
   const { ulasan, nama, role, stars } = feedback;

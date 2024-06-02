@@ -1,5 +1,5 @@
 import React from "react";
-import "../sass/StyledFeedBack.scss";
+import "../../sass/StyledFeedBack.scss";
 import { GrPrevious } from "react-icons/gr";
 import { GrNext } from "react-icons/gr";
 
