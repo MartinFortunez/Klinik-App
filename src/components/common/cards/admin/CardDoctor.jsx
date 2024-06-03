@@ -27,35 +27,31 @@ const CardDoctor = () => {
   return (
     <Col>
       <Card className="border-0 d-flex flex-column">
-        <div className="d-flex flex-row align-items-center">
-        <Card.Img
-          variant="left"
-          src="holder.js/100px100"
-          className="custom-card-img"
-          style={{ width: '100px', height: '100px', objectFit: 'cover' }}
-        />
-        <Card.Body className="d-flex flex-column gap-3">
-          <Row>
+        <Card.Body>
+          <Row className="align-items-center">
+            <Col>
+              <Card.Img
+                variant="left"
+                src="holder.js/100px100"
+                className="custom-card-img"
+                style={{ width: "100px", height: "100px", objectFit: "cover" }}
+              />
+            </Col>
             <Col>
               <Card.Subtitle className="opacity-50">Nama</Card.Subtitle>
               <Card.Text>Mimi Peri</Card.Text>
             </Col>
             <Col className="text-center">
-              <Card.Subtitle className="opacity-50">
-                Id Dokter
-              </Card.Subtitle>
+              <Card.Subtitle className="opacity-50">Id Dokter</Card.Subtitle>
               <Card.Text>658264657973</Card.Text>
             </Col>
             <Col className="text-end">
-              <Card.Subtitle className="opacity-50">
-                Spesialis
-              </Card.Subtitle>
+              <Card.Subtitle className="opacity-50">Spesialis</Card.Subtitle>
               <Card.Text>Jantung</Card.Text>
             </Col>
           </Row>
         </Card.Body>
-        </div>
-        <Card.Footer className="bg-transparent d-flex justify-content-end gap-2 mt-auto">
+        <Card.Footer className="bg-transparent d-flex justify-content-end gap-2">
           <Button variant="outline-danger" onClick={handleDeleteShow}>
             Hapus
           </Button>

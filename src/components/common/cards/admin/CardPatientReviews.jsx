@@ -2,10 +2,15 @@ import React, { useState } from "react";
 import { Button, Card, Col, Row } from "react-bootstrap";
 import Reject from "../../admin/patientReviews/Reject";
 import Accept from "../../admin/patientReviews/Accept";
+import { BsStarFill } from "react-icons/bs";
+import PropTypes from "prop-types";
 
 const CardPatientReviews = () => {
   const [showRejectModal, setShowRejectModal] = useState(false);
   const [showAcceptModal, setShowAcceptModal] = useState(false);
+
+  const yellowStars = Math.floor(5);
+  const whiteStars = 5 - yellowStars;
 
   const handleRejectClose = () => setShowRejectModal(false);
   const handleRejectShow = () => setShowRejectModal(true);
@@ -23,6 +28,7 @@ const CardPatientReviews = () => {
     // Lakukan aksi simpan di sini
     handleAcceptClose();
   };
+
   return (
     <Col>
       <Card>
@@ -48,7 +54,29 @@ const CardPatientReviews = () => {
           <Row>
             <Col>
               <Card.Subtitle className="opacity-50">Penilaian</Card.Subtitle>
-              <Card.Text>Lorem ipsum dolor sit amet consectetur. Eu diam amet varius vitae tortor id eleifend ultrices potenti. At aliquam id egestas.</Card.Text>
+              <Card.Text>
+                Lorem ipsum dolor sit amet consectetur. Eu diam amet varius
+                vitae tortor id eleifend ultrices potenti. At aliquam id
+                egestas.
+              </Card.Text>
+            </Col>
+          </Row>
+          <Row>
+            <Col xs={3}>
+              <Card.Subtitle className="opacity-50">Rating</Card.Subtitle>
+              <div className="stars-container">
+                <div className="stars">
+                  {[...Array(yellowStars)].map((_, index) => (
+                    <BsStarFill key={index} className="star yellow-star" />
+                  ))}
+                  {[...Array(whiteStars)].map((_, index) => (
+                    <BsStarFill
+                      key={index + yellowStars}
+                      className="star white-star"
+                    />
+                  ))}
+                </div>
+              </div>
             </Col>
           </Row>
         </Card.Body>
