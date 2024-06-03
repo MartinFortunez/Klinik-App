@@ -11,8 +11,6 @@ const Facilities = () => {
 
   const handleAdd = () => {
     // Lakukan aksi delete di sini
-    console.log("Item deleted");
-    handleAddeClose();
   };
 
   return (

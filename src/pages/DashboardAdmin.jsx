@@ -12,8 +12,8 @@ const DashboardAdmin = () => {
     window.location.href = "/"; // Atau gunakan history.push('/login') jika menggunakan useHistory
   };
   return (
-    <Container fluid className="p-0 m-0">
-      <Row className="p-0 m-0 overflow-auto">
+    <Container fluid className="p-0 m-0 vh-100 g-0">
+      <Row className="p-0 m-0">
         <Col xs="auto" lg={2} id="sidebar-wrapper" className="p-0 m-0">
           <SideBar onLogout={handleLogout} />
         </Col>

@@ -1,4 +1,3 @@
-import "./App.css";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import HomePage from "./pages/HomePage";
 import DashboardAdmin from "./pages/DashboardAdmin";
@@ -10,6 +9,7 @@ import Doctor from "./components/common/admin/doctor/Doctor";
 import PatientReviews from "./components/common/admin/patientReviews/PatientReviews";
 import Facilities from "./components/common/admin/facilities/Facilities";
 import IncomingConsultation from "./components/common/admin/incomingConsultation/IncomingConsultation";
+import "normalize.css";
 
 function App() {
   return (

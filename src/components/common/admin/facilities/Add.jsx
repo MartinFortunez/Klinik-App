@@ -1,6 +1,26 @@
 import { Formik } from "formik";
 import React, { useState } from "react";
 import { Button, Col, Form, Image, Modal, Row } from "react-bootstrap";
+import * as yup from "yup";
+
+// const FILE_SIZE = 100 * 1024;
+// const SUPPORTED_FORMATS = ["image/jpg", "image/jpeg", "image/gif", "image/png"];
+
+const validationSchema = yup.object().shape({
+  imageFile: yup.mixed().required(),
+  // .test(
+  //   "fileSize",
+  //   "Ukuran file terlalu besar",
+  //   (value) => value && value.size <= FILE_SIZE
+  // )
+  // .test(
+  //   "fileFormat",
+  //   "Format file tidak didukung",
+  //   (value) => value && SUPPORTED_FORMATS.includes(value.type)
+  // ),
+  title: yup.string().required("judul wajib diisi"),
+  description: yup.string().required("deskripsi wajib diisi"),
+});
 
 const Add = ({ show, handleClose, handleAdd }) => {
   const [selectedFile, setSelectedFile] = useState(null);
@@ -27,11 +47,12 @@ const Add = ({ show, handleClose, handleAdd }) => {
       </Modal.Header>
       <Modal.Body>
         <Formik
-          // validationSchema={validationSchema}
+          validationSchema={validationSchema}
           onSubmit={console.log("submit")}
           initialValues={{
-            username: "",
-            password: "",
+            imageFile: null,
+            title: "",
+            description: "",
           }}
         >
           {({ handleSubmit, values, touched, errors, handleChange }) => (
@@ -42,8 +63,16 @@ const Add = ({ show, handleClose, handleAdd }) => {
                 </div>
               )}
               <Form.Group controlId="formFile" className="mb-3">
-                <Form.Label>Upload Gambar</Form.Label>
-                <Form.Control type="file" onChange={handleFileChange} />
+                <Form.Label>File</Form.Label>
+                <Form.Control
+                  type="file"
+                  name="file"
+                  onChange={handleChange}
+                  isInvalid={!!errors.imageFile}
+                />
+                <Form.Control.Feedback type="invalid">
+                  {errors.imageFile}
+                </Form.Control.Feedback>
               </Form.Group>
 
               <Form.Group controlId="validationUsername" className="mb-3">
