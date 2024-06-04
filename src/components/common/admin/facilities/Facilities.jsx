@@ -9,9 +9,7 @@ const Facilities = () => {
   const handleAddeClose = () => setShowAddModal(false);
   const handleAddShow = () => setShowAddModal(true);
 
-  const handleAdd = () => {
-    // Lakukan aksi delete di sini
-  };
+  const handleAdd = () => {};
 
   return (
     <Container fluid className="p-5 h-100 d-flex flex-column overflow-hidden">

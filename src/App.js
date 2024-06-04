@@ -9,10 +9,12 @@ import Doctor from "./components/common/admin/doctor/Doctor";
 import PatientReviews from "./components/common/admin/patientReviews/PatientReviews";
 import Facilities from "./components/common/admin/facilities/Facilities";
 import IncomingConsultation from "./components/common/admin/incomingConsultation/IncomingConsultation";
+import "normalize.css";
+import "./index.css";
 
 function App() {
   return (
-    <div>
+    <>
       <Router>
         <Routes>
           <Route path="/" element={<HomePage />} />
@@ -28,7 +30,7 @@ function App() {
           </Route>
         </Routes>
       </Router>
-    </div>
+    </>
   );
 }
 

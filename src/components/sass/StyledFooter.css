@@ -81,16 +81,16 @@
   border-radius: 50%;
   background-color: #d9d9d9;
   text-decoration: none;
+}
 
-  &.bg-red {
-    background-color: red;
-  }
+.SocialLink.bg-red {
+  background-color: red;
+}
 
-  &.bg-green {
-    background-color: green;
-  }
+.SocialLink.bg-green {
+  background-color: green;
+}
 
-  &.bg-blue {
-    background-color: blue;
-  }
+.SocialLink.bg-blue {
+  background-color: blue;
 }

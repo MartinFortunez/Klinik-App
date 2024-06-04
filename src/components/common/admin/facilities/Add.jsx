@@ -3,38 +3,28 @@ import React, { useState } from "react";
 import { Button, Col, Form, Image, Modal, Row } from "react-bootstrap";
 import * as yup from "yup";
 
-// const FILE_SIZE = 100 * 1024;
-// const SUPPORTED_FORMATS = ["image/jpg", "image/jpeg", "image/gif", "image/png"];
+const FILE_SIZE = 100 * 1024;
+const SUPPORTED_FORMATS = ["image/jpg", "image/jpeg", "image/gif", "image/png"];
 
 const validationSchema = yup.object().shape({
-  imageFile: yup.mixed().required(),
-  // .test(
-  //   "fileSize",
-  //   "Ukuran file terlalu besar",
-  //   (value) => value && value.size <= FILE_SIZE
-  // )
-  // .test(
-  //   "fileFormat",
-  //   "Format file tidak didukung",
-  //   (value) => value && SUPPORTED_FORMATS.includes(value.type)
-  // ),
+  imageFile: yup
+    .mixed()
+    .required()
+    .test(
+      "fileSize",
+      "Ukuran file terlalu besar",
+      (value) => value && value.size <= FILE_SIZE
+    )
+    .test(
+      "fileFormat",
+      "Format file tidak didukung",
+      (value) => value && SUPPORTED_FORMATS.includes(value.type)
+    ),
   title: yup.string().required("judul wajib diisi"),
   description: yup.string().required("deskripsi wajib diisi"),
 });
 
 const Add = ({ show, handleClose, handleAdd }) => {
-  const [selectedFile, setSelectedFile] = useState(null);
-  const [previewUrl, setPreviewUrl] = useState(null);
-
-  const handleFileChange = (event) => {
-    const file = event.target.files[0];
-    if (file) {
-      setSelectedFile(file);
-      const previewUrl = URL.createObjectURL(file);
-      setPreviewUrl(previewUrl);
-    }
-  };
-
   return (
     <Modal
       show={show}
@@ -48,26 +38,41 @@ const Add = ({ show, handleClose, handleAdd }) => {
       <Modal.Body>
         <Formik
           validationSchema={validationSchema}
-          onSubmit={console.log("submit")}
+          onSubmit={(values) => {
+            alert(JSON.stringify(values, null, 2));
+            console.log(values);
+          }}
           initialValues={{
             imageFile: null,
             title: "",
             description: "",
           }}
         >
-          {({ handleSubmit, values, touched, errors, handleChange }) => (
+          {({
+            handleSubmit,
+            values,
+            touched,
+            errors,
+            handleChange,
+            setFieldValue,
+          }) => (
             <Form noValidate onSubmit={handleSubmit}>
-              {previewUrl && (
+              {values.imageFile && (
                 <div className="mb-3">
-                  <Image src={previewUrl} thumbnail />
+                  <Image
+                    src={URL.createObjectURL(values.imageFile)}
+                    thumbnail
+                  />
                 </div>
               )}
               <Form.Group controlId="formFile" className="mb-3">
                 <Form.Label>File</Form.Label>
                 <Form.Control
                   type="file"
-                  name="file"
-                  onChange={handleChange}
+                  name="imageFile"
+                  onChange={(e) =>
+                    setFieldValue("imageFile", e.target.files[0])
+                  }
                   isInvalid={!!errors.imageFile}
                 />
                 <Form.Control.Feedback type="invalid">
@@ -119,7 +124,6 @@ const Add = ({ show, handleClose, handleAdd }) => {
                     variant="primary"
                     type="submit"
                     className="w-100 text-light"
-                    onClick={handleAdd}
                   >
                     Tambahkan
                   </Button>
