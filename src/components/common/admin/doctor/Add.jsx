@@ -1,6 +1,13 @@
 import { Formik } from "formik";
 import React, { useState } from "react";
 import { Button, Col, Form, Image, Modal, Row } from "react-bootstrap";
+import * as yup from "yup";
+
+const validationSchema = yup.object().shape({
+  nama: yup.string().required("nama wajib diisi"),
+  iddokter : yup.string().required("id dokter wajib diisi"),
+  spesialis : yup.string().required("spesialis wajib diisi"),
+});
 
 const Add = ({ show, handleClose, handleAdd }) => {
   const [selectedFile, setSelectedFile] = useState(null);
@@ -27,7 +34,7 @@ const Add = ({ show, handleClose, handleAdd }) => {
       </Modal.Header>
       <Modal.Body>
         <Formik
-          // validationSchema={validationSchema}
+          validationSchema={validationSchema}
           onSubmit={console.log("submit")}
           initialValues={{
             nama: "",
@@ -55,6 +62,7 @@ const Add = ({ show, handleClose, handleAdd }) => {
                   placeholder="Masukkan nama"
                   value={values.nama}
                   onChange={handleChange}
+                  isValid={touched.nama && !!errors.nama}
                   isInvalid={touched.nama && !!errors.nama}
                 />
                 <Form.Control.Feedback type="invalid">
@@ -69,6 +77,7 @@ const Add = ({ show, handleClose, handleAdd }) => {
                   placeholder="Masukkan id dokter"
                   value={values.iddokter}
                   onChange={handleChange}
+                  isValid={touched.iddokter && !!errors.iddokter}
                   isInvalid={touched.iddokter && !!errors.iddokter}
                 />
                 <Form.Control.Feedback type="invalid">
@@ -79,6 +88,8 @@ const Add = ({ show, handleClose, handleAdd }) => {
                 <Form.Select
                       aria-label="Default select example"
                       onChange={handleChange}
+                      isValid={touched.spesialis && !!errors.spesialis}
+                      isInvalid={touched.spesialis && !!errors.spesialis}
                     >
                       <option>Pilih Spesialis</option>
                       <option value="1">Spesialis 1</option>
@@ -106,7 +117,7 @@ const Add = ({ show, handleClose, handleAdd }) => {
                     variant="primary"
                     type="submit"
                     className="w-100 text-light"
-                    onClick={handleAdd}
+                    // onClick={handleAdd}
                   >
                     Tambahkan
                   </Button>
