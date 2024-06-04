@@ -55,6 +55,7 @@ const Add = ({ show, handleClose, handleAdd }) => {
             errors,
             handleChange,
             setFieldValue,
+            handleReset,
           }) => (
             <Form noValidate onSubmit={handleSubmit}>
               {values.imageFile && (
@@ -114,7 +115,10 @@ const Add = ({ show, handleClose, handleAdd }) => {
                     variant="secondary"
                     type="button"
                     className="w-100 bg-transparent border-0"
-                    onClick={handleClose}
+                    onClick={() => {
+                      handleReset();
+                      handleClose();
+                    }}
                   >
                     Batal
                   </Button>
