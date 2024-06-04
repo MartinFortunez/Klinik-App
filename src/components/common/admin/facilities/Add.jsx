@@ -24,7 +24,7 @@ const validationSchema = yup.object().shape({
   description: yup.string().required("deskripsi wajib diisi"),
 });
 
-const Add = ({ show, handleClose, handleAdd }) => {
+const Add = ({ show, handleClose }) => {
   return (
     <Modal
       show={show}

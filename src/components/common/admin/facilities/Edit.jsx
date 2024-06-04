@@ -1,20 +1,30 @@
 import { Formik } from "formik";
-import React, { useState } from "react";
+import React from "react";
 import { Button, Col, Form, Image, Modal, Row } from "react-bootstrap";
+import * as yup from "yup";
 
-const Edit = ({ show, handleClose, handleSave }) => {
-  const [selectedFile, setSelectedFile] = useState(null);
-  const [previewUrl, setPreviewUrl] = useState(null);
+const FILE_SIZE = 100 * 1024;
+const SUPPORTED_FORMATS = ["image/jpg", "image/jpeg", "image/gif", "image/png"];
 
-  const handleFileChange = (event) => {
-    const file = event.target.files[0];
-    if (file) {
-      setSelectedFile(file);
-      const previewUrl = URL.createObjectURL(file);
-      setPreviewUrl(previewUrl);
-    }
-  };
+const validationSchema = yup.object().shape({
+  imageFile: yup
+    .mixed()
+    .required()
+    .test(
+      "fileSize",
+      "Ukuran file terlalu besar",
+      (value) => value && value.size <= FILE_SIZE
+    )
+    .test(
+      "fileFormat",
+      "Format file tidak didukung",
+      (value) => value && SUPPORTED_FORMATS.includes(value.type)
+    ),
+  title: yup.string().required("judul wajib diisi"),
+  description: yup.string().required("deskripsi wajib diisi"),
+});
 
+const Edit = ({ show, handleClose }) => {
   return (
     <Modal
       show={show}
@@ -27,23 +37,47 @@ const Edit = ({ show, handleClose, handleSave }) => {
       </Modal.Header>
       <Modal.Body>
         <Formik
-          // validationSchema={validationSchema}
-          // onSubmit={}
+          validationSchema={validationSchema}
+          onSubmit={(values) => {
+            alert(JSON.stringify(values, null, 2));
+            console.log(values);
+          }}
           initialValues={{
-            username: "",
-            password: "",
+            imageFile: null,
+            title: "",
+            description: "",
           }}
         >
-          {({ handleSubmit, values, touched, errors, handleChange }) => (
+          {({
+            handleSubmit,
+            values,
+            touched,
+            errors,
+            handleChange,
+            setFieldValue,
+            handleReset,
+          }) => (
             <Form noValidate onSubmit={handleSubmit}>
-              {previewUrl && (
+              {values.imageFile && (
                 <div className="mb-3">
-                  <Image src={previewUrl} thumbnail />
+                  <Image
+                    src={URL.createObjectURL(values.imageFile)}
+                    thumbnail
+                  />
                 </div>
               )}
               <Form.Group controlId="formFile" className="mb-3">
                 <Form.Label>Upload Gambar</Form.Label>
-                <Form.Control type="file" onChange={handleFileChange} />
+                <Form.Control
+                  type="file"
+                  onChange={(e) =>
+                    setFieldValue("imageFile", e.target.files[0])
+                  }
+                  isInvalid={!!errors.imageFile}
+                />
+                <Form.Control.Feedback type="invalid">
+                  {errors.imageFile}
+                </Form.Control.Feedback>
               </Form.Group>
 
               <Form.Group controlId="validationUsername" className="mb-3">
@@ -90,7 +124,6 @@ const Edit = ({ show, handleClose, handleSave }) => {
                     variant="primary"
                     type="submit"
                     className="w-100 text-light"
-                    onClick={handleSave}
                   >
                     Simpan
                   </Button>
