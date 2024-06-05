@@ -1,15 +1,18 @@
-const Fasilitas = require('../models/Fasilitas');
+const Fasilitas = require("../models/Fasilitas");
 
 exports.getAllFasilitas = (req, res) => {
   Fasilitas.getAll((err, results) => {
-    if (err) throw err;
-    res.render("fasilitas/index", {facilities: results });
+    if (err) {
+      res.status(500).json({ error: "Internal server error" });
+      return;
+    }
+    res.status(200).json(results);
   });
 };
 
-exports.showAddForm = (req, res) => {
-  res.render("fasilitas/index");
-};
+// exports.showAddForm = (req, res) => {
+//   res.render("fasilitas/index");
+// };
 
 exports.addFasilitas = (req, res) => {
   const { judul, deskripsi } = req.body;
@@ -22,18 +25,18 @@ exports.addFasilitas = (req, res) => {
   });
 };
 
-exports.showEditForm = (req, res) => {
-  const { id } = req.params;
+// exports.showEditForm = (req, res) => {
+//   const { id } = req.params;
 
-  Dokter.getById(id, (err, user) => {
-    if (err) throw err;
-    res.render("fasilitas/index", { user });
-  });
-};
+//   Fasilitas.getById(id, (err, user) => {
+//     if (err) throw err;
+//     res.render("fasilitas/index", { user });
+//   });
+// };
 
 exports.editFasilitas = (req, res) => {
   const { id } = req.params;
-  const { judul, deskripsi} = req.body;
+  const { judul, deskripsi } = req.body;
   const foto_fasilitas = req.file ? req.file.buffer : null;
   const updatedFasilitas = { judul, deskripsi, foto_fasilitas };
 

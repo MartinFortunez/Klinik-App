@@ -23,11 +23,11 @@ router.post('/riwayat/send-whatsapp/:id', riwayatController.sendWhatsAppMessageR
 router.get("/dashboard/admin", adminController.getAllAdmins);
 
 // CREATE
-router.get("/dashboard/admin/add", adminController.showAddForm);
+// router.get("/dashboard/admin/add", adminController.showAddForm);
 router.post("/dashboard/admin/add", upload.single('foto_admin'), adminController.addAdmin);
 
 // UPDATE
-router.get("/dashboard/admin/edit/:id", adminController.showEditForm);
+// router.get("/dashboard/admin/edit/:id", adminController.showEditForm);
 router.post("/dashboard/admin/edit/:id", upload.single('foto_admin'), adminController.editAdmin);
 
 // DELETE
