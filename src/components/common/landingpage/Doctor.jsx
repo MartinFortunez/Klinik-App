@@ -8,16 +8,16 @@ import { Container } from "react-bootstrap";
 
 const Doctor = () => {
   return (
-    <Container fluid>
+    <Container fluid className="py-5">
       <Row className="text-center">
-        <h1>Jadwal Praktek Dokter</h1>
+        <h1 className="text-primary">Jadwal Praktek Dokter</h1>
         <p>
           Lorem ipsum dolor sit amet consectetur. Ullamcorper vulputate non in
           lorem adipiscing tempor integer blandit commodo.
         </p>
       </Row>
-      {/* <Row className="position-absolute w-100 px-5"> */}
-      <Row xs={1} md={2} className="g-4">
+
+      <Row xs={1} md={2} className="g-4 p-5">
         {dataDoctor.map((data, index) => (
           <Col lg={4} key={index}>
             <CardDoctor
@@ -30,7 +30,6 @@ const Doctor = () => {
           </Col>
         ))}
       </Row>
-      {/* </Row> */}
     </Container>
   );
 };

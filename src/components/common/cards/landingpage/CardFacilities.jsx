@@ -6,7 +6,7 @@ const CardFacilities = ({ imgSrc, title, desc }) => {
         <Card className="d-flex flex-column align-items-center">
             <Image src={imgSrc} fluid/>
             <Card.Body>
-                <Card.Title className="fw-bold">{title}</Card.Title>
+                <Card.Title className="fw-bold text-primary">{title}</Card.Title>
                 <Card.Text>{desc}</Card.Text>
             </Card.Body>
         </Card>
