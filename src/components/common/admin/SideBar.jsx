@@ -47,7 +47,7 @@ const SideBar = ({ onLogout }) => {
     },
   ];
   return (
-    <div className="d-flex flex-column bg-light vh-100 justify-content-between px-2 px-lg-4 pb-5">
+    <div className="d-flex flex-column bg-light justify-content-between px-2 px-lg-4 vh-100 pb-5">
       <Nav className="flex-column gap-2">
         <div className="logo mb-4 "></div>
         {links.map((link, index) => (
