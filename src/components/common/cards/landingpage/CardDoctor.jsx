@@ -9,7 +9,7 @@ const CardDoctor = ({ imgSrc, title, desc, sesi }) => {
     left: "50%",
     transform: "translateX(-50%)",
     width: "50%",
-    borderBottom: "2px solid black",
+    borderBottom: "2px solid #58a399",
   };
 
   const [modalShow, setModalShow] = useState(false);
@@ -29,7 +29,7 @@ const CardDoctor = ({ imgSrc, title, desc, sesi }) => {
           <br />
           {sesi.sesi3}
         </Card.Text>
-        <Button variant="primary" onClick={() => setModalShow(true)}>
+        <Button className="text-light" variant="primary" onClick={() => setModalShow(true)}>
           Daftar Konsultasi
         </Button>
 

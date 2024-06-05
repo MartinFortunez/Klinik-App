@@ -3,7 +3,7 @@ import imgFacilities from "../assets/img-facilities.jpg";
 const data = [
     {
         "img": imgFacilities,
-        "title": "Ruang pendaftaran dan administrasi",
+        "title": "Ruang pendaftaran & administrasi",
         "desc": "Lorem ipsum dolor sit amet consectetur. Ullamcorper vulputate non in lorem adipiscing tempor integer blandit commodo."
     },
     {
