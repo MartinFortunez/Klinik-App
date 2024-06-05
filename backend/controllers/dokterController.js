@@ -1,15 +1,25 @@
 const Dokter = require('../models/Dokter');
 
+// exports.getAllDokter = (req, res) => {
+//   Dokter.getAll((err, results) => {
+//     if (err) throw err;
+//     res.render("dokter/index", { users: results });
+//   });
+// };
+
 exports.getAllDokter = (req, res) => {
   Dokter.getAll((err, results) => {
-    if (err) throw err;
-    res.render("dokter/index", { users: results });
+    if (err) {
+      res.status(500).json({ error: 'Internal server error' });
+      return;
+    }
+    res.status(200).json(results);
   });
 };
 
-exports.showAddForm = (req, res) => {
-  res.render("dokter/index");
-};
+// exports.showAddForm = (req, res) => {
+//   res.render("dokter/index");
+// };
 
 exports.addDokter = (req, res) => {
   const { sip, nama_dokter, spesialis } = req.body;
@@ -22,14 +32,14 @@ exports.addDokter = (req, res) => {
   });
 };
 
-exports.showEditForm = (req, res) => {
-  const { id } = req.params;
+// exports.showEditForm = (req, res) => {
+//   const { id } = req.params;
 
-  Dokter.getById(id, (err, user) => {
-    if (err) throw err;
-    res.render("dokter/index", { user });
-  });
-};
+//   Dokter.getById(id, (err, user) => {
+//     if (err) throw err;
+//     res.render("dokter/index", { user });
+//   });
+// };
 
 exports.editDokter = (req, res) => {
   const { id } = req.params;
@@ -49,5 +59,5 @@ exports.deleteDokter = (req, res) => {
   Dokter.delete(id, (err) => {
     if (err) throw err;
     res.redirect("/dashboard/dokter-klinik");
-  });
+  });
 };
