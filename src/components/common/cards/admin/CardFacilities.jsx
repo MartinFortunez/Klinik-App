@@ -5,7 +5,7 @@ import Edit from "../../admin/facilities/Edit";
 
 const CardFacilities = ({ data }) => {
   const { foto_fasilitas, judul, deskripsi } = data;
-  console.log(foto_fasilitas)
+  console.log(foto_fasilitas);
 
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [showEditModal, setShowEditModal] = useState(false);
@@ -30,11 +30,11 @@ const CardFacilities = ({ data }) => {
   return (
     <Col>
       <Card className="border-0">
-        {/* <Card.Img
+        <Card.Img
           variant="top"
-          src={foto_fasilitas}
+          src={`data:image/jpeg;base64,${foto_fasilitas}`}
           className="custom-card-img"
-        /> */}
+        />
         <Card.Body>
           <Card.Title className="text-primary">{judul}</Card.Title>
           <Card.Text>{deskripsi}</Card.Text>

@@ -45,7 +45,7 @@ const Facilities = () => {
           />
         </Col>
       </Row>
-      <Row xs={1} lg={2} className="gx-3 gy-4 overflow-y-scroll m-0">
+      <Row xs={1} lg={2} className="gx-3 gy-4 overflow-y-auto m-0 h-100">
         {data ? (
           data.map((item) => (
             <CardFacilities key={item.fasilitas_id} data={item} />
