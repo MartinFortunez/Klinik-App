@@ -3,7 +3,6 @@ import { Button, Card, Col, Row } from "react-bootstrap";
 import Reject from "../../admin/patientReviews/Reject";
 import Accept from "../../admin/patientReviews/Accept";
 import { BsStarFill } from "react-icons/bs";
-import PropTypes from "prop-types";
 
 const CardPatientReviews = () => {
   const [showRejectModal, setShowRejectModal] = useState(false);
