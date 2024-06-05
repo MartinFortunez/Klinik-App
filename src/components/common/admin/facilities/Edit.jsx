@@ -69,7 +69,7 @@ const Edit = ({ show, handleClose, data }) => {
           validationSchema={validationSchema}
           onSubmit={handleSubmit}
           initialValues={{
-            imageFile: null,
+            imageFile: foto_fasilitas,
             title: judul,
             description: deskripsi,
           }}
@@ -83,17 +83,17 @@ const Edit = ({ show, handleClose, data }) => {
             setFieldValue,
           }) => (
             <Form noValidate onSubmit={handleSubmit}>
-              {values.imageFile ? (
+              {values.imageFile === foto_fasilitas ? (
                 <div className="mb-3">
                   <Image
-                    src={URL.createObjectURL(values.imageFile)}
+                    src={`data:image/jpeg;base64, ${foto_fasilitas}`}
                     thumbnail
                   />
                 </div>
               ) : (
                 <div className="mb-3">
                   <Image
-                    src={`data:image/jpeg;base64, ${foto_fasilitas}`}
+                    src={URL.createObjectURL(values.imageFile)}
                     thumbnail
                   />
                 </div>
