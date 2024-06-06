@@ -1,3 +1,4 @@
+// models/Ulasan.js
 const connection = require("../config/database");
 
 class Ulasan {
@@ -17,14 +18,17 @@ class Ulasan {
     });
   }
 
+  
   static create(data, callback) {
-    const query = "INSERT INTO ulasan (ulasan_id, nama_pasien, tgl_ulasan, status) VALUES (?, ?, ?, ?)";
-    connection.query(query, [data.ulasan_id, data.nama_pasien, data.tgl_ulasan, data.status], callback);
+    const query = "INSERT INTO ulasan (nik, nama_pasien, penilaian, rating, status) VALUES (?, ?, ?,?,'off')";
+    connection.query(query, [data.nik, data.nama_pasien, data.penilaian, data.rating, data.status], callback);
   }
 
   static update(id, data, callback) {
-    const query = "UPDATE ulasan SET status = ? WHERE ulasan_id = ?";
-    connection.query(query, [data.status, id], callback);
+    let query, queryParams;
+      query = "UPDATE ulasan SET status = ? WHERE ulasan_id = ?";
+      queryParams = [data.status, id];
+      connection.query(query, queryParams, callback);
   }
 
   static delete(id, callback) {

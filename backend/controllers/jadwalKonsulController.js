@@ -2,55 +2,81 @@ const JadwalKonsul = require("../models/JadwalKonsul");
 
 exports.getAllKonsul = (req, res) => {
   JadwalKonsul.getAll((err, schedules) => {
-    if (err) throw err;
-    res.render("konsultasi/index", { schedules });
+    if (err) {
+      res.status(500).json({ error: 'Internal server error' });
+      return;
+    }
+    res.status(200).json({ schedules });
   });
 };
 
-// add konsultasi NEW
+
+exports.getJadwalKonsulById = (req, res) => {
+  const { id } = req.params;
+
+  JadwalKonsul.getById(id, (err, result) => {
+    if (err) {
+      res.status(500).json({ error: 'Internal server error' });
+      return;
+    }
+    if (!result) {
+      res.status(404).json({ error: 'Facility not found' });
+      return;
+    }
+    res.status(200).json(result);
+  });
+};
+
 exports.addJadwalKonsul = (req, res) => {
-  const { nik, nama_pasien, alamat, gol_darah, tgl_lahir, no_wa, jadwal_id, jenis_kelamin, dokter_id, status, tgl_konsul } = req.body;
-  const newJadwalKonsul = { nik, nama_pasien, alamat, gol_darah, tgl_lahir, no_wa, jadwal_id, jenis_kelamin, dokter_id, status, tgl_konsul };
+  const { nik, nama_pasien, alamat, gol_darah, tgl_lahir, no_wa, jadwal_id, jenis_kelamin, dokter_id } = req.body;
+  const newJadwalKonsul = { nik, nama_pasien, alamat, gol_darah, tgl_lahir, no_wa, jadwal_id, jenis_kelamin, dokter_id, status: "pending" };
+
+  // Logging untuk memeriksa newJadwalKonsul
+  console.log("newJadwalKonsul:", newJadwalKonsul);
 
   JadwalKonsul.create(newJadwalKonsul, (err) => {
-    if (err) throw err;
-    res.redirect("/dashboard/jadwal-konsultasi");
+    if (err) {
+      console.error("Error adding consultation schedule:", err);
+      res.status(500).json({ error: 'Failed to add consultation schedule' });
+      return;
+    }
+    res.status(200).json({ message: 'Consultation schedule added successfully' });
   });
 };
-// add konsultasi END
 
 
-
-// setuju konsultasi NEW
 exports.setujuKonsultasi = (req, res) => {
   const { id } = req.params;
 
   JadwalKonsul.setujuKonsultasiMasuk(id, (err) => {
-    if (err) throw err;
-    res.redirect("/dashboard/jadwal-konsultasi");
+    if (err) {
+      res.status(500).json({ error: 'Failed to approve consultation' });
+      return;
+    }
+    res.status(200).json({ message: 'Consultation approved successfully' });
   });
 };
-  // END setuju konsultasi NEW
 
-
-// tolak konsultasi NEW
 exports.tolakKonsultasi = (req, res) => {
   const { id } = req.params;
 
   JadwalKonsul.tolakKonsultasiMasuk(id, (err) => {
-    if (err) throw err;
-    res.redirect("/dashboard/jadwal-konsultasi");
+    if (err) {
+      res.status(500).json({ error: 'Failed to reject consultation' });
+      return;
+    }
+    res.status(200).json({ message: 'Consultation rejected successfully' });
   });
 };
-// END tolak konsultasi NEW
-
-
 
 exports.deleteJadwalKonsul = (req, res) => {
   const { id } = req.params;
 
   JadwalKonsul.delete(id, (err) => {
-    if (err) throw err;
-    res.redirect("/dashboard/jadwal-konsultasi");
+    if (err) {
+      res.status(500).json({ error: 'Failed to delete consultation schedule' });
+      return;
+    }
+    res.status(200).json({ message: 'Consultation schedule deleted successfully' });
   });
 };

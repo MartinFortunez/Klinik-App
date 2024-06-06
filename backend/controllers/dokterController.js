@@ -1,14 +1,28 @@
-const Dokter = require('../models/Dokter');
+const Dokter = require("../models/Dokter");
 
 exports.getAllDokter = (req, res) => {
   Dokter.getAll((err, results) => {
-    if (err) throw err;
-    res.render("dokter/index", { users: results });
+    if (err) {
+      res.status(500).json({ error: "Internal server error" });
+      return;
+    }
+    res.status(200).json(results);
   });
 };
 
-exports.showAddForm = (req, res) => {
-  res.render("dokter/index");
+exports.getDokterById = (req, res) => {
+  const { id } = req.params;
+  Dokter.getById(id, (err, result) => {
+    if (err) {
+      res.status(500).json({ error: "Internal server error" });
+      return;
+    }
+    if (!result) {
+      res.status(404).json({ error: "Doctor not found" });
+      return;
+    }
+    res.status(200).json(result);
+  });
 };
 
 exports.addDokter = (req, res) => {
@@ -17,17 +31,12 @@ exports.addDokter = (req, res) => {
   const newDokter = { sip, nama_dokter, spesialis, foto_dokter };
 
   Dokter.create(newDokter, (err) => {
-    if (err) throw err;
-    res.redirect("/dashboard/dokter-klinik");
-  });
-};
-
-exports.showEditForm = (req, res) => {
-  const { id } = req.params;
-
-  Dokter.getById(id, (err, user) => {
-    if (err) throw err;
-    res.render("dokter/index", { user });
+    if (err) {
+      res.status(500).json({ error: "Failed to add doctor" });
+      return;
+    }
+    // res.redirect("/dashboard/dokter-klinik");
+    res.status(200).json({ message: "Doctor add successfully" });
   });
 };
 
@@ -38,16 +47,23 @@ exports.editDokter = (req, res) => {
   const updatedDokter = { sip, nama_dokter, spesialis, foto_dokter };
 
   Dokter.update(id, updatedDokter, (err) => {
-    if (err) throw err;
-    res.redirect("/dashboard/dokter-klinik");
+    if (err) {
+      res.status(500).json({ error: "Failed to update doctor" });
+      return;
+    }
+    // res.redirect("/dashboard/dokter-klinik");
+    res.status(200).json({ message: "Doctor updated successfully" });
   });
 };
 
 exports.deleteDokter = (req, res) => {
   const { id } = req.params;
-
   Dokter.delete(id, (err) => {
-    if (err) throw err;
-    res.redirect("/dashboard/dokter-klinik");
+    if (err) {
+      res.status(500).json({ error: "Failed to delete doctor" });
+      return;
+    }
+    res.status(200).json({ message: "Doctor deleted successfully" });
+    // res.redirect("/dashboard/dokter-klinik");
   });
 };
