@@ -11,10 +11,13 @@ import Facilities from "./components/common/admin/facilities/Facilities";
 import IncomingConsultation from "./components/common/admin/incomingConsultation/IncomingConsultation";
 import "normalize.css";
 import "./index.css";
+import { QueryClient, QueryClientProvider } from "react-query";
+
+const queryClient = new QueryClient();
 
 function App() {
   return (
-    <>
+    <QueryClientProvider client={queryClient}>
       <Router>
         <Routes>
           <Route path="/" element={<HomePage />} />
@@ -30,7 +33,7 @@ function App() {
           </Route>
         </Routes>
       </Router>
-    </>
+    </QueryClientProvider>
   );
 }
 
