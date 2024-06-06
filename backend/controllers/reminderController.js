@@ -2,8 +2,11 @@ const JadwalKonsul = require("../models/JadwalKonsul");
 
 exports.getAllReminder = (req, res) => {
   JadwalKonsul.getAllReminderUser((err, schedules) => {
-    if (err) throw err;
-    res.render("reminder/index", { schedules });
+    if (err) {
+      res.status(500).json({ error: 'Internal server error' });
+      return;
+    }
+    res.status(200).json({ schedules });
   });
 };
 
