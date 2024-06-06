@@ -26,7 +26,7 @@ class JadwalDokter {
   }
 
   static create(data, callback) {
-    const query = "INSERT INTO jadwal_dokter (dokter_id, sesi, status) VALUES (?, ?, ?)";
+    const query = "INSERT INTO jadwal_dokter (dokter_id, sesi, status) VALUES (?, ?, 'on')";
     connection.query(query, [data.dokter_id, data.sesi, data.status], callback);
   }
 
