@@ -17,8 +17,25 @@ class JadwalDokter {
     });
   }
 
+  static getByIdTableJadwal(id, callback) {
+    const query = "SELECT * FROM jadwal_dokter WHERE jadwal_id = ?";
+    connection.query(query, [id], (err, results) => {
+      if (err) return callback(err);
+      callback(null, results[0]);
+    });
+  }
+
+
   static getAllDoctors(callback) {
     const query = "SELECT * FROM dokter";
+    connection.query(query, (err, results) => {
+      if (err) return callback(err);
+      callback(null, results);
+    });
+  }
+
+  static getAllJadwalDokter(callback) {
+    const query = "SELECT * FROM jadwal_dokter";
     connection.query(query, (err, results) => {
       if (err) return callback(err);
       callback(null, results);
