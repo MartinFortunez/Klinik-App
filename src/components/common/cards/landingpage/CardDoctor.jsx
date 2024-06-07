@@ -2,7 +2,8 @@ import { Card, Image, Button } from "react-bootstrap";
 import React, { useState } from "react";
 import FormConsul from "../../landingpage/FormConsul";
 
-const CardDoctor = ({ imgSrc, title, desc, sesi }) => {
+const CardDoctor = ({ data }) => {
+  const { dokter_id, sip, nama_dokter, spesialis, foto_dokter } = data;
   const styleUnderline = {
     position: "absolute",
     bottom: "-5px",
@@ -16,20 +17,28 @@ const CardDoctor = ({ imgSrc, title, desc, sesi }) => {
 
   return (
     <Card className="d-flex flex-column align-items-center p-3">
-      <Image src={imgSrc} width={150} roundedCircle />
+      <Image
+        src={`data:image/jpeg;base64,${foto_dokter}`}
+        width={150}
+        roundedCircle
+      />
       <Card.Body className="text-center">
         <Card.Title className="fw-bold position-relative">
-          {title} <span style={styleUnderline}></span>
+          {nama_dokter} <span style={styleUnderline}></span>
         </Card.Title>
-        <Card.Text className="text-muted">{desc}</Card.Text>
+        {/* <Card.Text className="text-muted">{desc}</Card.Text>
         <Card.Text className="text-info">
           {sesi.sesi1}
           <br />
           {sesi.sesi2}
           <br />
           {sesi.sesi3}
-        </Card.Text>
-        <Button className="text-light" variant="primary" onClick={() => setModalShow(true)}>
+        </Card.Text> */}
+        <Button
+          className="text-light"
+          variant="primary"
+          onClick={() => setModalShow(true)}
+        >
           Daftar Konsultasi
         </Button>
 
