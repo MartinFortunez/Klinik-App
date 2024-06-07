@@ -36,7 +36,7 @@ router.get("/profile", verifyToken, jwtController.getProfile);
 // End Admin Routes
 
 // Start Dokter Routes
-// READ
+// READ hanya menampilkan 1 tabel dokter
 router.get("/dashboard/dokter-klinik", dokterController.getAllDokter);
 // CREATE
 router.post(
@@ -59,6 +59,10 @@ router.get(
   "/dashboard/jadwal-dokter-spesialis",
   jadwalDokterController.getAllJadwalDokter
 );
+
+// Menampilkan hanya tabel jadwal dokter
+router.get("/dashboard/jadwal-dokter", jadwalDokterController.getAllJadwalDokterTable);
+router.get("/dashboard/jadwal-dokter/:id", jadwalDokterController.getJadwalDokterTableById);
 
 // CREATE
 router.post(
