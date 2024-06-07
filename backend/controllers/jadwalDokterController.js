@@ -32,6 +32,34 @@ exports.getJadwalDokterById = (req, res) => {
   });
 };
 
+exports.getJadwalDokterTableById = (req, res) => {
+  const { id } = req.params;
+
+  JadwalDokter. getByIdTableJadwal(id, (err, result) => {
+    if (err) {
+      res.status(500).json({ error: 'Internal server error' });
+      return;
+    }
+    if (!result) {
+      res.status(404).json({ error: 'Facility not found' });
+      return;
+    }
+    res.status(200).json(result);
+  });
+};
+
+exports.getAllJadwalDokterTable = (req, res) => {
+    JadwalDokter.getAllDoctors((err, schedules) => {
+      if (err) {
+        res.status(500).json({ error: 'Internal server error' });
+        return;
+      }
+      res.status(200).json({ schedules});
+    });
+};
+
+
+
 exports.addJadwalDokter = (req, res) => {
   const { dokter_id, sesi, status } = req.body;
   const newJadwalDokter = { dokter_id, sesi, status: "off" };

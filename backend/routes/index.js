@@ -42,7 +42,7 @@ router.get("/profile", verifyToken, jwtController.getProfile);
 
 
 // Start Dokter Routes
-// READ
+// READ hanya menampilkan 1 tabel dokter
 router.get("/dashboard/dokter-klinik", dokterController.getAllDokter);
 // CREATE
 router.post("/dashboard/dokter-klinik/add", upload.single('foto_dokter'), dokterController.addDokter);
@@ -61,6 +61,10 @@ router.delete("/dashboard/dokter-klinik/delete/:id", dokterController.deleteDokt
 // Start Jadwal Dokter Routes
 // READ
 router.get("/dashboard/jadwal-dokter-spesialis", jadwalDokterController.getAllJadwalDokter);
+
+// Menampilkan hanya tabel jadwal dokter
+router.get("/dashboard/jadwal-dokter", jadwalDokterController.getAllJadwalDokterTable);
+router.get("/dashboard/jadwal-dokter/:id", jadwalDokterController.getJadwalDokterTableById);
 
 // CREATE
 router.post("/dashboard/jadwal-dokter-spesialis/add", jadwalDokterController.addJadwalDokter);
