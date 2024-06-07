@@ -24,7 +24,7 @@ const validationSchema = yup.object().shape({
   description: yup.string().required("deskripsi wajib diisi"),
 });
 
-const Add = ({ show, handleClose }) => {
+const Add = ({ show, handleClose, handleAdd }) => {
   return (
     <Modal
       show={show}
@@ -38,10 +38,7 @@ const Add = ({ show, handleClose }) => {
       <Modal.Body>
         <Formik
           validationSchema={validationSchema}
-          onSubmit={(values) => {
-            alert(JSON.stringify(values, null, 2));
-            console.log(values);
-          }}
+          onSubmit={handleAdd}
           initialValues={{
             imageFile: null,
             title: "",
@@ -56,6 +53,7 @@ const Add = ({ show, handleClose }) => {
             handleChange,
             setFieldValue,
             handleReset,
+            isSubmitting,
           }) => (
             <Form noValidate onSubmit={handleSubmit}>
               {values.imageFile && (

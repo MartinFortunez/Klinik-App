@@ -3,7 +3,7 @@ import { Button, Card, Col, Row } from "react-bootstrap";
 import Reject from "../../admin/incomingConsultation/Reject";
 import Accept from "../../admin/incomingConsultation/Accept";
 
-const CardIncomingConsultation = () => {
+const CardIncomingConsultation = ({ data }) => {
   const [showRejectModal, setShowRejectModal] = useState(false);
   const [showAcceptModal, setShowAcceptModal] = useState(false);
 
