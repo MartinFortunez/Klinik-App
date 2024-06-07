@@ -15,7 +15,7 @@ const editFacility = async (facilityId, updatedFacilityData) => {
     formData.append("judul", updatedFacilityData.title);
     formData.append("deskripsi", updatedFacilityData.description);
 
-    await axios.post(
+    await axios.put(
       `http://localhost:3000/dashboard/fasilitas/edit/${facilityId}`,
       formData
     );

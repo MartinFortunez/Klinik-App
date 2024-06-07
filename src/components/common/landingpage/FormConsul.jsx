@@ -133,7 +133,6 @@ function FormConsul(props) {
                     <Form.Select
                       aria-label="Default select example"
                       onChange={handleChange}
-
                     >
                       <option>Pilih Jenis Kelamin</option>
                       <option value="1">Laki-Laki</option>

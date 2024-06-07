@@ -7,7 +7,7 @@ import { useQueryClient } from "react-query";
 
 const deleteFacility = async (facilityId) => {
   try {
-    await axios.get(
+    await axios.delete(
       `http://localhost:3000/dashboard/fasilitas/delete/${facilityId}`
     );
   } catch (error) {
@@ -63,7 +63,6 @@ const CardFacilities = ({ data }) => {
             variant="primary"
             onClick={handleEditShow}
             className="text-light"
-
           >
             Edit
           </Button>
