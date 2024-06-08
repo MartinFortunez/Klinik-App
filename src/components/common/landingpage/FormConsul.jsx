@@ -1,25 +1,58 @@
 import { Formik } from "formik";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Modal, Form, Button, Row, Col } from "react-bootstrap";
 import * as yup from "yup";
+import axios from "axios";
+import { useQuery, useQueryClient } from "react-query";
 
-const validationSchema = yup.object().shape({
-  NIK: yup.string().required("NIK wajib diisi"),
-  nama: yup.string().required("nama wajib diisi"),
-  alamat: yup.string().required("alamat wajib diisi"),
-  nohp: yup.number().required("no hp wajib diisi"),
-  jeniskelamin: yup.string().required("jenis kelamin wajib diisi"),
-  tanggallahir: yup.string().required("tanggal lahir wajib diisi"),
-  golongandarah: yup.string().required("golongan darah wajib diisi"),
-  spesialis: yup.string().required("spesialis wajib diisi"),
-  dokter: yup.string().required("dokter wajib diisi"),
-  sesi: yup.string().required("sesi wajib diisi"),
-});
+// const validationSchema = yup.object().shape({
+//   NIK: yup.string().required("NIK wajib diisi"),
+//   nama: yup.string().required("nama wajib diisi"),
+//   alamat: yup.string().required("alamat wajib diisi"),
+//   nohp: yup.number().required("no hp wajib diisi"),
+//   jeniskelamin: yup.string().required("jenis kelamin wajib diisi"),
+//   tanggallahir: yup.string().required("tanggal lahir wajib diisi"),
+//   golongandarah: yup.string().required("golongan darah wajib diisi"),
+//   spesialis: yup.string().required("spesialis wajib diisi"),
+//   dokter: yup.string().required("dokter wajib diisi"),
+//   sesi: yup.string().required("sesi wajib diisi"),
+// });
 
-function FormConsul(props) {
+const fetchData = async (dokterId) => {
+  const response = await axios.get(
+    `http://localhost:3000/dashboard/jadwal-dokter/${dokterId}`
+  );
+  return response.data;
+};
+
+const FormConsul = ({ data, show, handleClose, handleAdd }) => {
+  const { dokter_id, nama_dokter, spesialis } = data;
+  const [sesiData, setSesiData] = useState(null);
+  const { isLoading, isError } = useQuery(
+    ["jadwalData", dokter_id],
+    () => fetchData(dokter_id),
+    {
+      enabled: false,
+    }
+  );
+
+  useEffect(() => {
+    if (data) {
+      // Memuat data sesi hanya jika data utama sudah dimuat
+      fetchData(dokter_id)
+        .then((response) => {
+          setSesiData(response);
+        })
+        .catch((error) => {
+          console.error("Error fetching sesi data:", error);
+        });
+    }
+  }, [data, dokter_id]);
+
   return (
     <Modal
-      {...props}
+      show={show}
+      onHide={handleClose}
       size="lg"
       aria-labelledby="contained-modal-title-vcenter"
       centered
@@ -31,22 +64,31 @@ function FormConsul(props) {
       </Modal.Header>
       <Modal.Body>
         <Formik
-          validationSchema={validationSchema}
-          onSubmit={console.log("submit")}
+          // validationSchema={validationSchema}
+          onSubmit={handleAdd}
           initialValues={{
             NIK: "",
             nama: "",
             alamat: "",
             nohp: "",
-            jeniskelamin: "Pilih Jenis Kelamin",
-            tanggallahir: "",
-            golongandarah: "",
-            spesialis: "",
-            dokter: "",
+            jenisKelamin: "",
+            tanggalLahir: "",
+            golonganDarah: "",
+            spesialis: spesialis,
+            namaDokter: nama_dokter,
             sesi: "",
+            dokterId: dokter_id,
+            jadwalId: "",
           }}
         >
-          {({ handleSubmit, values, touched, errors, handleChange }) => (
+          {({
+            handleSubmit,
+            values,
+            touched,
+            errors,
+            handleChange,
+            handleReset,
+          }) => (
             <Form
               noValidate
               onSubmit={handleSubmit}
@@ -131,12 +173,14 @@ function FormConsul(props) {
                   >
                     <Form.Label>Jenis Kelamin</Form.Label>
                     <Form.Select
+                      name="jenisKelamin"
+                      // value={values.jeniskelamin}
                       aria-label="Default select example"
                       onChange={handleChange}
                     >
                       <option>Pilih Jenis Kelamin</option>
-                      <option value="1">Laki-Laki</option>
-                      <option value="2">Perempuan</option>
+                      <option value="Laki-Laki">Laki-Laki</option>
+                      <option value="Perempuan">Perempuan</option>
                     </Form.Select>
                     <Form.Control.Feedback type="invalid">
                       {errors.jeniskelamin}
@@ -149,15 +193,15 @@ function FormConsul(props) {
                   >
                     <Form.Label>Tanggal Lahir</Form.Label>
                     <Form.Control
-                      name="tanggallahir"
+                      name="tanggalLahir"
                       type="date"
-                      value={values.tanggallahir}
+                      value={values.tanggalLahir}
                       onChange={handleChange}
-                      // isValid={touched.tanggallahir && !errors.tanggallahir}
-                      isInvalid={touched.tanggallahir && !!errors.tanggallahir}
+                      // isValid={touched.tanggalLahir && !errors.tanggalLahir}
+                      isInvalid={touched.tanggalLahir && !!errors.tanggalLahir}
                     />
                     <Form.Control.Feedback type="invalid">
-                      {errors.tanggallahir}
+                      {errors.tanggalLahir}
                     </Form.Control.Feedback>
                   </Form.Group>
                   <Form.Group
@@ -167,24 +211,24 @@ function FormConsul(props) {
                   >
                     <Form.Label>Golongan Darah</Form.Label>
                     <Form.Control
-                      name="golongandarah"
+                      name="golonganDarah"
                       type="text"
                       placeholder="masukkan golongan darah"
-                      value={values.golongandarah}
+                      value={values.golonganDarah}
                       onChange={handleChange}
-                      isValid={touched.golongandarah && !errors.golongandarah}
+                      isValid={touched.golonganDarah && !errors.golonganDarah}
                       isInvalid={
-                        touched.golongandarah && !!errors.golongandarah
+                        touched.golonganDarah && !!errors.golonganDarah
                       }
                     />
                     <Form.Control.Feedback type="invalid">
-                      {errors.golongandarah}
+                      {errors.golonganDarah}
                     </Form.Control.Feedback>
                   </Form.Group>
                 </Row>
               </Form.Group>
               <Form.Group>
-                <Form.Label className="fw-semibold">Pilih Dokter</Form.Label>
+                <Form.Label className="fw-semibold">Dokter</Form.Label>
                 <Row>
                   <Form.Group
                     as={Col}
@@ -192,15 +236,14 @@ function FormConsul(props) {
                     className="mb-3"
                   >
                     <Form.Label>Spesialis</Form.Label>
-                    <Form.Select
-                      aria-label="Default select example"
+                    <Form.Control
+                      name="spesialis"
+                      type="text"
+                      value={values.spesialis}
                       onChange={handleChange}
-                    >
-                      <option>Pilih Spesialis</option>
-                      <option value="1">Spesialis 1</option>
-                      <option value="2">Spesialis 2</option>
-                      <option value="3">Spesialis 3</option>
-                    </Form.Select>
+                      isInvalid={touched.spesialis && !!errors.spesialis}
+                      disabled
+                    />
                     <Form.Control.Feedback type="invalid">
                       {errors.spesialis}
                     </Form.Control.Feedback>
@@ -211,17 +254,16 @@ function FormConsul(props) {
                     className="mb-3"
                   >
                     <Form.Label>Dokter</Form.Label>
-                    <Form.Select
-                      aria-label="Default select example"
+                    <Form.Control
+                      name="namaDokter"
+                      type="text"
+                      value={values.namaDokter}
                       onChange={handleChange}
-                    >
-                      <option>Pilih Dokter</option>
-                      <option value="1">Dokter 1</option>
-                      <option value="2">Dokter 2</option>
-                      <option value="3">Dokter 3</option>
-                    </Form.Select>
+                      isInvalid={touched.namaDokter && !!errors.namaDokter}
+                      disabled
+                    />
                     <Form.Control.Feedback type="invalid">
-                      {errors.dokter}
+                      {errors.namaDokter}
                     </Form.Control.Feedback>
                   </Form.Group>
 
@@ -232,13 +274,17 @@ function FormConsul(props) {
                   >
                     <Form.Label>Sesi</Form.Label>
                     <Form.Select
+                      name="jadwalId"
                       aria-label="Default select example"
                       onChange={handleChange}
                     >
                       <option>Pilih Sesi</option>
-                      <option value="1">Sesi 1</option>
-                      <option value="2">Sesi 2</option>
-                      <option value="3">Sesi 3</option>
+                      {sesiData &&
+                        sesiData.map((item) => (
+                          <option key={item.jadwal_id} value={item.jadwal_id}>
+                            {item.sesi}
+                          </option>
+                        ))}
                     </Form.Select>
                     <Form.Control.Feedback type="invalid">
                       {errors.sesi}
@@ -252,7 +298,10 @@ function FormConsul(props) {
                     variant="secondary"
                     type="button"
                     className="w-100 bg-transparent border-0"
-                    // onClick={props.onHide}
+                    onClick={() => {
+                      handleReset();
+                      handleClose();
+                    }}
                   >
                     Batal
                   </Button>
@@ -274,6 +323,6 @@ function FormConsul(props) {
       </Modal.Body>
     </Modal>
   );
-}
+};
 
 export default FormConsul;
