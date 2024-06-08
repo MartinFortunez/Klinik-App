@@ -3,9 +3,25 @@ import React, { useState } from "react";
 import { Button, Col, Form, Image, Modal, Row } from "react-bootstrap";
 import * as yup from "yup";
 
+const FILE_SIZE = 100 * 1024;
+const SUPPORTED_FORMATS = ["image/jpg", "image/jpeg", "image/gif", "image/png"];
+
 const validationSchema = yup.object().shape({
-  nama: yup.string().required("nama wajib diisi"),
-  iddokter : yup.string().required("id dokter wajib diisi"),
+  imageFile: yup
+    .mixed()
+    .required()
+    .test(
+      "fileSize",
+      "Ukuran file terlalu besar",
+      (value) => value && value.size <= FILE_SIZE
+    )
+    .test(
+      "fileFormat",
+      "Format file tidak didukung",
+      (value) => value && SUPPORTED_FORMATS.includes(value.type)
+    ),
+  namaDokter: yup.string().required("nama wajib diisi"),
+  sip : yup.string().required("id dokter wajib diisi"),
   spesialis : yup.string().required("spesialis wajib diisi"),
 });
 

@@ -22,12 +22,6 @@ const Doctor = () => {
   const handleAddClose = () => setShowAddModal(false);
   const handleAddShow = () => setShowAddModal(true);
 
-  const handleAdd = () => {
-    // Lakukan aksi delete di sini
-    console.log("Item deleted");
-    handleAddClose();
-  };
-
   const handleSubmit = async (values, { setSubmitting }) => {
     try {
       const formData = new FormData();
@@ -66,7 +60,7 @@ const Doctor = () => {
           <Add
             show={showAddModal}
             handleClose={handleAddClose}
-            handleAdd={handleAdd}
+            handleAdd={handleSubmit}
           />
         </Col>
       </Row>
