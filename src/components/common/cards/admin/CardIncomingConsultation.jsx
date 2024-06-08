@@ -5,13 +5,6 @@ import Accept from "../../admin/incomingConsultation/Accept";
 import axios from "axios";
 import { useQuery, useQueryClient } from "react-query";
 
-const fetchData = async (dokterId) => {
-  const response = await axios.get(
-    `http://localhost:3000/dashboard/jadwal-dokter/${dokterId}`
-  );
-  return response.data;
-};
-
 const CardIncomingConsultation = ({ data }) => {
   const {
     nik,
@@ -25,6 +18,7 @@ const CardIncomingConsultation = ({ data }) => {
     sesi,
     jenis_kelamin,
     tgl_konsul,
+    konsul_id,
     tgl_tenggat,
   } = data;
   const [showRejectModal, setShowRejectModal] = useState(false);
@@ -36,16 +30,6 @@ const CardIncomingConsultation = ({ data }) => {
   const handleAcceptClose = () => setShowAcceptModal(false);
   const handleAcceptShow = () => setShowAcceptModal(true);
 
-  const handleReject = () => {
-    // Lakukan aksi delete di sini
-    console.log("Item deleted");
-    handleRejectClose();
-  };
-
-  const handleAccept = () => {
-    // Lakukan aksi simpan di sini
-    handleAcceptClose();
-  };
   return (
     <Col>
       <Card>
@@ -135,13 +119,13 @@ const CardIncomingConsultation = ({ data }) => {
           <Reject
             show={showRejectModal}
             handleClose={handleRejectClose}
-            handleReject={handleReject}
+            data={konsul_id}
           />
 
           <Accept
             show={showAcceptModal}
             handleClose={handleAcceptClose}
-            handleAccept={handleAccept}
+            data={konsul_id}
           />
         </Card.Footer>
       </Card>
