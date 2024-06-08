@@ -2,8 +2,31 @@ import React, { useState } from "react";
 import { Button, Card, Col, Row } from "react-bootstrap";
 import Reject from "../../admin/incomingConsultation/Reject";
 import Accept from "../../admin/incomingConsultation/Accept";
+import axios from "axios";
+import { useQuery, useQueryClient } from "react-query";
+
+const fetchData = async (dokterId) => {
+  const response = await axios.get(
+    `http://localhost:3000/dashboard/jadwal-dokter/${dokterId}`
+  );
+  return response.data;
+};
 
 const CardIncomingConsultation = ({ data }) => {
+  const {
+    nik,
+    nama_pasien,
+    alamat,
+    gol_darah,
+    tgl_lahir,
+    no_wa,
+    nama_dokter,
+    spesialis,
+    sesi,
+    jenis_kelamin,
+    tgl_konsul,
+    tgl_tenggat,
+  } = data;
   const [showRejectModal, setShowRejectModal] = useState(false);
   const [showAcceptModal, setShowAcceptModal] = useState(false);
 
@@ -33,47 +56,47 @@ const CardIncomingConsultation = ({ data }) => {
               <span className="custom-underline"></span>
             </Col>
             <Col className="d-flex justify-content-end">
-              <span>00/00/0000</span>
+              <span>{tgl_konsul}</span>
             </Col>
           </Row>
           <Row>
             <Card.Subtitle className="opacity-50">NIK</Card.Subtitle>
-            <Card.Text>13543457349579845798475</Card.Text>
+            <Card.Text>{nik}</Card.Text>
           </Row>
           <Row>
             <Col>
               <Card.Subtitle className="opacity-50">Nama</Card.Subtitle>
-              <Card.Text>Mimi Peri</Card.Text>
+              <Card.Text>{nama_pasien}</Card.Text>
             </Col>
             <Col className="text-center">
               <Card.Subtitle className="opacity-50">
                 Jenis Kelamin
               </Card.Subtitle>
-              <Card.Text>Laki-Laki</Card.Text>
+              <Card.Text>{jenis_kelamin}</Card.Text>
             </Col>
             <Col className="text-end">
               <Card.Subtitle className="opacity-50">
                 Golongan Darah
               </Card.Subtitle>
-              <Card.Text>O</Card.Text>
+              <Card.Text>{gol_darah}</Card.Text>
             </Col>
           </Row>
           <Row>
             <Col>
               <Card.Subtitle className="opacity-50">Alamat</Card.Subtitle>
-              <Card.Text>Kecamatan ini - Kabupaten itu</Card.Text>
+              <Card.Text>{alamat}</Card.Text>
             </Col>
             <Col className="text-center">
               <Card.Subtitle className="opacity-50">
                 Tanggal Lahir
               </Card.Subtitle>
-              <Card.Text>00/00/0000</Card.Text>
+              <Card.Text>{tgl_lahir}</Card.Text>
             </Col>
             <Col className="text-end">
               <Card.Subtitle className="opacity-50">
                 No. HP/WhatsApp
               </Card.Subtitle>
-              <Card.Text>08512345678</Card.Text>
+              <Card.Text>{no_wa}</Card.Text>
             </Col>
           </Row>
           <Row>
@@ -85,15 +108,15 @@ const CardIncomingConsultation = ({ data }) => {
           <Row>
             <Col>
               <Card.Subtitle className="opacity-50">Dokter</Card.Subtitle>
-              <Card.Text>Marco</Card.Text>
+              <Card.Text>{nama_dokter}</Card.Text>
             </Col>
             <Col className="text-center">
               <Card.Subtitle className="opacity-50">Spesialis</Card.Subtitle>
-              <Card.Text>Jantung</Card.Text>
+              <Card.Text>{spesialis}</Card.Text>
             </Col>
             <Col className="text-end">
               <Card.Subtitle className="opacity-50">Sesi</Card.Subtitle>
-              <Card.Text>1</Card.Text>
+              <Card.Text>{sesi}</Card.Text>
             </Col>
           </Row>
         </Card.Body>
