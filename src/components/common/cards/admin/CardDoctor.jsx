@@ -3,7 +3,9 @@ import { Button, Card, Col, Row } from "react-bootstrap";
 import Delete from "../../admin/doctor/Delete";
 import Edit from "../../admin/doctor/Edit";
 
-const CardDoctor = () => {
+const CardDoctor = ({ data }) => {
+  const { dokter_id, sip, nama_dokter, spesialis, foto_dokter } = data;
+  // const queryClient = useQueryClient();
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [showEditModal, setShowEditModal] = useState(false);
 
@@ -32,22 +34,22 @@ const CardDoctor = () => {
             <Col>
               <Card.Img
                 variant="left"
-                src="holder.js/100px100"
+                src={`data:image/jpeg;base64,${foto_dokter}`}
                 className="custom-card-img"
                 style={{ width: "100px", height: "100px", objectFit: "cover" }}
               />
             </Col>
             <Col>
               <Card.Subtitle className="opacity-50">Nama</Card.Subtitle>
-              <Card.Text>Mimi Peri</Card.Text>
+              <Card.Text>{nama_dokter}</Card.Text>
             </Col>
             <Col className="text-center">
               <Card.Subtitle className="opacity-50">Id Dokter</Card.Subtitle>
-              <Card.Text>658264657973</Card.Text>
+              <Card.Text>{sip}</Card.Text>
             </Col>
             <Col className="text-end">
               <Card.Subtitle className="opacity-50">Spesialis</Card.Subtitle>
-              <Card.Text>Jantung</Card.Text>
+              <Card.Text>{spesialis}</Card.Text>
             </Col>
           </Row>
         </Card.Body>
