@@ -18,12 +18,13 @@ class JadwalDokter {
   }
 
   static getByIdTableJadwal(id, callback) {
-    const query = "SELECT * FROM jadwal_dokter WHERE jadwal_id = ?";
+    const query = "SELECT * FROM jadwal_dokter WHERE dokter_id = ?";
     connection.query(query, [id], (err, results) => {
       if (err) return callback(err);
-      callback(null, results[0]);
+      callback(null, results); // Mengembalikan semua hasil, bukan hanya yang pertama
     });
   }
+  
 
 
   static getAllDoctors(callback) {
