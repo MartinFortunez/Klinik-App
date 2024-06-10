@@ -5,8 +5,20 @@ import Row from "react-bootstrap/Row";
 import CardFacilities from "../cards/landingpage/CardFacilities.jsx";
 import dataFacilities from "../../../data/facilities.js";
 import { Container } from "react-bootstrap";
+import axios from "axios";
+import { useQuery, useQueryClient } from "react-query";
+
+const fetchData = async () => {
+  const response = await axios.get("http://localhost:3000/dashboard/fasilitas");
+  return response.data;
+};
 
 const Facilities = () => {
+  const { data, isSuccess } = useQuery("fasilitasData", fetchData, {
+    refetchOnWindowFocus: false, // Tidak merender ulang data saat jendela browser mendapatkan fokus
+    refetchOnMount: false, // Tidak merender ulang data saat komponen dipasang
+    staleTime: Infinity, // Data tidak dianggap kadaluwarsa
+  });
   return (
     <Container fluid className="bg-secondary py-5">
       <Row className="text-center">
@@ -16,18 +28,17 @@ const Facilities = () => {
           lorem adipiscing tempor integer blandit commodo.
         </p>
       </Row>
-      
+
       <Row xs={1} md={2} className="g-4 p-5">
-        {dataFacilities.map((data, index) => (
-          <Col lg={4} key={index}>
-            <CardFacilities 
-              key={index}
-              imgSrc={data.img}
-              title={data.title}
-              desc={data.desc}
-            />
-          </Col>
-        ))}
+        {data ? (
+          data.map((item) => (
+            <Col lg={4} key={item.fasilitas_id}>
+              <CardFacilities data={item} />
+            </Col>
+          ))
+        ) : (
+          <p>loading bolo</p>
+        )}
       </Row>
     </Container>
   );
