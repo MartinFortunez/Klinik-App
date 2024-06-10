@@ -5,10 +5,10 @@ import { BiSolidQuoteLeft } from "react-icons/bi";
 import { BsStarFill } from "react-icons/bs";
 import "../../../sass/StyledFeedBack.scss";
 
-const CardFeedBack = ({ feedback, className }) => {
-  const { ulasan, nama, role, stars } = feedback;
+const CardFeedBack = ({ data, className }) => {
+  const { nama_pasien, penilaian, tgl_ulasan, rating, status } = data;
 
-  const yellowStars = Math.floor(stars);
+  const yellowStars = Math.floor(rating);
   const whiteStars = 5 - yellowStars;
 
   return (
@@ -17,14 +17,14 @@ const CardFeedBack = ({ feedback, className }) => {
       <Card.Body>
         <Row>
           <Col xs={12}>
-            <p className="feedback">{ulasan}</p>
+            <p className="feedback">{penilaian}</p>
           </Col>
         </Row>
         <Row className="mt-3">
           <Col xs={9}>
             <div>
-              <div className="user">{nama}</div>
-              <div className="role">{role}</div>
+              <div className="user">{nama_pasien}</div>
+              <div className="role">{tgl_ulasan}</div>
             </div>
           </Col>
           <Col xs={3}>
