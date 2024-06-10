@@ -18,21 +18,15 @@ const fetchData = async () => {
 };
 
 const FeedBack = () => {
-  const [showModal, setShowModal] = useState(false);
+  const [showAddModal, setShowAddModal] = useState(false);
   const { data, isSuccess } = useQuery("feedbackData", fetchData, {
     refetchOnWindowFocus: false, // Tidak merender ulang data saat jendela browser mendapatkan fokus
     refetchOnMount: false, // Tidak merender ulang data saat komponen dipasang
     staleTime: Infinity, // Data tidak dianggap kadaluwarsa
   });
 
-  const handleShowModal = () => {
-    setShowModal(true);
-  };
-
-  const handleCloseModal = () => {
-    setShowModal(false);
-  };
-
+  const handleAddClose = () => setShowAddModal(false);
+  const handleAddShow = () => setShowAddModal(true);
   return (
     <div className="StyledFeedBack">
       <div className="Title">Ulasan Pasien</div>
@@ -41,17 +35,6 @@ const FeedBack = () => {
           prevIcon={<CarouselControlPrev />}
           nextIcon={<CarouselControlNext />}
         >
-          {/* {data ? (
-            data.map((item) => (
-              <Carousel.Item key={item.ulasan_id}>
-                <div className="d-flex justify-content-around">
-                  <CardFeedBack data={item} />
-                </div>
-              </Carousel.Item>
-            ))
-          ) : (
-            <p>loading bolo</p>
-          )} */}
           {data ? (
             Array.from({ length: Math.ceil(data.length / 2) }, (_, i) => {
               const startIndex = i * 2;
@@ -72,18 +55,15 @@ const FeedBack = () => {
           )}
         </Carousel>
         <div className="d-flex justify-content-center mt-3">
-          <Button className="CustomButton" onClick={handleShowModal}>
+          <Button className="CustomButton" onClick={handleAddShow}>
             Kirim Feedback
           </Button>
         </div>
-        <Modal show={showModal} onHide={handleCloseModal}>
-          <Modal.Header closeButton>
-            <Modal.Title>Kirim Feedback</Modal.Title>
-          </Modal.Header>
-          <Modal.Body>
-            <FormAddFeedBack handleCloseModal={handleCloseModal} />
-          </Modal.Body>
-        </Modal>
+        <FormAddFeedBack
+          show={showAddModal}
+          handleClose={handleAddClose}
+          data={data}
+        />
       </Container>
     </div>
   );
