@@ -3,9 +3,25 @@ import React, { useState } from "react";
 import { Button, Col, Form, Image, Modal, Row } from "react-bootstrap";
 import * as yup from "yup";
 
+const FILE_SIZE = 100 * 1024;
+const SUPPORTED_FORMATS = ["image/jpg", "image/jpeg", "image/gif", "image/png"];
+
 const validationSchema = yup.object().shape({
-  nama: yup.string().required("nama wajib diisi"),
-  iddokter : yup.string().required("id dokter wajib diisi"),
+  imageFile: yup
+    .mixed()
+    .required()
+    .test(
+      "fileSize",
+      "Ukuran file terlalu besar",
+      (value) => value && value.size <= FILE_SIZE
+    )
+    .test(
+      "fileFormat",
+      "Format file tidak didukung",
+      (value) => value && SUPPORTED_FORMATS.includes(value.type)
+    ),
+  namaDokter: yup.string().required("nama wajib diisi"),
+  sip : yup.string().required("id dokter wajib diisi"),
   spesialis : yup.string().required("spesialis wajib diisi"),
 });
 
@@ -35,57 +51,73 @@ const Add = ({ show, handleClose, handleAdd }) => {
       <Modal.Body>
         <Formik
           validationSchema={validationSchema}
-          onSubmit={console.log("submit")}
+          onSubmit={handleAdd}
           initialValues={{
-            nama: "",
-            iddokter: "",
+            imageFile: null,
+            namaDokter: "",
+            sip: "",
             spesialis: "",
           }}
         >
-          {({ handleSubmit, values, touched, errors, handleChange }) => (
+          {({ handleSubmit, values, touched, errors, handleChange, setFieldValue }) => (
             <Form noValidate onSubmit={handleSubmit}>
-              {previewUrl && (
+              {values.imageFile && (
                 <div className="mb-3">
-                  <Image src={previewUrl} thumbnail />
+                  <Image
+                    src={URL.createObjectURL(values.imageFile)}
+                    thumbnail
+                  />
                 </div>
               )}
               <Form.Group controlId="formFile" className="mb-3">
-                <Form.Label>Upload Foto</Form.Label>
-                <Form.Control type="file" onChange={handleFileChange} />
+                <Form.Label>File</Form.Label>
+                <Form.Control
+                  type="file"
+                  name="imageFile"
+                  onChange={(e) =>
+                    setFieldValue("imageFile", e.target.files[0])
+                  }
+                  isInvalid={!!errors.imageFile}
+                />
+                <Form.Control.Feedback type="invalid">
+                  {errors.imageFile}
+                </Form.Control.Feedback>
               </Form.Group>
 
               <Form.Group controlId="validationNama" className="mb-3">
-                <Form.Label>Nama</Form.Label>
+                <Form.Label>Nama Dokter</Form.Label>
                 <Form.Control
-                  name="nama"
+                  name="namaDokter"
                   type="text"
-                  placeholder="Masukkan nama"
-                  value={values.nama}
+                  placeholder="Masukkan nama dokter"
+                  value={values.namaDokter}
                   onChange={handleChange}
-                  isValid={touched.nama && !!errors.nama}
-                  isInvalid={touched.nama && !!errors.nama}
+                  isValid={touched.namaDokter && !!errors.namaDokter}
+                  isInvalid={touched.namaDokter && !!errors.namaDokter}
                 />
                 <Form.Control.Feedback type="invalid">
-                  {errors.nama}
+                  {errors.namaDokter}
                 </Form.Control.Feedback>
               </Form.Group>
               <Form.Group controlId="validationIddokter" className="mb-3">
-                <Form.Label>Id Dokter</Form.Label>
+                <Form.Label>Sip</Form.Label>
                 <Form.Control
-                  name="iddokter"
+                  name="sip"
                   type="text"
-                  placeholder="Masukkan id dokter"
-                  value={values.iddokter}
+                  placeholder="Masukkan sip dokter"
+                  value={values.sip}
                   onChange={handleChange}
-                  isValid={touched.iddokter && !!errors.iddokter}
-                  isInvalid={touched.iddokter && !!errors.iddokter}
+                  isValid={touched.sip && !!errors.sip}
+                  isInvalid={touched.sip && !!errors.sip}
                 />
                 <Form.Control.Feedback type="invalid">
-                  {errors.iddokter}
+                  {errors.sip}
                 </Form.Control.Feedback>
               <Form.Group controlId="validationSpesialis" className="mb-3">
                 <Form.Label>Spesialis</Form.Label>
                 <Form.Select
+                      name="spesialis"
+                      value={values.spesialis}
                       aria-label="Default select example"
                       onChange={handleChange}
                       isValid={touched.spesialis && !!errors.spesialis}
