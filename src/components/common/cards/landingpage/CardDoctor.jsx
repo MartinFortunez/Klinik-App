@@ -66,6 +66,8 @@ const CardDoctor = ({ data }) => {
       <Image
         src={`data:image/jpeg;base64,${foto_dokter}`}
         width={150}
+        height={150}
+        className="object-fit-cover"
         roundedCircle
       />
       <Card.Body className="text-center">

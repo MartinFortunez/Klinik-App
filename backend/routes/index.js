@@ -14,17 +14,24 @@ const ulasanController = require("../controllers/ulasanController.js");
 const jwtController = require("../controllers/jwtController");
 const verifyToken = require("../middleware/auth");
 
-
 // Admin Routes
 // READ
 router.get("/dashboard/admin", adminController.getAllAdmins);
 
 // CREATE
-router.post("/dashboard/admin/add", upload.single('foto_admin'), adminController.addAdmin);
+router.post(
+  "/dashboard/admin/add",
+  upload.single("foto_admin"),
+  adminController.addAdmin
+);
 
 // UPDATE
 router.get("/dashboard/admin/edit/:id", adminController.getAdminById);
-router.put("/dashboard/admin/edit/:id", upload.single('foto_admin'), adminController.editAdmin);
+router.put(
+  "/dashboard/admin/edit/:id",
+  upload.single("foto_admin"),
+  adminController.editAdmin
+);
 
 // DELETE
 router.delete("/dashboard/admin/delete/:id", adminController.deleteAdmin);
@@ -46,11 +53,18 @@ router.post(
 );
 
 // UPDATE
-router.get("/dashboard/dokter-klinik/edit/:id", dokterController.getDokterById); 
-router.put("/dashboard/dokter-klinik/edit/:id", upload.single('foto_dokter'), dokterController.editDokter);
+router.get("/dashboard/dokter-klinik/edit/:id", dokterController.getDokterById);
+router.put(
+  "/dashboard/dokter-klinik/edit/:id",
+  upload.single("foto_dokter"),
+  dokterController.editDokter
+);
 
 // DELETE
-router.delete("/dashboard/dokter-klinik/delete/:id", dokterController.deleteDokter);
+router.delete(
+  "/dashboard/dokter-klinik/delete/:id",
+  dokterController.deleteDokter
+);
 // End Dokter Routes
 
 // Start Jadwal Dokter Routes
@@ -61,8 +75,14 @@ router.get(
 );
 
 // Menampilkan hanya tabel jadwal dokter
-router.get("/dashboard/jadwal-dokter", jadwalDokterController.getAllJadwalDokterTable);
-router.get("/dashboard/jadwal-dokter/:id", jadwalDokterController.getJadwalDokterTableById);
+router.get(
+  "/dashboard/jadwal-dokter",
+  jadwalDokterController.getAllJadwalDokterTable
+);
+router.get(
+  "/dashboard/jadwal-dokter/:id",
+  jadwalDokterController.getJadwalDokterTableById
+);
 
 // CREATE
 router.post(
@@ -71,17 +91,21 @@ router.post(
 );
 
 // UPDATE
-router.get("/dashboard/jadwal-dokter-spesialis/edit/:id", jadwalDokterController.getJadwalDokterById);
-router.put("/dashboard/jadwal-dokter-spesialis/edit/:id", jadwalDokterController.editJadwalDokter);
+router.get(
+  "/dashboard/jadwal-dokter-spesialis/edit/:id",
+  jadwalDokterController.getJadwalDokterById
+);
+router.put(
+  "/dashboard/jadwal-dokter-spesialis/edit/:id",
+  jadwalDokterController.editJadwalDokter
+);
 
 // DELETE
-router.delete("/dashboard/jadwal-dokter-spesialis/delete/:id", jadwalDokterController.deleteJadwalDokter);
+router.delete(
+  "/dashboard/jadwal-dokter-spesialis/delete/:id",
+  jadwalDokterController.deleteJadwalDokter
+);
 // End Jadwal Dokter Routes
-
-
-
-
-
 
 // Start Fasilitas Routes
 // READ
@@ -94,13 +118,22 @@ router.post(
 );
 
 // UPDATE
-router.get("/dashboard/fasilitas/edit/:id", fasilitasKlinikController.getFasilitasById);
-router.put("/dashboard/fasilitas/edit/:id", upload.single('foto_fasilitas'), fasilitasKlinikController.editFasilitas);
+router.get(
+  "/dashboard/fasilitas/edit/:id",
+  fasilitasKlinikController.getFasilitasById
+);
+router.put(
+  "/dashboard/fasilitas/edit/:id",
+  upload.single("foto_fasilitas"),
+  fasilitasKlinikController.editFasilitas
+);
 
 // DELETE
-router.delete("/dashboard/fasilitas/delete/:id", fasilitasKlinikController.deleteFasilitas);
+router.delete(
+  "/dashboard/fasilitas/delete/:id",
+  fasilitasKlinikController.deleteFasilitas
+);
 // End Fasilitas Routes
-
 
 // Start Feedback Routes
 // READ
@@ -124,24 +157,41 @@ router.post(
 );
 
 // UPDATE NEW TOLAK DAN SETUJU
-router.get('/dashboard/jadwal-konsultasi/edit/:id', jadwalKonsulController.getJadwalKonsulById);
-router.put('/dashboard/jadwal-konsultasi/:id/setuju', jadwalKonsulController.setujuKonsultasi);
-router.put('/dashboard/jadwal-konsultasi/:id/tolak', jadwalKonsulController.tolakKonsultasi);
+router.get(
+  "/dashboard/jadwal-konsultasi/edit/:id",
+  jadwalKonsulController.getJadwalKonsulById
+);
+router.put(
+  "/dashboard/jadwal-konsultasi/:id/setuju",
+  jadwalKonsulController.setujuKonsultasi
+);
+router.put(
+  "/dashboard/jadwal-konsultasi/:id/tolak",
+  jadwalKonsulController.tolakKonsultasi
+);
 // UPDATE END NEW TOLAK DAN SETUJU
 
 // DELETE
-router.delete("/dashboard/jadwal-konsultasi/delete/:id", jadwalKonsulController.deleteJadwalKonsul);
+router.delete(
+  "/dashboard/jadwal-konsultasi/delete/:id",
+  jadwalKonsulController.deleteJadwalKonsul
+);
 // End Jadwal Konsul Routes
-
 
 // start reminder routes
 router.get("/dashboard/reminder", reminderController.getAllReminder);
-router.post('/reminder/send-whatsapp/:id', reminderController.sendWhatsAppMessageReminder);
+router.post(
+  "/reminder/send-whatsapp/:id",
+  reminderController.sendWhatsAppMessageReminder
+);
 // end reminder routes
 
 // start riwayat routes
 router.get("/dashboard/riwayat", riwayatController.getAllRiwayat);
-router.post('/riwayat/send-whatsapp/:id', riwayatController.sendWhatsAppMessageRiwayat);
+router.post(
+  "/riwayat/send-whatsapp/:id",
+  riwayatController.sendWhatsAppMessageRiwayat
+);
 // end riwayat routes
 
 module.exports = router;

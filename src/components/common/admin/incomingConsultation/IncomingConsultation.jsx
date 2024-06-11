@@ -19,8 +19,6 @@ const IncomingConsultation = () => {
     staleTime: Infinity, // Data tidak dianggap kadaluwarsa
   });
 
-  console.log(data);
-
   return (
     <Container fluid className="p-5 h-100 d-flex flex-column overflow-hidden">
       <Row className="align-items-center">
@@ -29,12 +27,14 @@ const IncomingConsultation = () => {
         </Col>
       </Row>
       <Row xs={1} lg={2} className="gx-3 gy-4 overflow-y-auto m-0">
-        {data ? (
+        {data && data.schedules.length > 0 ? (
           data.schedules.map((item) => (
             <CardIncomingConsultation key={item.konsul_id} data={item} />
           ))
+        ) : data && data.schedules.length === 0 ? (
+          <p>No Data</p>
         ) : (
-          <p>loading bolo</p>
+          <p>Loading...</p>
         )}
       </Row>
     </Container>
