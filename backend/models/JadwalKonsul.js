@@ -34,7 +34,7 @@ class JadwalKonsul {
 
   static getAllRiwayat(callback) {
     const query = `
-    SELECT * FROM jadwal_konsul JOIN dokter USING (dokter_id) JOIN jadwal_dokter USING (jadwal_id) WHERE jadwal_konsul.status ='reject';
+    SELECT * FROM jadwal_konsul JOIN dokter USING (dokter_id) JOIN jadwal_dokter USING (jadwal_id) WHERE jadwal_konsul.status ='cancel';
     `;
     connection.query(query, (err, results) => {
       if (err) return callback(err);
@@ -70,10 +70,10 @@ class JadwalKonsul {
   // END setuju konsultasi NEW
 
   // tolak konsultasi NEW
-  static tolakKonsultasiMasuk(id, callback) {
+  static cancelKonsultasiMasuk(id, callback) {
     const query = `
       UPDATE jadwal_konsul
-      SET status = "reject"
+      SET status = "cancel"
       WHERE konsul_id = ?;
     `;
     connection.query(query, [id], callback);

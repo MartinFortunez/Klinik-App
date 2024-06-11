@@ -1,6 +1,6 @@
 const JadwalKonsul = require("../models/JadwalKonsul");
 
-exports.getAllRiwayat = (req, res) => {
+exports.getAllRiwayatCancel = (req, res) => {
   JadwalKonsul.getAllRiwayat((err, schedules) => {
     if (err) {
       res.status(500).json({ error: 'Internal server error' });
