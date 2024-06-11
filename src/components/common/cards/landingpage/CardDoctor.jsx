@@ -62,10 +62,12 @@ const CardDoctor = ({ data }) => {
   const handleAddShow = () => setShowAddModal(true);
 
   return (
-    <Card className="d-flex flex-column align-items-center p-3">
+    <Card className="d-flex flex-column align-items-center p-3 h-100">
       <Image
         src={`data:image/jpeg;base64,${foto_dokter}`}
         width={150}
+        height={150}
+        className="object-fit-cover"
         roundedCircle
       />
       <Card.Body className="text-center">
