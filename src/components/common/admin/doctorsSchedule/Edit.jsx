@@ -1,8 +1,49 @@
 import { Formik } from "formik";
-import React from "react";
+import React, { useState } from "react";
 import { Button, Col, Form, Modal, Row } from "react-bootstrap";
+import * as yup from "yup";
+import { useQuery, useQueryClient } from "react-query";
+import axios from "axios";
 
-const Edit = ({ show, handleClose, handleEdit }) => {
+const editSchedule = async (scheduleId, updatedFacilityData) => {
+  try {
+    const response = {
+      dokter_id: updatedFacilityData.idDokter,
+      sesi: `${updatedFacilityData.hari} (${updatedFacilityData.jam})`,
+      status: updatedFacilityData.status,
+    };
+
+    await axios.put(
+      `http://localhost:3000/dashboard/jadwal-dokter-spesialis/edit/${scheduleId}`,
+      response
+    );
+  } catch (error) {
+    throw new Error("Failed to edit schedule");
+  }
+};
+
+const Edit = ({ show, handleClose, data, dataDoctor }) => {
+  const { dokter_id, jadwal_id, sesi, nama_dokter, spesialis, status } = data;
+  // Mencari posisi tanda kurung
+  const startIndex = sesi.indexOf("(");
+  const endIndex = sesi.indexOf(")");
+
+  // Memisahkan hari dan jam dari string sesi
+  const hari = sesi.substring(0, startIndex).trim(); // Mengambil teks sebelum tanda kurung dan menghapus spasi di sekitarnya
+  const jam = sesi.substring(startIndex + 1, endIndex).trim(); // Mengambil teks di antara tanda kurung dan menghapus spasi di sekitarnya
+  const queryClient = useQueryClient();
+  const [selectedDokter, setSelectedDokter] = useState(null);
+
+  const handleSubmit = async (e) => {
+    console.log(e);
+    try {
+      await editSchedule(jadwal_id, e);
+      queryClient.invalidateQueries("jadwalDokterData");
+      handleClose();
+    } catch (error) {
+      console.error("Failed to edit schedule:", error);
+    }
+  };
   return (
     <Modal
       show={show}
@@ -11,83 +52,120 @@ const Edit = ({ show, handleClose, handleEdit }) => {
       centered
     >
       <Modal.Header closeButton className="border-0">
-        <Modal.Title>Edit Jadwal Dokter</Modal.Title>
+        <Modal.Title>Tambah Jadwal Dokter</Modal.Title>
       </Modal.Header>
       <Modal.Body>
         <Formik
-          onSubmit={console.log("submit")}
+          onSubmit={handleSubmit}
           initialValues={{
-            nama: "",
-            idDokter: "",
-            spesialis: "",
-            jadwalDokter: "",
+            idDokter: dokter_id,
+            namaDokter: nama_dokter,
+            spesialis: spesialis,
+            jam: jam,
+            hari: hari,
+            status: status,
           }}
         >
           {({ handleSubmit, values, touched, errors, handleChange }) => (
             <Form noValidate onSubmit={handleSubmit}>
-              <Form.Group controlId="validationNama" className="mb-3">
-                <Form.Label>Nama</Form.Label>
-                <Form.Control
-                  name="nama"
-                  type="text"
-                  placeholder="Masukkan nama"
-                  value={values.nama}
-                  onChange={handleChange}
-                  isInvalid={touched.nama && !!errors.nama}
-                />
-                <Form.Control.Feedback type="invalid">
-                  {errors.nama}
-                </Form.Control.Feedback>
-              </Form.Group>
-
-              <Form.Group controlId="validationIdDokter" className="mb-3">
+              <Form.Group controlId="validationUsername" className="mb-3">
                 <Form.Label>Id Dokter</Form.Label>
                 <Form.Control
                   name="idDokter"
                   type="text"
-                  placeholder="Masukkan Id Dokter"
                   value={values.idDokter}
                   onChange={handleChange}
                   isInvalid={touched.idDokter && !!errors.idDokter}
+                  disabled
                 />
                 <Form.Control.Feedback type="invalid">
                   {errors.idDokter}
                 </Form.Control.Feedback>
               </Form.Group>
-
-              <Form.Group controlId="validationSpesialis" className="mb-3">
-                <Form.Label>Spesialis</Form.Label>
+              <Form.Group controlId="validationUsername" className="mb-3">
+                <Form.Label>Nama Dokter</Form.Label>
                 <Form.Select
+                  name="namaDokter"
+                  value={values.namaDokter}
+                  onChange={(e) => {
+                    handleChange(e);
+                    const selected = dataDoctor.find(
+                      (dokter) => dokter.nama_dokter === e.target.value
+                    );
+                    if (selected) {
+                      setSelectedDokter(selected);
+                      handleChange({
+                        target: { name: "idDokter", value: selected.dokter_id },
+                      });
+                      handleChange({
+                        target: {
+                          name: "spesialis",
+                          value: selected.spesialis,
+                        },
+                      });
+                    }
+                    console.log(selected);
+                  }}
+                  isInvalid={touched.namaDokter && !!errors.namaDokter}
+                >
+                  {" "}
+                  <option value="">Pilih Dokter</option>
+                  {dataDoctor &&
+                    dataDoctor.map((item) => (
+                      <option key={item.dokter_id} value={item.nama_dokter}>
+                        {item.nama_dokter}
+                      </option>
+                    ))}
+                </Form.Select>
+                <Form.Control.Feedback type="invalid">
+                  {errors.namaDokter}
+                </Form.Control.Feedback>
+              </Form.Group>
+              <Form.Group controlId="validationUsername" className="mb-3">
+                <Form.Label>Spesialis</Form.Label>
+                <Form.Control
                   name="spesialis"
+                  type="text"
                   value={values.spesialis}
                   onChange={handleChange}
                   isInvalid={touched.spesialis && !!errors.spesialis}
-                >
-                  <option value="">Pilih Spesialis</option>
-                  <option value="cardiology">Cardiology</option>
-                  <option value="neurology">Neurology</option>
-                  <option value="orthopedics">Orthopedics</option>
-                  <option value="pediatrics">Pediatrics</option>
-                  <option value="general">General</option>
-                </Form.Select>
+                  disabled
+                />
                 <Form.Control.Feedback type="invalid">
                   {errors.spesialis}
                 </Form.Control.Feedback>
               </Form.Group>
-
-              <Form.Group controlId="validationJadwalDokter" className="mb-3">
-                <Form.Label>Jadwal Dokter</Form.Label>
-                {/* Gunakan Form.Control dengan type="date" sebagai tanggal picker */}
+              <Form.Group controlId="hari" className="mb-3">
+                <Form.Label>Hari</Form.Label>
                 <Form.Control
-                  name="jadwalDokter"
-                  type="date"
-                  value={values.jadwalDokter}
+                  as="select"
+                  name="hari"
+                  value={values.hari}
                   onChange={handleChange}
-                  isInvalid={touched.jadwalDokter && !!errors.jadwalDokter}
-                />
-                <Form.Control.Feedback type="invalid">
-                  {errors.jadwalDokter}
-                </Form.Control.Feedback>
+                >
+                  <option value="">Pilih Hari</option>
+                  <option value="Senin">Senin</option>
+                  <option value="Selasa">Selasa</option>
+                  <option value="Rabu">Rabu</option>
+                  <option value="Kamis">Kamis</option>
+                  <option value="Jumat">Jumat</option>
+                  <option value="Sabtu">Sabtu</option>
+                  <option value="Minggu">Minggu</option>
+                </Form.Control>
+              </Form.Group>
+              <Form.Group controlId="jam" className="mb-3">
+                <Form.Label>Jam</Form.Label>
+                <Form.Select
+                  name="jam"
+                  value={values.jam}
+                  onChange={handleChange}
+                >
+                  {" "}
+                  <option value="">Pilih Jam</option>
+                  <option value="09:00 - 10:00">09:00 - 10:00</option>
+                  <option value="10:00 - 11:00">10:00 - 11:00</option>
+                  <option value="11:00 - 12:00">11:00 - 12:00</option>
+                </Form.Select>
               </Form.Group>
 
               <Form.Group as={Row}>
@@ -106,9 +184,8 @@ const Edit = ({ show, handleClose, handleEdit }) => {
                     variant="primary"
                     type="submit"
                     className="w-100 text-light"
-                    onClick={handleEdit}
                   >
-                    Edit
+                    Tambahkan
                   </Button>
                 </Col>
               </Form.Group>
