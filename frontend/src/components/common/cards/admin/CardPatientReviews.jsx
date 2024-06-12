@@ -4,11 +4,13 @@ import Reject from "../../admin/patientReviews/Reject";
 import Accept from "../../admin/patientReviews/Accept";
 import { BsStarFill } from "react-icons/bs";
 
-const CardPatientReviews = () => {
+const CardPatientReviews = ({ data }) => {
+  const { ulasan_id, nik, nama_pasien, penilaian, tgl_ulasan, rating, status } =
+    data;
   const [showRejectModal, setShowRejectModal] = useState(false);
   const [showAcceptModal, setShowAcceptModal] = useState(false);
 
-  const yellowStars = Math.floor(5);
+  const yellowStars = Math.floor(rating);
   const whiteStars = 5 - yellowStars;
 
   const handleRejectClose = () => setShowRejectModal(false);
@@ -35,29 +37,25 @@ const CardPatientReviews = () => {
           <Row>
             <Col>
               <Card.Subtitle className="opacity-50">NIK</Card.Subtitle>
-              <Card.Text>6568266846216346</Card.Text>
+              <Card.Text>{nik}</Card.Text>
             </Col>
             <Col className="text-center">
               <Card.Subtitle className="opacity-50">
-                Tanggal Lahir
+                Tanggal Ulasan
               </Card.Subtitle>
-              <Card.Text>00/00/0000</Card.Text>
+              <Card.Text>{tgl_ulasan}</Card.Text>
             </Col>
           </Row>
           <Row>
             <Col>
               <Card.Subtitle className="opacity-50">Nama</Card.Subtitle>
-              <Card.Text>Mimi Peri</Card.Text>
+              <Card.Text>{nama_pasien}</Card.Text>
             </Col>
           </Row>
           <Row>
             <Col>
               <Card.Subtitle className="opacity-50">Penilaian</Card.Subtitle>
-              <Card.Text>
-                Lorem ipsum dolor sit amet consectetur. Eu diam amet varius
-                vitae tortor id eleifend ultrices potenti. At aliquam id
-                egestas.
-              </Card.Text>
+              <Card.Text>{penilaian}</Card.Text>
             </Col>
           </Row>
           <Row>
@@ -66,12 +64,12 @@ const CardPatientReviews = () => {
               <div className="stars-container">
                 <div className="stars">
                   {[...Array(yellowStars)].map((_, index) => (
-                    <BsStarFill key={index} className="star yellow-star" />
+                    <BsStarFill key={index} className="text-primary" />
                   ))}
                   {[...Array(whiteStars)].map((_, index) => (
                     <BsStarFill
                       key={index + yellowStars}
-                      className="star white-star"
+                      className="text-secondary"
                     />
                   ))}
                 </div>

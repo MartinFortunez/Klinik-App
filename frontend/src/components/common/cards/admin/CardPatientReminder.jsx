@@ -3,7 +3,8 @@ import { Button, Card, Col, Row } from "react-bootstrap";
 import Cancel from "../../admin/patientReminder/Cancel";
 import Send from "../../admin/patientReminder/Send";
 
-const CardPatientReminder = () => {
+const CardPatientReminder = ({ data }) => {
+  const { nik, nama_pasien, tgl_konsul, no_wa, tgl_tenggat } = data;
   const [showCancelModal, setShowCancelModal] = useState(false);
   const [showSendModal, setShowSendModal] = useState(false);
 
@@ -31,36 +32,33 @@ const CardPatientReminder = () => {
               <span className="custom-underline"></span>
             </Col>
             <Col className="d-flex justify-content-end">
-              <span>00/00/0000</span>
+              <span>{tgl_konsul}</span>
             </Col>
           </Row>
           <Row>
             <Card.Subtitle className="opacity-50">NIK</Card.Subtitle>
-            <Card.Text>13543457349579845798475</Card.Text>
+            <Card.Text>{nik}</Card.Text>
           </Row>
           <Row>
             <Col>
               <Card.Subtitle className="opacity-50">Nama</Card.Subtitle>
-              <Card.Text>Nama</Card.Text>
+              <Card.Text>{nama_pasien}</Card.Text>
             </Col>
             <Col className="text-center">
               <Card.Subtitle className="opacity-50">
                 No. HP/WhatsApp
               </Card.Subtitle>
-              <Card.Text>No. HP/WhatsApp</Card.Text>
+              <Card.Text>{no_wa}</Card.Text>
             </Col>
             <Col className="text-end">
-              <Card.Subtitle className="opacity-50">
-                Tengat Waktu
-              </Card.Subtitle>
-              <Card.Text>dd/mm/yy --,--</Card.Text>
+              <Card.Subtitle className="opacity-50">Tengat Waktu</Card.Subtitle>
+              <Card.Text>{tgl_tenggat}</Card.Text>
             </Col>
           </Row>
-          
         </Card.Body>
         <Card.Footer className="bg-transparent d-flex justify-content-end gap-2">
           <Button variant="outline-danger" onClick={handleCancelShow}>
-          Batalkan Konsultasi
+            Batalkan Konsultasi
           </Button>
           <Button
             variant="primary"

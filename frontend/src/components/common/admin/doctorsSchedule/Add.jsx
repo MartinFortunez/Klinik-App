@@ -1,8 +1,24 @@
 import { Formik } from "formik";
-import React from "react";
+import React, { useState } from "react";
 import { Button, Col, Form, Modal, Row } from "react-bootstrap";
+import axios from "axios";
+import { useQuery, useQueryClient } from "react-query";
+
+const fetchData = async () => {
+  const response = await axios.get(
+    "http://localhost:3000/dashboard/dokter-klinik"
+  );
+  return response.data;
+};
 
 const Add = ({ show, handleClose, handleAdd }) => {
+  const queryClient = useQueryClient();
+  const { data, isSuccess } = useQuery("dokterData", fetchData, {
+    refetchOnWindowFocus: false, // Tidak merender ulang data saat jendela browser mendapatkan fokus
+    refetchOnMount: false, // Tidak merender ulang data saat komponen dipasang
+    staleTime: Infinity, // Data tidak dianggap kadaluwarsa
+  });
+  const [selectedDokter, setSelectedDokter] = useState(null);
   return (
     <Modal
       show={show}
@@ -15,79 +31,116 @@ const Add = ({ show, handleClose, handleAdd }) => {
       </Modal.Header>
       <Modal.Body>
         <Formik
-          onSubmit={console.log("submit")}
+          onSubmit={handleAdd}
           initialValues={{
-            nama: "",
             idDokter: "",
+            namaDokter: "",
             spesialis: "",
-            jadwalDokter: "",
+            jam: "",
+            hari: "",
           }}
         >
           {({ handleSubmit, values, touched, errors, handleChange }) => (
             <Form noValidate onSubmit={handleSubmit}>
-              <Form.Group controlId="validationNama" className="mb-3">
-                <Form.Label>Nama</Form.Label>
-                <Form.Control
-                  name="nama"
-                  type="text"
-                  placeholder="Masukkan nama"
-                  value={values.nama}
-                  onChange={handleChange}
-                  isInvalid={touched.nama && !!errors.nama}
-                />
-                <Form.Control.Feedback type="invalid">
-                  {errors.nama}
-                </Form.Control.Feedback>
-              </Form.Group>
-
-              <Form.Group controlId="validationIdDokter" className="mb-3">
+              <Form.Group controlId="validationUsername" className="mb-3">
                 <Form.Label>Id Dokter</Form.Label>
                 <Form.Control
                   name="idDokter"
                   type="text"
-                  placeholder="Masukkan Id Dokter"
                   value={values.idDokter}
                   onChange={handleChange}
                   isInvalid={touched.idDokter && !!errors.idDokter}
+                  disabled
                 />
                 <Form.Control.Feedback type="invalid">
                   {errors.idDokter}
                 </Form.Control.Feedback>
               </Form.Group>
-
-              <Form.Group controlId="validationSpesialis" className="mb-3">
-                <Form.Label>Spesialis</Form.Label>
+              <Form.Group controlId="validationUsername" className="mb-3">
+                <Form.Label>Nama Dokter</Form.Label>
                 <Form.Select
+                  name="namaDokter"
+                  value={values.namaDokter}
+                  onChange={(e) => {
+                    handleChange(e);
+                    const selected = data.find(
+                      (dokter) => dokter.nama_dokter === e.target.value
+                    );
+                    if (selected) {
+                      setSelectedDokter(selected);
+                      handleChange({
+                        target: { name: "idDokter", value: selected.dokter_id },
+                      });
+                      handleChange({
+                        target: {
+                          name: "spesialis",
+                          value: selected.spesialis,
+                        },
+                      });
+                    }
+                    console.log(selected);
+                  }}
+                  isInvalid={touched.namaDokter && !!errors.namaDokter}
+                >
+                  {" "}
+                  <option value="">Pilih Dokter</option>
+                  {isSuccess &&
+                    data &&
+                    data.map((item) => (
+                      <option key={item.dokter_id} value={item.nama_dokter}>
+                        {item.nama_dokter}
+                      </option>
+                    ))}
+                </Form.Select>
+                <Form.Control.Feedback type="invalid">
+                  {errors.namaDokter}
+                </Form.Control.Feedback>
+              </Form.Group>
+              <Form.Group controlId="validationUsername" className="mb-3">
+                <Form.Label>Spesialis</Form.Label>
+                <Form.Control
                   name="spesialis"
+                  type="text"
                   value={values.spesialis}
                   onChange={handleChange}
                   isInvalid={touched.spesialis && !!errors.spesialis}
-                >
-                  <option value="">Pilih Spesialis</option>
-                  <option value="cardiology">Cardiology</option>
-                  <option value="neurology">Neurology</option>
-                  <option value="orthopedics">Orthopedics</option>
-                  <option value="pediatrics">Pediatrics</option>
-                  <option value="general">General</option>
-                </Form.Select>
+                  disabled
+                />
                 <Form.Control.Feedback type="invalid">
                   {errors.spesialis}
                 </Form.Control.Feedback>
               </Form.Group>
-
-              <Form.Group controlId="validationJadwalDokter" className="mb-3">
-                <Form.Label>Jadwal Dokter</Form.Label>
-                {/* Gunakan Form.Control dengan type="date" sebagai tanggal picker */}
+              <Form.Group controlId="hari" className="mb-3">
+                <Form.Label>Hari</Form.Label>
                 <Form.Control
-                  name="jadwalDokter"
-                  type="date"
-                  value={values.jadwalDokter}
+                  as="select"
+                  name="hari"
+                  value={values.hari}
                   onChange={handleChange}
-                  isInvalid={touched.jadwalDokter && !!errors.jadwalDokter}
-                />
-                <Form.Control.Feedback type="invalid">
-                  {errors.jadwalDokter}
-                </Form.Control.Feedback>
+                >
+                  <option value="">Pilih Hari</option>
+                  <option value="Senin">Senin</option>
+                  <option value="Selasa">Selasa</option>
+                  <option value="Rabu">Rabu</option>
+                  <option value="Kamis">Kamis</option>
+                  <option value="Jumat">Jumat</option>
+                  <option value="Sabtu">Sabtu</option>
+                  <option value="Minggu">Minggu</option>
+                </Form.Control>
+              </Form.Group>
+              <Form.Group controlId="jam" className="mb-3">
+                <Form.Label>Jam</Form.Label>
+                <Form.Select
+                  name="jam"
+                  value={values.jam}
+                  onChange={handleChange}
+                >
+                  {" "}
+                  <option value="">Pilih Jam</option>
+                  <option value="09:00 - 10:00">09:00 - 10:00</option>
+                  <option value="10:00 - 11:00">10:00 - 11:00</option>
+                  <option value="11:00 - 12:00">11:00 - 12:00</option>
+                </Form.Select>
               </Form.Group>
 
               <Form.Group as={Row}>
@@ -106,7 +159,6 @@ const Add = ({ show, handleClose, handleAdd }) => {
                     variant="primary"
                     type="submit"
                     className="w-100 text-light"
-                    onClick={handleAdd}
                   >
                     Tambahkan
                   </Button>
