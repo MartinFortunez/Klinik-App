@@ -3,24 +3,23 @@ const JadwalKonsul = require("../models/JadwalKonsul");
 exports.getAllKonsul = (req, res) => {
   JadwalKonsul.getAll((err, schedules) => {
     if (err) {
-      res.status(500).json({ error: 'Internal server error' });
+      res.status(500).json({ error: "Internal server error" });
       return;
     }
     res.status(200).json({ schedules });
   });
 };
 
-
 exports.getJadwalKonsulById = (req, res) => {
   const { id } = req.params;
 
   JadwalKonsul.getById(id, (err, result) => {
     if (err) {
-      res.status(500).json({ error: 'Internal server error' });
+      res.status(500).json({ error: "Internal server error" });
       return;
     }
     if (!result) {
-      res.status(404).json({ error: 'Facility not found' });
+      res.status(404).json({ error: "Facility not found" });
       return;
     }
     res.status(200).json(result);
@@ -37,35 +36,34 @@ exports.addJadwalKonsul = (req, res) => {
   JadwalKonsul.create(newJadwalKonsul, (err) => {
     if (err) {
       console.error("Error adding consultation schedule:", err);
-      res.status(500).json({ error: 'Failed to add consultation schedule' });
+      res.status(500).json({ error: "Failed to add consultation schedule" });
       return;
     }
-    res.status(200).json({ message: 'Consultation schedule added successfully' });
+    res.status(200).json({ message: "Consultation schedule added successfully" });
   });
 };
-
 
 exports.setujuKonsultasi = (req, res) => {
   const { id } = req.params;
 
   JadwalKonsul.setujuKonsultasiMasuk(id, (err) => {
     if (err) {
-      res.status(500).json({ error: 'Failed to approve consultation' });
+      res.status(500).json({ error: "Failed to approve consultation" });
       return;
     }
-    res.status(200).json({ message: 'Consultation approved successfully' });
+    res.status(200).json({ message: "Consultation approved successfully" });
   });
 };
 
-exports.tolakKonsultasi = (req, res) => {
+exports.cancelKonsultasi = (req, res) => {
   const { id } = req.params;
 
-  JadwalKonsul.tolakKonsultasiMasuk(id, (err) => {
+  JadwalKonsul.cancelKonsultasiMasuk(id, (err) => {
     if (err) {
-      res.status(500).json({ error: 'Failed to reject consultation' });
+      res.status(500).json({ error: "Failed to reject consultation" });
       return;
     }
-    res.status(200).json({ message: 'Consultation rejected successfully' });
+    res.status(200).json({ message: "Consultation rejected successfully" });
   });
 };
 
@@ -74,9 +72,9 @@ exports.deleteJadwalKonsul = (req, res) => {
 
   JadwalKonsul.delete(id, (err) => {
     if (err) {
-      res.status(500).json({ error: 'Failed to delete consultation schedule' });
+      res.status(500).json({ error: "Failed to delete consultation schedule" });
       return;
     }
-    res.status(200).json({ message: 'Consultation schedule deleted successfully' });
+    res.status(200).json({ message: "Consultation schedule deleted successfully" });
   });
 };

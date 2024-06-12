@@ -26,13 +26,8 @@ class Fasilitas {
   }
 
   static create(data, callback) {
-    const query =
-      "INSERT INTO fasilitas (foto_fasilitas, judul, deskripsi) VALUES (?, ?, ?)";
-    connection.query(
-      query,
-      [data.foto_fasilitas, data.judul, data.deskripsi],
-      callback
-    );
+    const query = "INSERT INTO fasilitas (foto_fasilitas, judul, deskripsi) VALUES (?, ?, ?)";
+    connection.query(query, [data.foto_fasilitas, data.judul, data.deskripsi], callback);
   }
 
   static update(id, data, callback) {
@@ -41,8 +36,7 @@ class Fasilitas {
       query = "UPDATE fasilitas SET foto_fasilitas = ?, judul = ?, deskripsi = ? WHERE fasilitas_id = ?";
       queryParams = [data.foto_fasilitas, data.judul, data.deskripsi, id];
     } else {
-      query =
-        "UPDATE fasilitas SET judul = ?, deskripsi = ? WHERE fasilitas_id = ?";
+      query = "UPDATE fasilitas SET judul = ?, deskripsi = ? WHERE fasilitas_id = ?";
       queryParams = [data.judul, data.deskripsi, id];
     }
     connection.query(query, queryParams, callback);

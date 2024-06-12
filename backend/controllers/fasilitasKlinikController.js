@@ -1,4 +1,4 @@
-const Fasilitas = require("../models/Fasilitas");
+const Fasilitas = require('../models/Fasilitas');
 
 exports.getAllFasilitas = (req, res) => {
   Fasilitas.getAll((err, results) => {
