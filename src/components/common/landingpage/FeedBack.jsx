@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Modal, Button, Container, Carousel } from "react-bootstrap";
 import CardFeedBack from "../cards/landingpage/CardFeedBack";
 import "bootstrap/dist/css/bootstrap.min.css";
@@ -19,14 +19,33 @@ const fetchData = async () => {
 
 const FeedBack = () => {
   const [showAddModal, setShowAddModal] = useState(false);
+  const [cardsPerSlide, setCardsPerSlide] = useState(2);
   const { data, isSuccess } = useQuery("feedbackData", fetchData, {
-    refetchOnWindowFocus: false, // Tidak merender ulang data saat jendela browser mendapatkan fokus
-    refetchOnMount: false, // Tidak merender ulang data saat komponen dipasang
-    staleTime: Infinity, // Data tidak dianggap kadaluwarsa
+    refetchOnWindowFocus: false,
+    refetchOnMount: false,
+    staleTime: Infinity,
   });
+
+  useEffect(() => {
+    const handleResize = () => {
+      if (window.innerWidth <= 1000) {
+        setCardsPerSlide(1);
+      } else {
+        setCardsPerSlide(2);
+      }
+    };
+
+    handleResize();
+    window.addEventListener("resize", handleResize);
+
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, []);
 
   const handleAddClose = () => setShowAddModal(false);
   const handleAddShow = () => setShowAddModal(true);
+
   return (
     <div className="StyledFeedBack">
       <div className="Title">Ulasan Pasien</div>
@@ -36,9 +55,9 @@ const FeedBack = () => {
           nextIcon={<CarouselControlNext />}
         >
           {data ? (
-            Array.from({ length: Math.ceil(data.length / 2) }, (_, i) => {
-              const startIndex = i * 2;
-              const endIndex = startIndex + 2;
+            Array.from({ length: Math.ceil(data.length / cardsPerSlide) }, (_, i) => {
+              const startIndex = i * cardsPerSlide;
+              const endIndex = startIndex + cardsPerSlide;
               return (
                 <Carousel.Item key={i}>
                   <div className="d-flex justify-content-around">
@@ -46,7 +65,6 @@ const FeedBack = () => {
                       <CardFeedBack key={item.ulasan_id} data={item} />
                     ))}
                   </div>
-                  s
                 </Carousel.Item>
               );
             })

@@ -6,6 +6,7 @@ import CardDoctor from "../cards/landingpage/CardDoctor.jsx";
 import { Container } from "react-bootstrap";
 import axios from "axios";
 import { useQuery, useQueryClient } from "react-query";
+import styled from 'styled-components';
 
 const fetchDataDokter = async () => {
   const response = await axios.get(
@@ -22,15 +23,24 @@ const Doctor = () => {
   });
   console.log(data);
 
+  const CustomRow = styled(Row)`
+  text-align: center;
+
+  @media (max-width: 576px) {
+    text-align: left;
+    padding-left: 20px;
+  }
+`;
+
   return (
     <Container fluid className="py-5">
-      <Row className="text-center">
-        <h1 className="text-primary">Jadwal Praktek Dokter</h1>
-        <p>
-          Lorem ipsum dolor sit amet consectetur. Ullamcorper vulputate non in
-          lorem adipiscing tempor integer blandit commodo.
-        </p>
-      </Row>
+      <CustomRow>
+      <h1 className="text-primary">Jadwal Praktek Dokter</h1>
+      <p>
+        Lorem ipsum dolor sit amet consectetur. Ullamcorper vulputate non in
+        lorem adipiscing tempor integer blandit commodo.
+      </p>
+    </CustomRow>
 
       <Row xs={1} md={2} className="g-4 p-5">
         {data ? (
