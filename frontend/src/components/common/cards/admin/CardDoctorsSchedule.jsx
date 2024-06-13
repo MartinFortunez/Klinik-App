@@ -5,17 +5,7 @@ import Edit from "../../admin/doctorsSchedule/Edit";
 import axios from "axios";
 
 import { useQueryClient } from "react-query";
-
-const deleteDoctorSchedule = async (jadwalId) => {
-  console.log(jadwalId);
-  try {
-    await axios.delete(
-      `http://localhost:3000/dashboard/jadwal-dokter-spesialis/delete/${jadwalId}`
-    );
-  } catch (error) {
-    throw new Error(error);
-  }
-};
+import { handleDelete } from "../../../../utils/handleFunction";
 
 const CardDoctorsSchedule = ({ data, dataDoctor }) => {
   const { dokter_id, jadwal_id, sesi, nama_dokter, spesialis } = data;
@@ -31,20 +21,13 @@ const CardDoctorsSchedule = ({ data, dataDoctor }) => {
   const handleEditClose = () => setShowEditModal(false);
   const handleEditShow = () => setShowEditModal(true);
 
-  const handleDelete = async () => {
-    try {
-      console.log("delete");
-      await deleteDoctorSchedule(jadwal_id);
-      queryClient.invalidateQueries("jadwalDokterData"); // Memicu refetch setelah menghapus data
-    } catch (error) {
-      console.error("Failed to delete schedule:", error);
-    }
-  };
-
-  const handleSave = (formData) => {
-    // Lakukan aksi simpan di sini
-    console.log("Form data saved:", formData);
-    handleEditClose();
+  const onDelete = () => {
+    handleDelete(
+      "delete",
+      `jadwal-dokter-spesialis/delete/${jadwal_id}`,
+      queryClient,
+      "jadwalDokterData"
+    );
   };
 
   return (
@@ -73,7 +56,7 @@ const CardDoctorsSchedule = ({ data, dataDoctor }) => {
           </Row>
         </Card.Body>
         <Card.Footer className="bg-transparent d-flex justify-content-end gap-2">
-          <Button variant="outline-danger" onClick={handleDelete}>
+          <Button variant="outline-danger" onClick={handleDeleteShow}>
             Hapus
           </Button>
           <Button
@@ -83,16 +66,16 @@ const CardDoctorsSchedule = ({ data, dataDoctor }) => {
           >
             Edit
           </Button>
-          {/* <Delete
+          <Delete
             show={showDeleteModal}
             handleClose={handleDeleteClose}
-            handleDelete={handleDelete}
-          /> */}
+            handleDelete={onDelete}
+            data={data}
+          />
 
           <Edit
             show={showEditModal}
             handleClose={handleEditClose}
-            handleSave={handleSave}
             data={data}
             dataDoctor={dataDoctor}
           />

@@ -88,7 +88,7 @@ const CardDoctor = ({ data }) => {
           show={showAddModal}
           handleClose={handleAddClose}
           handleAdd={handleSubmit}
-          data={data}
+          dataDoctor={data}
         />
       </Card.Body>
     </Card>

@@ -1,26 +1,18 @@
 import React from "react";
 import { Button, Col, Modal, Row } from "react-bootstrap";
-import axios from "axios";
-import { useMutation, useQuery, useQueryClient } from "react-query";
+import { useQueryClient } from "react-query";
+import { api } from "../../../../api/api";
 
 const Accept = ({ data, show, handleClose }) => {
   const queryClient = useQueryClient();
 
-  const { mutate } = useMutation(
-    (konsulId) =>
-      axios.put(
-        `http://localhost:3000/dashboard/jadwal-konsultasi/${konsulId}/setuju`
-      ),
-    {
-      onSuccess: () => {
-        queryClient.invalidateQueries("konsultasiMasukData");
-        handleClose();
-      },
-    }
-  );
+  const onSubmit = async () => {
+    api("put", `jadwal-konsultasi/${data}/setuju`, "");
+    await queryClient.invalidateQueries("konsultasiMasukData");
 
-  const handleAccept = () => {
-    mutate(data);
+    // Menunggu hingga refetch selesai
+    await queryClient.refetchQueries("konsultasiMasukData");
+    handleClose();
   };
 
   return (
@@ -45,7 +37,7 @@ const Accept = ({ data, show, handleClose }) => {
           <Button
             variant="primary"
             className="w-100 text-light"
-            onClick={handleAccept}
+            onClick={onSubmit}
           >
             Terima
           </Button>

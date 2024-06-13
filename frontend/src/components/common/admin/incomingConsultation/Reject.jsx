@@ -1,26 +1,18 @@
 import React from "react";
 import { Button, Col, Modal, Row } from "react-bootstrap";
-import axios from "axios";
-import { useMutation, useQuery, useQueryClient } from "react-query";
+import { useQueryClient } from "react-query";
+import { api } from "../../../../api/api";
 
 const Reject = ({ data, show, handleClose }) => {
   const queryClient = useQueryClient();
 
-  const { mutate } = useMutation(
-    (konsulId) =>
-      axios.put(
-        `http://localhost:3000/dashboard/jadwal-konsultasi/${konsulId}/tolak`
-      ),
-    {
-      onSuccess: () => {
-        queryClient.invalidateQueries("konsultasiMasukData");
-        handleClose();
-      },
-    }
-  );
+  const onSubmit = async () => {
+    api("delete", `jadwal-konsultasi/reject/${data}`, "");
+    await queryClient.invalidateQueries("konsultasiMasukData");
 
-  const handleReject = () => {
-    mutate(data);
+    // Menunggu hingga refetch selesai
+    await queryClient.refetchQueries("konsultasiMasukData");
+    handleClose();
   };
   return (
     <Modal show={show} onHide={handleClose} centered>
@@ -41,7 +33,7 @@ const Reject = ({ data, show, handleClose }) => {
           </Button>
         </Col>
         <Col>
-          <Button variant="danger" className="w-100" onClick={handleReject}>
+          <Button variant="danger" className="w-100" onClick={onSubmit}>
             Tolak
           </Button>
         </Col>
