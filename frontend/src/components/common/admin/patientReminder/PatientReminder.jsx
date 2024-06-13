@@ -3,20 +3,12 @@ import { Col, Container, Row } from "react-bootstrap";
 import CardPatientReminder from "../../cards/admin/CardPatientReminder";
 import axios from "axios";
 import { useQuery, useQueryClient } from "react-query";
-
-const fetchData = async () => {
-  const response = await axios.get("http://localhost:3000/dashboard/reminder");
-  return response.data;
-};
+import useFetch from "../../../../hooks/useFetch";
 
 const PatientReminder = () => {
   const [showAddModal, setShowAddModal] = useState(false);
   const queryClient = useQueryClient();
-  const { data, isSuccess } = useQuery("reminderData", fetchData, {
-    refetchOnWindowFocus: false, // Tidak merender ulang data saat jendela browser mendapatkan fokus
-    refetchOnMount: false, // Tidak merender ulang data saat komponen dipasang
-    staleTime: Infinity, // Data tidak dianggap kadaluwarsa
-  });
+  const { data, isSuccess } = useFetch("reminder", "reminderData");
 
   const handleAddClose = () => setShowAddModal(false);
   const handleAddShow = () => setShowAddModal(true);

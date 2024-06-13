@@ -17,6 +17,8 @@ const PatientReviews = () => {
     staleTime: Infinity, // Data tidak dianggap kadaluwarsa
   });
 
+  
+
   return (
     <Container fluid className="p-5 h-100 d-flex flex-column overflow-hidden">
       <Row className="align-items-center">
