@@ -4,6 +4,7 @@ import Cancel from "../../admin/patientReminder/Cancel";
 import Send from "../../admin/patientReminder/Send";
 
 const CardPatientReminder = ({ data }) => {
+  console.log(data);
   const { nik, nama_pasien, tgl_konsul, no_wa, tgl_tenggat } = data;
   const [showCancelModal, setShowCancelModal] = useState(false);
   const [showSendModal, setShowSendModal] = useState(false);
@@ -78,6 +79,7 @@ const CardPatientReminder = ({ data }) => {
             show={showSendModal}
             handleClose={handleSendClose}
             handleSend={handleSend}
+            data={data}
           />
         </Card.Footer>
       </Card>

@@ -13,6 +13,10 @@ import "normalize.css";
 import "./index.css";
 import { QueryClient, QueryClientProvider } from "react-query";
 
+// import dotenv from "dotenv";
+
+// dotenv.config();
+
 const queryClient = new QueryClient();
 
 function App() {
