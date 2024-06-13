@@ -156,20 +156,12 @@ router.post(
   jadwalKonsulController.addJadwalKonsul
 );
 
-// UPDATE NEW CANCEL DAN APPROVE
-router.get(
-  "/dashboard/jadwal-konsultasi/edit/:id",
-  jadwalKonsulController.getJadwalKonsulById
-);
-router.put(
-  "/dashboard/jadwal-konsultasi/:id/setuju",
-  jadwalKonsulController.setujuKonsultasi
-);
-router.put(
-  "/dashboard/jadwal-konsultasi/:id/cancel",
-  jadwalKonsulController.cancelKonsultasi
-);
-// UPDATE END NEW CANCEL DAN APPROVE
+// UPDATE NEW CANCEL, APPROVE, COMPELETE
+router.get('/dashboard/jadwal-konsultasi/edit/:id', jadwalKonsulController.getJadwalKonsulById);
+router.put('/dashboard/jadwal-konsultasi/:id/setuju', jadwalKonsulController.setujuKonsultasi);
+router.put('/dashboard/jadwal-konsultasi/:id/cancel', jadwalKonsulController.cancelKonsultasi);
+router.put('/dashboard/jadwal-konsultasi/:id/complete', jadwalKonsulController.completeKonsultasi);
+// UPDATE END NEW CANCEL, APPROVE, COMPELETE
 
 // DELETE REJECT DARI JADWAL KONSULTASI
 router.delete(
@@ -187,6 +179,7 @@ router.post(
 // end reminder routes
 
 // start riwayat routes
+router.get("/dashboard/riwayat/search", riwayatController.getAllRiwayatCancel);
 router.get("/dashboard/riwayat", riwayatController.getAllRiwayatCancel);
 router.post(
   "/riwayat/send-whatsapp/:id",

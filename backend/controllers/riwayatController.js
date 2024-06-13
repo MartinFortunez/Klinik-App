@@ -1,13 +1,38 @@
 const JadwalKonsul = require("../models/JadwalKonsul");
 
+// exports.getAllRiwayatCancel = (req, res) => {
+//   JadwalKonsul.getAllRiwayat((err, schedules) => {
+//     if (err) {
+//       res.status(500).json({ error: 'Internal server error' });
+//       return;
+//     }
+//     res.status(200).json({ schedules });
+//   });
+// };
+
+
 exports.getAllRiwayatCancel = (req, res) => {
-  JadwalKonsul.getAllRiwayat((err, schedules) => {
-    if (err) {
-      res.status(500).json({ error: 'Internal server error' });
-      return;
-    }
-    res.status(200).json({ schedules });
-  });
+  const { nik } = req.query; // Ambil nilai 'nik' dari query parameter
+
+  // Jika parameter 'nik' ada, gunakan searchByNik untuk pencarian
+  if (nik) {
+    JadwalKonsul.searchByNik(nik, (err, schedules) => {
+      if (err) {
+        res.status(500).json({ error: 'Internal server error' });
+        return;
+      }
+      res.status(200).json({ schedules });
+    });
+  } else {
+    // Jika tidak ada parameter 'nik', ambil semua riwayat cancel
+    JadwalKonsul.getAllRiwayat((err, schedules) => {
+      if (err) {
+        res.status(500).json({ error: 'Internal server error' });
+        return;
+      }
+      res.status(200).json({ schedules });
+    });
+  }
 };
 
 // Fungsi untuk memastikan nomor dalam format E.164
