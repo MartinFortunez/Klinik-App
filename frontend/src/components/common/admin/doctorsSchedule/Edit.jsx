@@ -4,23 +4,8 @@ import { Button, Col, Form, Modal, Row } from "react-bootstrap";
 import * as yup from "yup";
 import { useQuery, useQueryClient } from "react-query";
 import axios from "axios";
-
-const editSchedule = async (scheduleId, updatedFacilityData) => {
-  try {
-    const response = {
-      dokter_id: updatedFacilityData.idDokter,
-      sesi: `${updatedFacilityData.hari} (${updatedFacilityData.jam})`,
-      status: updatedFacilityData.status,
-    };
-
-    await axios.put(
-      `http://localhost:3000/dashboard/jadwal-dokter-spesialis/edit/${scheduleId}`,
-      response
-    );
-  } catch (error) {
-    throw new Error("Failed to edit schedule");
-  }
-};
+import { handleSubmit } from "../../../../utils/handleFunction";
+import { formDataEditSchedule } from "../../../../utils/body";
 
 const Edit = ({ show, handleClose, data, dataDoctor }) => {
   const { dokter_id, jadwal_id, sesi, nama_dokter, spesialis, status } = data;
@@ -34,15 +19,16 @@ const Edit = ({ show, handleClose, data, dataDoctor }) => {
   const queryClient = useQueryClient();
   const [selectedDokter, setSelectedDokter] = useState(null);
 
-  const handleSubmit = async (e) => {
-    console.log(e);
-    try {
-      await editSchedule(jadwal_id, e);
-      queryClient.invalidateQueries("jadwalDokterData");
-      handleClose();
-    } catch (error) {
-      console.error("Failed to edit schedule:", error);
-    }
+  const onSubmit = (values, actions) => {
+    handleSubmit(
+      "put",
+      `jadwal-dokter-spesialis/edit/${jadwal_id}`,
+      formDataEditSchedule(values),
+      actions,
+      handleClose,
+      queryClient,
+      "jadwalDokterData"
+    );
   };
   return (
     <Modal
@@ -56,7 +42,7 @@ const Edit = ({ show, handleClose, data, dataDoctor }) => {
       </Modal.Header>
       <Modal.Body>
         <Formik
-          onSubmit={handleSubmit}
+          onSubmit={onSubmit}
           initialValues={{
             idDokter: dokter_id,
             namaDokter: nama_dokter,
@@ -185,7 +171,7 @@ const Edit = ({ show, handleClose, data, dataDoctor }) => {
                     type="submit"
                     className="w-100 text-light"
                   >
-                    Tambahkan
+                    Konfirmasi
                   </Button>
                 </Col>
               </Form.Group>

@@ -4,6 +4,7 @@ import { Modal, Form, Button, Row, Col } from "react-bootstrap";
 import * as yup from "yup";
 import axios from "axios";
 import { useQuery, useQueryClient } from "react-query";
+import useFetch from "../../../hooks/useFetch";
 
 // const validationSchema = yup.object().shape({
 //   NIK: yup.string().required("NIK wajib diisi"),
@@ -18,36 +19,23 @@ import { useQuery, useQueryClient } from "react-query";
 //   sesi: yup.string().required("sesi wajib diisi"),
 // });
 
-const fetchData = async (dokterId) => {
-  const response = await axios.get(
-    `http://localhost:3000/dashboard/jadwal-dokter/${dokterId}`
-  );
-  return response.data;
-};
-
-const FormConsul = ({ data, show, handleClose, handleAdd }) => {
-  const { dokter_id, nama_dokter, spesialis } = data;
+const FormConsul = ({ dataDoctor, show, handleClose, handleAdd }) => {
+  const { dokter_id, nama_dokter, spesialis } = dataDoctor;
   const [sesiData, setSesiData] = useState(null);
-  const { isLoading, isError } = useQuery(
-    ["jadwalData", dokter_id],
-    () => fetchData(dokter_id),
-    {
-      enabled: false,
-    }
+
+  const { data, isSuccess } = useFetch(
+    `jadwal-dokter/${dokter_id}`,
+    "konsultasiMasukData"
   );
 
   useEffect(() => {
-    if (data) {
+    if (isSuccess && data) {
       // Memuat data sesi hanya jika data utama sudah dimuat
-      fetchData(dokter_id)
-        .then((response) => {
-          setSesiData(response);
-        })
-        .catch((error) => {
-          console.error("Error fetching sesi data:", error);
-        });
+      setSesiData(data);
+    } else {
+      console.log("Failed to fetch data");
     }
-  }, [data, dokter_id]);
+  }, [isSuccess, data, dokter_id]);
 
   return (
     <Modal
