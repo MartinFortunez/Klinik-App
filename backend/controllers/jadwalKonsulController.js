@@ -67,6 +67,19 @@ exports.cancelKonsultasi = (req, res) => {
   });
 };
 
+
+exports.completeKonsultasi = (req, res) => {
+  const { id } = req.params;
+
+  JadwalKonsul.completeKonsultasiMasuk(id, (err) => {
+    if (err) {
+      res.status(500).json({ error: "Failed to cpmplete consultation" });
+      return;
+    }
+    res.status(200).json({ message: "Consultation completed successfully" });
+  });
+};
+
 exports.deleteJadwalKonsul = (req, res) => {
   const { id } = req.params;
 

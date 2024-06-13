@@ -34,7 +34,7 @@ class JadwalKonsul {
 
   static getAllRiwayat(callback) {
     const query = `
-    SELECT * FROM jadwal_konsul JOIN dokter USING (dokter_id) JOIN jadwal_dokter USING (jadwal_id) WHERE jadwal_konsul.status ='cancel';
+    SELECT jadwal_konsul.*, dokter.nama_dokter, dokter.spesialis, jadwal_dokter.sesi FROM jadwal_konsul JOIN dokter USING (dokter_id) JOIN jadwal_dokter USING (jadwal_id) WHERE jadwal_konsul.status ='cancel' OR jadwal_konsul.status ='complete';
     `;
     connection.query(query, (err, results) => {
       if (err) return callback(err);
@@ -47,18 +47,30 @@ class JadwalKonsul {
     const tglKonsul = new Date(); // Jika `tgl_konsul` diatur secara otomatis ke tanggal saat ini
     const tglTenggat = new Date(tglKonsul);
     tglTenggat.setDate(tglTenggat.getDate() + 3);
-  
+
     const query = `
       INSERT INTO jadwal_konsul (nik, nama_pasien, alamat, gol_darah, tgl_lahir, no_wa, jenis_kelamin, dokter_id, jadwal_id, status, tgl_konsul, tgl_tenggat)
       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, 'pending', ?, ?);
     `;
     connection.query(query, [data.nik, data.nama_pasien, data.alamat, data.gol_darah, data.tgl_lahir, data.no_wa, data.jenis_kelamin, data.dokter_id, data.jadwal_id, tglKonsul, tglTenggat], callback);
   }
-  
+
+  static searchByNik(nik, callback) {
+    const query = `
+    SELECT jadwal_konsul.*, dokter.nama_dokter, dokter.spesialis, jadwal_dokter.sesi 
+    FROM jadwal_konsul
+    JOIN dokter USING (dokter_id) 
+    JOIN jadwal_dokter USING (jadwal_id) 
+    WHERE (jadwal_konsul.status = 'cancel' OR jadwal_konsul.status = 'complete') 
+    AND jadwal_konsul.nik = ?;
+    `;
+    connection.query(query, [nik], (err, results) => {
+        if (err) return callback(err);
+        callback(null, results);
+    });
+}
 
 
-    
-  // setuju konsultasi NEW
   static setujuKonsultasiMasuk(id, callback) {
     const query = `
       UPDATE jadwal_konsul
@@ -67,9 +79,7 @@ class JadwalKonsul {
     `;
     connection.query(query, [id], callback);
   }
-  // END setuju konsultasi NEW
 
-  // tolak konsultasi NEW
   static cancelKonsultasiMasuk(id, callback) {
     const query = `
       UPDATE jadwal_konsul
@@ -78,7 +88,15 @@ class JadwalKonsul {
     `;
     connection.query(query, [id], callback);
   }
-  // END tolak konsultasi NEW
+
+  static completeKonsultasiMasuk(id, callback) {
+    const query = `
+      UPDATE jadwal_konsul
+      SET status = "complete"
+      WHERE konsul_id = ?;
+    `;
+    connection.query(query, [id], callback);
+  }
 
   static delete(id, callback) {
     const query = "DELETE FROM jadwal_konsul WHERE konsul_id = ?;";
