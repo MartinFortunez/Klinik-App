@@ -21,22 +21,13 @@ const validationSchema = yup.object().shape({
       (value) => value && SUPPORTED_FORMATS.includes(value.type)
     ),
   namaDokter: yup.string().required("nama wajib diisi"),
-  sip : yup.string().required("id dokter wajib diisi"),
-  spesialis : yup.string().required("spesialis wajib diisi"),
+  sip: yup.string().required("id dokter wajib diisi"),
+  spesialis: yup.string().required("spesialis wajib diisi"),
 });
 
 const Add = ({ show, handleClose, handleAdd }) => {
   const [selectedFile, setSelectedFile] = useState(null);
   const [previewUrl, setPreviewUrl] = useState(null);
-
-  const handleFileChange = (event) => {
-    const file = event.target.files[0];
-    if (file) {
-      setSelectedFile(file);
-      const previewUrl = URL.createObjectURL(file);
-      setPreviewUrl(previewUrl);
-    }
-  };
 
   return (
     <Modal
@@ -59,7 +50,14 @@ const Add = ({ show, handleClose, handleAdd }) => {
             spesialis: "",
           }}
         >
-          {({ handleSubmit, values, touched, errors, handleChange, setFieldValue }) => (
+          {({
+            handleSubmit,
+            values,
+            touched,
+            errors,
+            handleChange,
+            setFieldValue,
+          }) => (
             <Form noValidate onSubmit={handleSubmit}>
               {values.imageFile && (
                 <div className="mb-3">
@@ -113,25 +111,25 @@ const Add = ({ show, handleClose, handleAdd }) => {
                 <Form.Control.Feedback type="invalid">
                   {errors.sip}
                 </Form.Control.Feedback>
-              <Form.Group controlId="validationSpesialis" className="mb-3">
-                <Form.Label>Spesialis</Form.Label>
-                <Form.Select
-                      name="spesialis"
-                      value={values.spesialis}
-                      aria-label="Default select example"
-                      onChange={handleChange}
-                      isValid={touched.spesialis && !!errors.spesialis}
-                      isInvalid={touched.spesialis && !!errors.spesialis}
-                    >
-                      <option>Pilih Spesialis</option>
-                      <option value="1">Spesialis 1</option>
-                      <option value="2">Spesialis 2</option>
-                      <option value="3">Spesialis 3</option>
-                    </Form.Select>
-                    <Form.Control.Feedback type="invalid">
-                      {errors.spesialis}
-                    </Form.Control.Feedback>
-                  </Form.Group>
+                <Form.Group controlId="validationSpesialis" className="mb-3">
+                  <Form.Label>Spesialis</Form.Label>
+                  <Form.Select
+                    name="spesialis"
+                    value={values.spesialis}
+                    aria-label="Default select example"
+                    onChange={handleChange}
+                    isValid={touched.spesialis && !!errors.spesialis}
+                    isInvalid={touched.spesialis && !!errors.spesialis}
+                  >
+                    <option>Pilih Spesialis</option>
+                    <option value="1">Spesialis 1</option>
+                    <option value="2">Spesialis 2</option>
+                    <option value="3">Spesialis 3</option>
+                  </Form.Select>
+                  <Form.Control.Feedback type="invalid">
+                    {errors.spesialis}
+                  </Form.Control.Feedback>
+                </Form.Group>
               </Form.Group>
               <Form.Group as={Row}>
                 <Col>

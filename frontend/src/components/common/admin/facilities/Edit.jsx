@@ -4,25 +4,11 @@ import { Button, Col, Form, Image, Modal, Row } from "react-bootstrap";
 import * as yup from "yup";
 import { useQuery, useQueryClient } from "react-query";
 import axios from "axios";
+import { handleSubmit } from "../../../../utils/handleFunction";
+import { formDataFacilities } from "../../../../utils/body";
 
 // const FILE_SIZE = 100 * 1024;
 // const SUPPORTED_FORMATS = ["image/jpg", "image/jpeg", "image/gif", "image/png"];
-
-const editFacility = async (facilityId, updatedFacilityData) => {
-  try {
-    const formData = new FormData();
-    formData.append("foto_fasilitas", updatedFacilityData.imageFile);
-    formData.append("judul", updatedFacilityData.title);
-    formData.append("deskripsi", updatedFacilityData.description);
-
-    await axios.put(
-      `http://localhost:3000/dashboard/fasilitas/edit/${facilityId}`,
-      formData
-    );
-  } catch (error) {
-    throw new Error("Failed to edit facility");
-  }
-};
 
 const validationSchema = yup.object().shape({
   imageFile: yup.mixed(),
@@ -43,15 +29,17 @@ const validationSchema = yup.object().shape({
 const Edit = ({ show, handleClose, data }) => {
   const { fasilitas_id, foto_fasilitas, judul, deskripsi } = data;
   const queryClient = useQueryClient();
-  const handleSubmit = async (e) => {
-    console.log(e);
-    try {
-      await editFacility(fasilitas_id, e);
-      queryClient.invalidateQueries("fasilitasData");
-      handleClose();
-    } catch (error) {
-      console.error("Failed to edit facility:", error);
-    }
+
+  const onSubmit = (values, actions) => {
+    handleSubmit(
+      "put",
+      `fasilitas/edit/${fasilitas_id}`,
+      formDataFacilities(values),
+      actions,
+      handleClose,
+      queryClient,
+      "fasilitasData"
+    );
   };
 
   return (
@@ -67,7 +55,7 @@ const Edit = ({ show, handleClose, data }) => {
       <Modal.Body>
         <Formik
           validationSchema={validationSchema}
-          onSubmit={handleSubmit}
+          onSubmit={onSubmit}
           initialValues={{
             imageFile: foto_fasilitas,
             title: judul,

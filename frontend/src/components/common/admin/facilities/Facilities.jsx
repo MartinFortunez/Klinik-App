@@ -4,42 +4,28 @@ import CardFacilities from "../../cards/admin/CardFacilities";
 import Add from "./Add";
 import axios from "axios";
 import { useQuery, useQueryClient } from "react-query";
-
-const fetchData = async () => {
-  const response = await axios.get("http://localhost:3000/dashboard/fasilitas");
-  return response.data;
-};
+import useFetch from "../../../../hooks/useFetch";
+import { formDataFacilities } from "../../../../utils/body";
+import { handleSubmit } from "../../../../utils/handleFunction";
 
 const Facilities = () => {
   const [showAddModal, setShowAddModal] = useState(false);
   const queryClient = useQueryClient();
-  const { data, isSuccess } = useQuery("fasilitasData", fetchData, {
-    refetchOnWindowFocus: false, // Tidak merender ulang data saat jendela browser mendapatkan fokus
-    refetchOnMount: false, // Tidak merender ulang data saat komponen dipasang
-    staleTime: Infinity, // Data tidak dianggap kadaluwarsa
-  });
+  const { data, isSuccess } = useFetch("fasilitas", "fasilitasData");
 
   const handleAddClose = () => setShowAddModal(false);
   const handleAddShow = () => setShowAddModal(true);
 
-  const handleSubmit = async (values, { setSubmitting }) => {
-    try {
-      const formData = new FormData();
-      formData.append("foto_fasilitas", values.imageFile);
-      formData.append("judul", values.title);
-      formData.append("deskripsi", values.description);
-
-      await axios.post(
-        "http://localhost:3000/dashboard/fasilitas/add",
-        formData
-      );
-      queryClient.invalidateQueries("fasilitasData");
-      handleAddClose();
-    } catch (error) {
-      console.error("Failed to add facility:", error);
-    } finally {
-      setSubmitting(false);
-    }
+  const onSubmit = (values, actions) => {
+    handleSubmit(
+      "post",
+      "fasilitas/add",
+      formDataFacilities(values),
+      actions,
+      handleAddClose,
+      queryClient,
+      "fasilitasData"
+    );
   };
 
   return (
@@ -59,7 +45,7 @@ const Facilities = () => {
           <Add
             show={showAddModal}
             handleClose={handleAddClose}
-            handleAdd={handleSubmit}
+            handleAdd={onSubmit}
           />
         </Col>
       </Row>

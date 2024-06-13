@@ -6,7 +6,7 @@ const Send = ({ data, show, handleClose, handleSend }) => {
   const { konsul_id } = data;
 
   const onSubmit = () => {
-    api("post", `reminder/send-whatsapp/${konsul_id}`, "");
+    api("get", `reminder/send-whatsapp/${konsul_id}`, "");
   };
 
   return (

@@ -2,7 +2,22 @@ import React, { useState } from "react";
 import { Button, Card, Col, Row } from "react-bootstrap";
 import Send from "../../admin/history/Send";
 
-const CardHistory = () => {
+const CardHistory = ({ data }) => {
+  const {
+    nik,
+    nama_pasien,
+    alamat,
+    gol_darah,
+    tgl_lahir,
+    jenis_kelamin,
+    no_wa,
+    tgl_tenggat,
+    status,
+    tgl_konsul,
+    nama_dokter,
+    spesialis,
+    sesi,
+  } = data;
   const [showSendModal, setShowSendModal] = useState(false);
 
   const handleSendClose = () => setShowSendModal(false);
@@ -22,47 +37,47 @@ const CardHistory = () => {
               <span className="custom-underline"></span>
             </Col>
             <Col className="d-flex justify-content-end">
-              <span>00/00/0000</span>
+              <span>{tgl_konsul}</span>
             </Col>
           </Row>
           <Row>
             <Card.Subtitle className="opacity-50">NIK</Card.Subtitle>
-            <Card.Text>13543457349579845798475</Card.Text>
+            <Card.Text>{nik}</Card.Text>
           </Row>
           <Row>
             <Col>
               <Card.Subtitle className="opacity-50">Nama</Card.Subtitle>
-              <Card.Text>Mimi Peri</Card.Text>
+              <Card.Text>{nama_pasien}</Card.Text>
             </Col>
             <Col className="text-center">
               <Card.Subtitle className="opacity-50">
                 Jenis Kelamin
               </Card.Subtitle>
-              <Card.Text>Laki-Laki</Card.Text>
+              <Card.Text>{jenis_kelamin}</Card.Text>
             </Col>
             <Col className="text-end">
               <Card.Subtitle className="opacity-50">
                 Golongan Darah
               </Card.Subtitle>
-              <Card.Text>O</Card.Text>
+              <Card.Text>{gol_darah}</Card.Text>
             </Col>
           </Row>
           <Row>
             <Col>
               <Card.Subtitle className="opacity-50">Alamat</Card.Subtitle>
-              <Card.Text>Kecamatan ini - Kabupaten itu</Card.Text>
+              <Card.Text>{alamat}</Card.Text>
             </Col>
             <Col className="text-center">
               <Card.Subtitle className="opacity-50">
                 Tanggal Lahir
               </Card.Subtitle>
-              <Card.Text>00/00/0000</Card.Text>
+              <Card.Text>{tgl_lahir}</Card.Text>
             </Col>
             <Col className="text-end">
               <Card.Subtitle className="opacity-50">
                 No. HP/WhatsApp
               </Card.Subtitle>
-              <Card.Text>08512345678</Card.Text>
+              <Card.Text>{no_wa}</Card.Text>
             </Col>
           </Row>
           <Row>
@@ -74,15 +89,15 @@ const CardHistory = () => {
           <Row>
             <Col>
               <Card.Subtitle className="opacity-50">Dokter</Card.Subtitle>
-              <Card.Text>Marco</Card.Text>
+              <Card.Text>{nama_dokter}</Card.Text>
             </Col>
             <Col className="text-center">
               <Card.Subtitle className="opacity-50">Spesialis</Card.Subtitle>
-              <Card.Text>Jantung</Card.Text>
+              <Card.Text>{spesialis}</Card.Text>
             </Col>
             <Col className="text-end">
               <Card.Subtitle className="opacity-50">Sesi</Card.Subtitle>
-              <Card.Text>1</Card.Text>
+              <Card.Text>{sesi}</Card.Text>
             </Col>
           </Row>
         </Card.Body>

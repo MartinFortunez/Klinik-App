@@ -1,3 +1,4 @@
+// Form Data Dokter
 export const formDataDoctor = (values) => {
   const formData = new FormData();
   formData.append("foto_dokter", values.imageFile);
@@ -24,4 +25,13 @@ export const formDataEditSchedule = (values) => {
     status: values.status,
   };
   return respons;
+};
+
+// Form Data Fasilitas
+export const formDataFacilities = (values) => {
+  const formData = new FormData();
+  formData.append("foto_fasilitas", values.imageFile);
+  formData.append("judul", values.title);
+  formData.append("deskripsi", values.description);
+  return formData;
 };
