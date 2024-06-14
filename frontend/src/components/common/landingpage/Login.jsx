@@ -1,34 +1,55 @@
-import { Formik } from "formik";
 import React, { useState } from "react";
 import { Modal, Form, Button, Row, Col } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
+import { Formik } from "formik"; // Import Formik
 import * as yup from "yup";
+import axios from "axios";
 
 const validationSchema = yup.object().shape({
-  username: yup.string().required("username wajib diisi"),
-  password: yup.string().required("password wajib diisi"),
+  username: yup.string().required("Username wajib diisi"),
+  password: yup.string().required("Password wajib diisi"),
 });
 
-const Login = (props) => {
-  const [isLoggedIn, setIsLoggedIn] = useState(false); // State untuk menentukan apakah pengguna sudah login
-  const navigate = useNavigate(); // Menggunakan useHistory dari React Router untuk navigasi
-  console.log(isLoggedIn);
+const Login = ({ show, handleClose }) => {
+  const [error, setError] = useState(null);
+  const navigate = useNavigate();
 
-  const handleLogin = () => {
-    // Logika autentikasi pengguna di sini
-    setIsLoggedIn(true);
-    // Setelah pengguna berhasil login, arahkan ke halaman dashboard
-    navigate("/admin/dashboard");
+  const handleLogin = async (values) => {
+    try {
+      const response = await axios.post(
+        `${process.env.REACT_APP_BACKEND_URL}login`,
+        {
+          username: values.username,
+          password: values.password,
+        }
+      );
+      const token = response.data.token;
+      localStorage.setItem("token", token);
+
+      axios.defaults.headers.common["Authorization"] = `${token}`;
+
+      handleClose();
+      navigate("/admin/dashboard");
+    } catch (error) {
+      console.error("Login failed:", error);
+      setError("Login failed. Please try again.");
+    }
   };
+
   return (
-    <Modal {...props} aria-labelledby="contained-modal-title-vcenter" centered>
+    <Modal
+      show={show}
+      onHide={handleClose}
+      aria-labelledby="contained-modal-title-vcenter"
+      centered
+    >
       <Modal.Header closeButton className="border-0">
         <Modal.Title>Fitur ini hanya untuk admin klinik</Modal.Title>
       </Modal.Header>
       <Modal.Body>
         <Formik
           validationSchema={validationSchema}
-          onSubmit={console.log("submit")}
+          onSubmit={(values) => handleLogin(values)}
           initialValues={{
             username: "",
             password: "",
@@ -66,20 +87,23 @@ const Login = (props) => {
               <Form.Text className="text-end d-block mb-3">
                 <a
                   href="/"
-                  onClick={() =>
-                    alert("Silakan hubungi admin untuk reset password.")
-                  }
+                  onClick={(e) => {
+                    e.preventDefault();
+                    alert("Silakan hubungi admin untuk reset password.");
+                  }}
                 >
                   Lupa Password?
                 </a>
               </Form.Text>
+              {error && <div className="text-danger">{error}</div>}{" "}
+              {/* Display error message */}
               <Form.Group as={Row}>
                 <Col>
                   <Button
                     variant="secondary"
                     type="button"
                     className="w-100 bg-transparent border-0"
-                    onClick={props.onHide}
+                    onClick={handleClose}
                   >
                     Batal
                   </Button>
@@ -89,7 +113,6 @@ const Login = (props) => {
                     variant="primary"
                     type="submit"
                     className="w-100 text-light"
-                    onClick={handleLogin}
                   >
                     Login
                   </Button>
