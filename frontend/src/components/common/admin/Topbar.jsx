@@ -24,7 +24,7 @@ const Topbar = () => {
         {data ? (
           <div className="d-flex flex-column align-items-end">
             <span className="fw-semibold text-primary">{data.username}</span>
-            <span>Alamat Lengkap</span>
+            <span>Klinik App</span>
           </div>
         ) : (
           <div className="d-flex flex-column align-items-end">
