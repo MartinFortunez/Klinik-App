@@ -4,6 +4,7 @@ import "bootstrap-icons/font/bootstrap-icons.css";
 import Login from "./Login";
 import "../../../sass/custom.scss";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
 
 const Navigation = () => {
   // State to manage modal visibility
@@ -23,6 +24,7 @@ const Navigation = () => {
     if (!token) {
       handleShowModal();
     } else {
+      axios.defaults.headers.common["Authorization"] = `${token}`;
       console.log("login");
       // Redirect to admin dashboard or perform any other action
       navigate("/admin/dashboard");
