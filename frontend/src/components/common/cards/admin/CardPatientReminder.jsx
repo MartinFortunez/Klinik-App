@@ -2,12 +2,14 @@ import React, { useState } from "react";
 import { Button, Card, Col, Row } from "react-bootstrap";
 import Cancel from "../../admin/patientReminder/Cancel";
 import Send from "../../admin/patientReminder/Send";
+import { api } from "../../../../api/api";
+import { useQueryClient } from "react-query";
 
 const CardPatientReminder = ({ data }) => {
-  console.log(data);
-  const { nik, nama_pasien, tgl_konsul, no_wa, tgl_tenggat } = data;
+  const { konsul_id, nik, nama_pasien, tgl_konsul, no_wa, tgl_tenggat } = data;
   const [showCancelModal, setShowCancelModal] = useState(false);
   const [showSendModal, setShowSendModal] = useState(false);
+  const queryClient = useQueryClient();
 
   const handleCancelClose = () => setShowCancelModal(false);
   const handleCancelShow = () => setShowCancelModal(true);
@@ -15,14 +17,16 @@ const CardPatientReminder = ({ data }) => {
   const handleSendClose = () => setShowSendModal(false);
   const handleSendShow = () => setShowSendModal(true);
 
-  const handleCancel = () => {
-    console.log("Item deleted");
+  const onCancel = async () => {
+    api("put", `jadwal-konsultasi/${konsul_id}/cancel`, "");
+
+    await queryClient.invalidateQueries("reminderData");
+
+    // Menunggu hingga refetch selesai
+    await queryClient.refetchQueries("reminderData");
     handleCancelClose();
   };
 
-  const handleSend = () => {
-    handleSendClose();
-  };
   return (
     <Col>
       <Card>
@@ -72,13 +76,12 @@ const CardPatientReminder = ({ data }) => {
           <Cancel
             show={showCancelModal}
             handleClose={handleCancelClose}
-            handleCancel={handleCancel}
+            handleCancel={onCancel}
           />
 
           <Send
             show={showSendModal}
             handleClose={handleSendClose}
-            handleSend={handleSend}
             data={data}
           />
         </Card.Footer>
