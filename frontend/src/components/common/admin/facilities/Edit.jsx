@@ -6,22 +6,10 @@ import { useQuery, useQueryClient } from "react-query";
 import axios from "axios";
 import { handleSubmit } from "../../../../utils/handleFunction";
 import { formDataFacilities } from "../../../../utils/body";
-
-// const FILE_SIZE = 100 * 1024;
-// const SUPPORTED_FORMATS = ["image/jpg", "image/jpeg", "image/gif", "image/png"];
+import { toast } from "react-toastify";
 
 const validationSchema = yup.object().shape({
-  imageFile: yup.mixed(),
-  // .test(
-  //   "fileSize",
-  //   "Ukuran file terlalu besar",
-  //   (value) => value && value.size <= FILE_SIZE
-  // )
-  // .test(
-  //   "fileFormat",
-  //   "Format file tidak didukung",
-  //   (value) => value && SUPPORTED_FORMATS.includes(value.type)
-  // ),
+  imageFile: yup.mixed().required(),
   title: yup.string().required("judul wajib diisi"),
   description: yup.string().required("deskripsi wajib diisi"),
 });
@@ -31,15 +19,21 @@ const Edit = ({ show, handleClose, data }) => {
   const queryClient = useQueryClient();
 
   const onSubmit = (values, actions) => {
-    handleSubmit(
-      "put",
-      `fasilitas/edit/${fasilitas_id}`,
-      formDataFacilities(values),
-      actions,
-      handleClose,
-      queryClient,
-      "fasilitasData"
-    );
+    try {
+      handleSubmit(
+        "put",
+        `fasilitas/edit/${fasilitas_id}`,
+        formDataFacilities(values),
+        actions,
+        handleClose,
+        queryClient,
+        "fasilitasData"
+      );
+      toast.success("Berhasil ubah fasilitas!");
+    } catch (error) {
+      console.error("Error adding facility:", error);
+      // Handle error
+    }
   };
 
   return (

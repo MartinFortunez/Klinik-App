@@ -8,7 +8,9 @@ exports.register = (req, res) => {
 
   Jwt.create(newAdmin, (err) => {
     if (err) {
-      return res.status(500).json({ message: "Error creating admin", error: err });
+      return res
+        .status(500)
+        .json({ message: "Error creating admin", error: err });
     }
     res.status(201).json({ message: "Admin created successfully" });
   });
@@ -19,15 +21,23 @@ exports.login = (req, res) => {
 
   Jwt.findByUsername(username, (err, admin) => {
     if (err || !admin) {
-      return res.status(401).json({ message: "Authentication failed. Admin not found." });
+      return res
+        .status(401)
+        .json({ message: "Authentication failed. Admin not found." });
     }
 
     bcrypt.compare(password, admin.password, (err, isMatch) => {
       if (err || !isMatch) {
-        return res.status(401).json({ message: "Authentication failed. Wrong password." });
+        return res
+          .status(401)
+          .json({ message: "Authentication failed. Wrong password." });
       }
 
-      const token = jwt.sign({ admin_id: admin.admin_id }, process.env.JWT_SECRET_KEY, { expiresIn: "1h" });
+      const token = jwt.sign(
+        { admin_id: admin.admin_id },
+        process.env.JWT_SECRET_KEY,
+        { expiresIn: "1h" }
+      );
 
       res.json({ message: "Authentication successful", token });
     });

@@ -7,16 +7,25 @@ import useFetch from "../../../../hooks/useFetch";
 
 const History = () => {
   const [searchQuery, setSearchQuery] = useState("");
-  const [showAddModal, setShowAddModal] = useState(false);
+  const [filterStatus, setFilterStatus] = useState(""); // State untuk status filter
   const queryClient = useQueryClient();
   const { data, isSuccess } = useFetch("riwayat", "riwayatData");
 
-  // Filter data berdasarkan kata kunci pencarian
+  // Filter data berdasarkan kata kunci pencarian dan status
   const filteredData = data
-    ? data.schedules.filter((item) =>
-        item.nik.toLowerCase().includes(searchQuery.toLowerCase())
+    ? data.schedules.filter(
+        (item) =>
+          item.nik.startsWith(searchQuery) && // Pencarian dimulai dari awal angka NIK
+          (filterStatus
+            ? item.status.toLowerCase() === filterStatus.toLowerCase()
+            : true) // Filter berdasarkan status jika ada
       )
     : [];
+
+  // Fungsi untuk menangani perubahan status filter
+  const handleStatusFilterChange = (e) => {
+    setFilterStatus(e.target.value);
+  };
 
   return (
     <Container fluid className="p-5 h-100 d-flex flex-column overflow-hidden">
@@ -32,6 +41,18 @@ const History = () => {
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
           />
+        </Col>
+        <Col xs="auto">
+          {/* Dropdown untuk filter status */}
+          <Form.Select
+            onChange={handleStatusFilterChange}
+            value={filterStatus}
+            aria-label="Filter by status"
+          >
+            <option value="">All Status</option>
+            <option value="Complete">Complete</option>
+            <option value="Cancel">Cancel</option>
+          </Form.Select>
         </Col>
       </Row>
       <Row xs={1} className="gx-3 gy-4 overflow-y-scroll m-0">

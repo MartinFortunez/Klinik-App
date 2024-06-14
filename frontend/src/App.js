@@ -1,4 +1,9 @@
-import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
+import {
+  BrowserRouter as Router,
+  Route,
+  Routes,
+  Navigate,
+} from "react-router-dom";
 import HomePage from "./pages/HomePage";
 import DashboardAdmin from "./pages/DashboardAdmin";
 import Dashboard from "./components/common/admin/dashboard/Dashboard";
@@ -13,11 +18,18 @@ import "normalize.css";
 import "./index.css";
 import { QueryClient, QueryClientProvider } from "react-query";
 
-// import dotenv from "dotenv";
-
-// dotenv.config();
-
 const queryClient = new QueryClient();
+
+// Fungsi untuk cek autentikasi
+const isAuthenticated = () => {
+  return localStorage.getItem("token") !== null;
+};
+
+const ProtectedRoute = ({ element }) => {
+  const isAuth = isAuthenticated();
+  return isAuth ? element : <Navigate to="/" />;
+};
+
 
 function App() {
   return (
@@ -26,14 +38,38 @@ function App() {
         <Routes>
           <Route path="/" element={<HomePage />} />
           <Route path="/admin" element={<DashboardAdmin />}>
-            <Route path="dashboard" element={<Dashboard />} />
-            <Route path="jadwal-dokter" element={<DoctorsSchedule />} />
-            <Route path="konsultasi-masuk" element={<IncomingConsultation />} />
-            <Route path="reminder-pasien" element={<PatientReminder />} />
-            <Route path="riwayat" element={<History />} />
-            <Route path="dokter" element={<Doctor />} />
-            <Route path="ulasan-pasien" element={<PatientReviews />} />
-            <Route path="fasilitas" element={<Facilities />} />
+            <Route
+              path="dashboard"
+              element={<ProtectedRoute element={<Dashboard />} />}
+            />
+            <Route
+              path="jadwal-dokter"
+              element={<ProtectedRoute element={<DoctorsSchedule />} />}
+            />
+            <Route
+              path="konsultasi-masuk"
+              element={<ProtectedRoute element={<IncomingConsultation />} />}
+            />
+            <Route
+              path="reminder-pasien"
+              element={<ProtectedRoute element={<PatientReminder />} />}
+            />
+            <Route
+              path="riwayat"
+              element={<ProtectedRoute element={<History />} />}
+            />
+            <Route
+              path="dokter"
+              element={<ProtectedRoute element={<Doctor />} />}
+            />
+            <Route
+              path="ulasan-pasien"
+              element={<ProtectedRoute element={<PatientReviews />} />}
+            />
+            <Route
+              path="fasilitas"
+              element={<ProtectedRoute element={<Facilities />} />}
+            />
           </Route>
         </Routes>
       </Router>

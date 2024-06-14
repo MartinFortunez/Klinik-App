@@ -3,16 +3,32 @@ import { Container, Nav, Navbar, Button } from "react-bootstrap";
 import "bootstrap-icons/font/bootstrap-icons.css";
 import Login from "./Login";
 import "../../../sass/custom.scss";
+import { useNavigate } from "react-router-dom";
+import axios from "axios";
 
 const Navigation = () => {
   // State to manage modal visibility
   const [showModal, setShowModal] = useState(false);
+  const navigate = useNavigate();
 
   // Function to handle showing the modal
   const handleShowModal = () => setShowModal(true);
 
   // Function to handle hiding the modal    icon: <HospitalFill />,
   const handleCloseModal = () => setShowModal(false);
+
+  const [token, setToken] = useState(localStorage.getItem("token"));
+
+  // Function to handle login button click
+  const handleLoginClick = () => {
+    if (!token) {
+      handleShowModal();
+    } else {
+      // Redirect to admin dashboard or perform any other action
+      navigate("/admin/dashboard");
+    }
+  };
+
   return (
     <Navbar
       collapseOnSelect
@@ -42,13 +58,13 @@ const Navigation = () => {
           <Nav className="ms-lg-3">
             <Button
               variant="primary"
-              onClick={handleShowModal}
+              onClick={handleLoginClick}
               className="bg-light text-primary fw-semibold"
             >
               Login Admin
             </Button>
           </Nav>
-          <Login show={showModal} onHide={handleCloseModal} />
+          <Login show={showModal} handleClose={handleCloseModal} />
         </Navbar.Collapse>
       </Container>
     </Navbar>

@@ -28,11 +28,6 @@ const CardDoctor = ({ data }) => {
   const handleEditClose = () => setShowEditModal(false);
   const handleEditShow = () => setShowEditModal(true);
 
-  const handleSave = (formData) => {
-    // Lakukan aksi simpan di sini
-    console.log("Form data saved:", formData);
-    handleEditClose();
-  };
   return (
     <Col>
       <Card className="border-0 d-flex flex-column">
@@ -81,7 +76,6 @@ const CardDoctor = ({ data }) => {
           <Edit
             show={showEditModal}
             handleClose={handleEditClose}
-            handleSave={handleSave}
             data={data}
           />
         </Card.Footer>
