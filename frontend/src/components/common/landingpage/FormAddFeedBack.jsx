@@ -3,7 +3,6 @@ import { Button, Col, Form, Modal, Row } from "react-bootstrap";
 import { BsStarFill } from "react-icons/bs";
 import "../../sass/StyledFeedBack.scss";
 import { Formik } from "formik";
-import "../../sass/StyledFeedBack.scss";
 import axios from "axios";
 import { useMutation, useQueryClient } from "react-query";
 
@@ -11,15 +10,14 @@ const FormAddFeedBack = ({ data, show, handleClose }) => {
   const [ratingPasien, setRatingPasien] = useState(0);
   const queryClient = useQueryClient();
   const [appointmentData, setAppointmentData] = useState([]);
+
   useEffect(() => {
-    // Panggil endpoint untuk mendapatkan data jadwal konsultasi
     const fetchData = async () => {
       try {
         const response = await axios.get(
-          "http://localhost:3000/dashboard/reminder"
+          "http://localhost:3000/dashboard/riwayat"
         );
         setAppointmentData(response.data);
-        console.log(appointmentData);
       } catch (error) {
         console.error("Error fetching appointment data:", error);
       }
@@ -50,13 +48,19 @@ const FormAddFeedBack = ({ data, show, handleClose }) => {
       return false;
     }
 
-    // Mencari objek dalam appointmentData.schedules yang sesuai dengan NIK dan namaPasien
     const foundAppointment = appointmentData.schedules.find((appointment) => {
       return appointment.nik === NIK && appointment.nama_pasien === namaPasien;
     });
 
-    // Mengembalikan true jika objek ditemukan, false jika tidak
     return !!foundAppointment;
+  };
+
+  const getAppointmentStatus = (NIK, namaPasien) => {
+    const appointment = appointmentData.schedules.find((appointment) => {
+      return appointment.nik === NIK && appointment.nama_pasien === namaPasien;
+    });
+
+    return appointment ? appointment.status : "";
   };
 
   const handleSubmit = async (values, { setSubmitting }) => {
@@ -66,14 +70,21 @@ const FormAddFeedBack = ({ data, show, handleClose }) => {
         console.error("Appointment data is not available yet.");
         return;
       }
-      // console.log(appointmentData.schedules);
 
       const isPatientInAppointment = checkPatientInAppointment(NIK, namaPasien);
-      // console.log(isPatientInAppointment, NIK, namaPasien);
 
       if (!isPatientInAppointment) {
         console.log(
           "Patient not found in appointment or status is not approved."
+        );
+        return;
+      }
+
+      const appointmentStatus = getAppointmentStatus(NIK, namaPasien);
+
+      if (appointmentStatus !== "complete") {
+        console.log(
+          "Cannot add feedback for appointments that are not complete."
         );
         return;
       }
@@ -93,10 +104,6 @@ const FormAddFeedBack = ({ data, show, handleClose }) => {
     }
   };
 
-  useEffect(() => {
-    console.log(ratingPasien); // Cetak nilai rating setelah perubahan
-  }, [ratingPasien]); // Menjalankan efek hanya jika rating berubah
-
   return (
     <Modal
       show={show}
@@ -112,7 +119,6 @@ const FormAddFeedBack = ({ data, show, handleClose }) => {
       </Modal.Header>
       <Modal.Body>
         <Formik
-          // validationSchema={validationSchema}
           onSubmit={handleSubmit}
           initialValues={{
             NIK: "",

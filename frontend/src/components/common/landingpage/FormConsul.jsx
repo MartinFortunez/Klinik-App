@@ -2,9 +2,8 @@ import { Formik } from "formik";
 import React, { useEffect, useState } from "react";
 import { Modal, Form, Button, Row, Col } from "react-bootstrap";
 import * as yup from "yup";
-import axios from "axios";
-import { useQuery, useQueryClient } from "react-query";
 import useFetch from "../../../hooks/useFetch";
+import { api } from "../../../api/api";
 
 // const validationSchema = yup.object().shape({
 //   NIK: yup.string().required("NIK wajib diisi"),
@@ -23,19 +22,22 @@ const FormConsul = ({ dataDoctor, show, handleClose, handleAdd }) => {
   const { dokter_id, nama_dokter, spesialis } = dataDoctor;
   const [sesiData, setSesiData] = useState(null);
 
-  const { data, isSuccess } = useFetch(
-    `jadwal-dokter/${dokter_id}`,
-    "konsultasiMasukData"
-  );
-
   useEffect(() => {
-    if (isSuccess && data) {
-      // Memuat data sesi hanya jika data utama sudah dimuat
-      setSesiData(data);
-    } else {
-      console.log("Failed to fetch data");
-    }
-  }, [isSuccess, data, dokter_id]);
+    const fetchData = async () => {
+      try {
+        const result = await api(
+          "get",
+          `jadwal-dokter/${dokter_id}`,
+          "jadwalDokterData"
+        );
+        setSesiData(result);
+      } catch (error) {
+        console.error("Error fetching session data:", error);
+      }
+    };
+
+    fetchData();
+  }, [dokter_id]);
 
   return (
     <Modal

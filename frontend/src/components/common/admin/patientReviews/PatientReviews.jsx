@@ -4,6 +4,8 @@ import CardPatientReviews from "../../cards/admin/CardPatientReviews";
 import axios from "axios";
 import { useQuery, useQueryClient } from "react-query";
 import useFetch from "../../../../hooks/useFetch";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const PatientReviews = () => {
   const queryClient = useQueryClient();
@@ -11,6 +13,7 @@ const PatientReviews = () => {
 
   return (
     <Container fluid className="p-5 h-100 d-flex flex-column overflow-hidden">
+      <ToastContainer />
       <Row className="align-items-center">
         <Col>
           <h2>Ulasan Pasien</h2>
@@ -21,7 +24,7 @@ const PatientReviews = () => {
           data.map((item) => (
             <CardPatientReviews key={item.ulasan_id} data={item} />
           ))
-        ) : data && data.schedules.length === 0 ? (
+        ) : data && data.length === 0 ? (
           <p>No Data</p>
         ) : (
           <p>Loading...</p>
