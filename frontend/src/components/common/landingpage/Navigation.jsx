@@ -24,8 +24,6 @@ const Navigation = () => {
     if (!token) {
       handleShowModal();
     } else {
-      axios.defaults.headers.common["Authorization"] = `${token}`;
-      console.log("login");
       // Redirect to admin dashboard or perform any other action
       navigate("/admin/dashboard");
     }

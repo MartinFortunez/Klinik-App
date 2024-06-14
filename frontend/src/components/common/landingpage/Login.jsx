@@ -26,8 +26,6 @@ const Login = ({ show, handleClose }) => {
       const token = response.data.token;
       localStorage.setItem("token", token);
 
-      axios.defaults.headers.common["Authorization"] = `${token}`;
-
       handleClose();
       navigate("/admin/dashboard");
     } catch (error) {

@@ -4,18 +4,26 @@ import Delete from "../../admin/facilities/Delete";
 import Edit from "../../admin/facilities/Edit";
 import { useQueryClient } from "react-query";
 import { handleDelete } from "../../../../utils/handleFunction";
+import { toast } from "react-toastify";
 
 const CardFacilities = ({ data }) => {
   const { fasilitas_id, foto_fasilitas, judul, deskripsi } = data;
   const queryClient = useQueryClient();
 
-  const onDelete = () => {
-    handleDelete(
-      "delete",
-      `fasilitas/delete/${fasilitas_id}`,
-      queryClient,
-      "fasilitasData"
-    );
+  const onDelete = async () => {
+    try {
+      await handleDelete(
+        "delete",
+        `fasilitas/delete/${fasilitas_id}`,
+        queryClient,
+        "fasilitasData"
+      );
+      // Display toast notification upon successful deletion
+      toast.success("Berhasil menghapus fasilitas!");
+    } catch (error) {
+      console.error("Error deleting facility:", error);
+      // Handle error
+    }
   };
 
   const [showDeleteModal, setShowDeleteModal] = useState(false);

@@ -1,10 +1,19 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Navigate, Outlet } from "react-router-dom";
 import SideBar from "../components/common/admin/SideBar";
 import Topbar from "../components/common/admin/Topbar";
 import { Col, Container, Row } from "react-bootstrap";
+import axios from "axios";
 
 const DashboardAdmin = () => {
+  useEffect(() => {
+    // Ambil token dari local storage
+    const token = localStorage.getItem("token");
+    // Atur header Authorization jika token ada
+    if (token) {
+      axios.defaults.headers.common["Authorization"] = `${token}`;
+    }
+  }, []);
   const handleLogout = () => {
     localStorage.removeItem("token");
     window.location.href = "/";
