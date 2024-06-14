@@ -3,12 +3,17 @@ import { Button, Card, Col, Row } from "react-bootstrap";
 import Reject from "../../admin/patientReviews/Reject";
 import Accept from "../../admin/patientReviews/Accept";
 import { BsStarFill } from "react-icons/bs";
+import { api } from "../../../../api/api";
+import { useQueryClient } from "react-query";
+import { handleDelete } from "../../../../utils/handleFunction";
 
 const CardPatientReviews = ({ data }) => {
   const { ulasan_id, nik, nama_pasien, penilaian, tgl_ulasan, rating, status } =
     data;
   const [showRejectModal, setShowRejectModal] = useState(false);
   const [showAcceptModal, setShowAcceptModal] = useState(false);
+  const [statusFeedback, setStatusFeedback] = useState(status);
+  const queryClient = useQueryClient();
 
   const yellowStars = Math.floor(rating);
   const whiteStars = 5 - yellowStars;
@@ -19,15 +24,26 @@ const CardPatientReviews = ({ data }) => {
   const handleAcceptClose = () => setShowAcceptModal(false);
   const handleAcceptShow = () => setShowAcceptModal(true);
 
-  const handleReject = () => {
-    // Lakukan aksi delete di sini
-    console.log("Item deleted");
-    handleRejectClose();
+  const onSubmit = async () => {
+    const newStatus = statusFeedback === "on" ? "off" : "on";
+    setStatusFeedback(newStatus);
+
+    const response = {
+      status: newStatus,
+    };
+    console.log(response);
+    await api("put", `feedback/edit/${ulasan_id}`, response);
+    // Menunggu hingga refetch selesai
+    await queryClient.refetchQueries("feedbackData");
   };
 
-  const handleAccept = () => {
-    // Lakukan aksi simpan di sini
-    handleAcceptClose();
+  const onDelete = () => {
+    handleDelete(
+      "delete",
+      `feedback/delete/${ulasan_id}`,
+      queryClient,
+      "feedbackData"
+    );
   };
 
   return (
@@ -39,7 +55,7 @@ const CardPatientReviews = ({ data }) => {
               <Card.Subtitle className="opacity-50">NIK</Card.Subtitle>
               <Card.Text>{nik}</Card.Text>
             </Col>
-            <Col className="text-center">
+            <Col className="text-end">
               <Card.Subtitle className="opacity-50">
                 Tanggal Ulasan
               </Card.Subtitle>
@@ -81,24 +97,15 @@ const CardPatientReviews = ({ data }) => {
           <Button variant="outline-danger" onClick={handleRejectShow}>
             Hapus
           </Button>
-          <Button
-            variant="primary"
-            onClick={handleAcceptShow}
-            className="text-light"
-          >
-            Tampilkan
+          <Button variant="primary" onClick={onSubmit} className="text-light">
+            {status === "off" ? "Tampilkan" : "Sembunyikan"}
           </Button>
 
           <Reject
             show={showRejectModal}
             handleClose={handleRejectClose}
-            handleReject={handleReject}
-          />
-
-          <Accept
-            show={showAcceptModal}
-            handleClose={handleAcceptClose}
-            handleAccept={handleAccept}
+            handleReject={onDelete}
+            data={data}
           />
         </Card.Footer>
       </Card>

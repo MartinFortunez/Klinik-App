@@ -11,20 +11,12 @@ import FormAddFeedBack from "./FormAddFeedBack";
 import "../../sass/StyledFeedBack.scss";
 import axios from "axios";
 import { useQuery, useQueryClient } from "react-query";
-
-const fetchData = async () => {
-  const response = await axios.get("http://localhost:3000/dashboard/feedback");
-  return response.data;
-};
+import useFetch from "../../../hooks/useFetch";
 
 const FeedBack = () => {
   const [showAddModal, setShowAddModal] = useState(false);
   const [cardsPerSlide, setCardsPerSlide] = useState(2);
-  const { data, isSuccess } = useQuery("feedbackData", fetchData, {
-    refetchOnWindowFocus: false,
-    refetchOnMount: false,
-    staleTime: Infinity,
-  });
+  const { data, isSuccess } = useFetch("feedback", "feedbackData");
 
   useEffect(() => {
     const handleResize = () => {
@@ -55,21 +47,27 @@ const FeedBack = () => {
           nextIcon={<CarouselControlNext />}
         >
           {data ? (
-            Array.from({ length: Math.ceil(data.length / cardsPerSlide) }, (_, i) => {
-              const startIndex = i * cardsPerSlide;
-              const endIndex = startIndex + cardsPerSlide;
-              return (
-                <Carousel.Item key={i}>
-                  <div className="d-flex justify-content-around">
-                    {data.slice(startIndex, endIndex).map((item) => (
-                      <CardFeedBack key={item.ulasan_id} data={item} />
-                    ))}
-                  </div>
-                </Carousel.Item>
-              );
-            })
+            Array.from(
+              { length: Math.ceil(data.length / cardsPerSlide) },
+              (_, i) => {
+                const startIndex = i * cardsPerSlide;
+                const endIndex = startIndex + cardsPerSlide;
+                const filteredData = data
+                  .slice(startIndex, endIndex)
+                  .filter((item) => item.status === "on");
+                return (
+                  <Carousel.Item key={i}>
+                    <div className="d-flex justify-content-around">
+                      {filteredData.map((item) => (
+                        <CardFeedBack key={item.ulasan_id} data={item} />
+                      ))}
+                    </div>
+                  </Carousel.Item>
+                );
+              }
+            )
           ) : (
-            <p>loading bolo</p>
+            <p>Loading...</p>
           )}
         </Carousel>
         <div className="d-flex justify-content-center mt-3">

@@ -4,59 +4,43 @@ import { Button, Col, Form, Image, Modal, Row } from "react-bootstrap";
 import * as yup from "yup";
 import { useQuery, useQueryClient } from "react-query";
 import axios from "axios";
+import { formDataDoctor } from "../../../../utils/body";
+import { handleSubmit } from "../../../../utils/handleFunction";
 
-const FILE_SIZE = 100 * 1024;
-const SUPPORTED_FORMATS = ["image/jpg", "image/jpeg", "image/gif", "image/png"];
-
-const editDoctor = async (doctorId, updatedDoctorData) => {
-  try {
-    const formData = new FormData();
-    formData.append("foto_dokter", updatedDoctorData.imageFile);
-    formData.append("nama_dokter", updatedDoctorData.namaDokter);
-    formData.append("sip", updatedDoctorData.sip);
-    formData.append("spesialis", updatedDoctorData.spesialis);
-
-    console.log(formData)
-    await axios.put(
-      `http://localhost:3000/dashboard/dokter-klinik/edit/${doctorId}`,
-      formData
-    );
-  } catch (error) {
-    throw new Error("Failed to edit doctor");
-  }
-};
+// const FILE_SIZE = 500 * 1024;
+// const SUPPORTED_FORMATS = ["image/jpg", "image/jpeg", "image/gif", "image/png"];
 
 const validationSchema = yup.object().shape({
-  imageFile: yup
-    .mixed()
-    .required()
-    .test(
-      "fileSize",
-      "Ukuran file terlalu besar",
-      (value) => value && value.size <= FILE_SIZE
-    )
-    .test(
-      "fileFormat",
-      "Format file tidak didukung",
-      (value) => value && SUPPORTED_FORMATS.includes(value.type)
-    ),
+  imageFile: yup.mixed().required(),
+  // .test(
+  //   "fileSize",
+  //   "Ukuran file terlalu besar",
+  //   (value) => value && value.size <= FILE_SIZE
+  // )
+  // .test(
+  //   "fileFormat",
+  //   "Format file tidak didukung",
+  //   (value) => value && SUPPORTED_FORMATS.includes(value.type)
+  // ),
   namaDokter: yup.string().required("nama wajib diisi"),
-  sip : yup.string().required("id dokter wajib diisi"),
-  spesialis : yup.string().required("spesialis wajib diisi"),
+  sip: yup.string().required("id dokter wajib diisi"),
+  spesialis: yup.string().required("spesialis wajib diisi"),
 });
 
 const Edit = ({ show, handleClose, data }) => {
   const { dokter_id, nama_dokter, sip, spesialis, foto_dokter } = data;
   const queryClient = useQueryClient();
-  const handleSubmit = async (e) => {
-    console.log(e);
-    try {
-      await editDoctor(dokter_id, e);
-      queryClient.invalidateQueries("dokterData");
-      handleClose();
-    } catch (error) {
-      console.error("Failed to edit doctor:", error);
-    }
+
+  const onSubmit = (values, actions) => {
+    handleSubmit(
+      "put",
+      `dokter-klinik/edit/${dokter_id}`,
+      formDataDoctor(values),
+      actions,
+      handleClose,
+      queryClient,
+      "doctorData"
+    );
   };
 
   return (
@@ -72,7 +56,7 @@ const Edit = ({ show, handleClose, data }) => {
       <Modal.Body>
         <Formik
           validationSchema={validationSchema}
-          onSubmit={handleSubmit}
+          onSubmit={onSubmit}
           initialValues={{
             imageFile: foto_dokter,
             namaDokter: nama_dokter,
@@ -135,7 +119,7 @@ const Edit = ({ show, handleClose, data }) => {
                 </Form.Control.Feedback>
               </Form.Group>
               <Form.Group controlId="validationIddokter" className="mb-3">
-              <Form.Label>Sip</Form.Label>
+                <Form.Label>Sip</Form.Label>
                 <Form.Control
                   name="sip"
                   type="text"
@@ -148,25 +132,25 @@ const Edit = ({ show, handleClose, data }) => {
                 <Form.Control.Feedback type="invalid">
                   {errors.sip}
                 </Form.Control.Feedback>
-              <Form.Group controlId="validationSpesialis" className="mb-3">
-                <Form.Label>Spesialis</Form.Label>
-                <Form.Select
-                      name="spesialis"
-                      value={values.spesialis}
-                      aria-label="Default select example"
-                      onChange={handleChange}
-                      isValid={touched.spesialis && !!errors.spesialis}
-                      isInvalid={touched.spesialis && !!errors.spesialis}
-                    >
-                      <option>Pilih Spesialis</option>
-                      <option value="1">Spesialis 1</option>
-                      <option value="2">Spesialis 2</option>
-                      <option value="3">Spesialis 3</option>
-                    </Form.Select>
-                    <Form.Control.Feedback type="invalid">
-                      {errors.spesialis}
-                    </Form.Control.Feedback>
-                  </Form.Group>
+                <Form.Group controlId="validationSpesialis" className="mb-3">
+                  <Form.Label>Spesialis</Form.Label>
+                  <Form.Select
+                    name="spesialis"
+                    value={values.spesialis}
+                    aria-label="Default select example"
+                    onChange={handleChange}
+                    isValid={touched.spesialis && !!errors.spesialis}
+                    isInvalid={touched.spesialis && !!errors.spesialis}
+                  >
+                    <option>Pilih Spesialis</option>
+                    <option value="1">Spesialis 1</option>
+                    <option value="2">Spesialis 2</option>
+                    <option value="3">Spesialis 3</option>
+                  </Form.Select>
+                  <Form.Control.Feedback type="invalid">
+                    {errors.spesialis}
+                  </Form.Control.Feedback>
+                </Form.Group>
               </Form.Group>
               <Form.Group as={Row}>
                 <Col>
