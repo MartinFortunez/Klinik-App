@@ -2,8 +2,6 @@ import React, { useState } from "react";
 import { Button, Card, Col, Row } from "react-bootstrap";
 import Reject from "../../admin/incomingConsultation/Reject";
 import Accept from "../../admin/incomingConsultation/Accept";
-import axios from "axios";
-import { useQuery, useQueryClient } from "react-query";
 
 const CardIncomingConsultation = ({ data }) => {
   const {

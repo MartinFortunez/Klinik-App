@@ -2,11 +2,21 @@ import React from "react";
 import { Button, Col, Modal, Row } from "react-bootstrap";
 import { api } from "../../../../api/api";
 
-const Send = ({ data, show, handleClose, handleSend }) => {
+const Send = ({ data, show, handleClose }) => {
   const { konsul_id } = data;
 
-  const onSubmit = () => {
-    api("get", `reminder/send-whatsapp/${konsul_id}`, "");
+  const onSubmit = async () => {
+    try {
+      const respons = await api(
+        "post",
+        `reminder/send-whatsapp/${konsul_id}`,
+        ""
+      );
+      // Redirect to WhatsApp URL
+      window.location.href = respons.url;
+    } catch (error) {
+      console.error("Error sending WhatsApp message:", error);
+    }
   };
 
   return (
