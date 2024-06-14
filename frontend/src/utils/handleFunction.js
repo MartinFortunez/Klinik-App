@@ -11,7 +11,7 @@ export const handleSubmit = async (
 ) => {
   try {
     const formData = createFormData;
-    api(method, url, formData);
+    api(method, url, formData, queryClient, keyClient);
     // Setelah berhasil menghapus, refetch data
     await queryClient.invalidateQueries(`${keyClient}`);
 

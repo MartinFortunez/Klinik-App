@@ -61,7 +61,7 @@ const CardDoctor = ({ data }) => {
           </Row>
         </Card.Body>
         <Card.Footer className="bg-transparent d-flex justify-content-end gap-2">
-          <Button variant="outline-danger" onClick={onDelete}>
+          <Button variant="outline-danger" onClick={handleDeleteShow}>
             Hapus
           </Button>
           <Button
@@ -71,11 +71,12 @@ const CardDoctor = ({ data }) => {
           >
             Edit
           </Button>
-          {/* <Delete
+          <Delete
             show={showDeleteModal}
             handleClose={handleDeleteClose}
-            handleDelete={handleDelete}
-          /> */}
+            handleDelete={onDelete}
+            data={data}
+          />
 
           <Edit
             show={showEditModal}

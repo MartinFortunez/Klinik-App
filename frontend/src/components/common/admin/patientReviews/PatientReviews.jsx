@@ -3,21 +3,11 @@ import { Col, Container, Row } from "react-bootstrap";
 import CardPatientReviews from "../../cards/admin/CardPatientReviews";
 import axios from "axios";
 import { useQuery, useQueryClient } from "react-query";
-
-const fetchData = async () => {
-  const response = await axios.get("http://localhost:3000/dashboard/feedback");
-  return response.data;
-};
+import useFetch from "../../../../hooks/useFetch";
 
 const PatientReviews = () => {
   const queryClient = useQueryClient();
-  const { data, isSuccess } = useQuery("feedbackkData", fetchData, {
-    refetchOnWindowFocus: false, // Tidak merender ulang data saat jendela browser mendapatkan fokus
-    refetchOnMount: false, // Tidak merender ulang data saat komponen dipasang
-    staleTime: Infinity, // Data tidak dianggap kadaluwarsa
-  });
-
-  
+  const { data, isSuccess } = useFetch("feedback", "feedbackData");
 
   return (
     <Container fluid className="p-5 h-100 d-flex flex-column overflow-hidden">
