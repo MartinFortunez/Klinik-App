@@ -1,9 +1,12 @@
 import React, { useState } from "react";
 import { Button, Card, Col, Row } from "react-bootstrap";
 import Send from "../../admin/history/Send";
+import { api } from "../../../../api/api";
+import { format } from "date-fns";
 
 const CardHistory = ({ data }) => {
   const {
+    konsul_id,
     nik,
     nama_pasien,
     alamat,
@@ -23,9 +26,21 @@ const CardHistory = ({ data }) => {
   const handleSendClose = () => setShowSendModal(false);
   const handleSendShow = () => setShowSendModal(true);
 
-  const handleSend = () => {
-    handleSendClose();
+  const onSubmit = async () => {
+    try {
+      const respons = await api(
+        "post",
+        `riwayat/send-whatsapp/${konsul_id}`,
+        ""
+      );
+      // Redirect to WhatsApp URL
+      window.location.href = respons.url;
+    } catch (error) {
+      console.error("Error sending WhatsApp message:", error);
+    }
   };
+
+  const formattedDate = format(new Date(tgl_konsul), "dd/MM/yyyy");
 
   return (
     <Col>
@@ -37,7 +52,7 @@ const CardHistory = ({ data }) => {
               <span className="custom-underline"></span>
             </Col>
             <Col className="d-flex justify-content-end">
-              <span>{tgl_konsul}</span>
+              <span>{formattedDate}</span>
             </Col>
           </Row>
           <Row>
@@ -101,21 +116,22 @@ const CardHistory = ({ data }) => {
             </Col>
           </Row>
         </Card.Body>
-        <Card.Footer className="bg-transparent d-flex justify-content-end gap-2">
-          <Button
-            variant="primary"
-            onClick={handleSendShow}
-            className="text-light"
-          >
-            Kirim
-          </Button>
-
-          <Send
-            show={showSendModal}
-            handleClose={handleSendClose}
-            handleSend={handleSend}
-          />
-        </Card.Footer>
+        {status === "complete" && (
+          <Card.Footer className="bg-transparent d-flex justify-content-end gap-2">
+            <Button
+              variant="primary"
+              onClick={handleSendShow}
+              className="text-light"
+            >
+              Kirim
+            </Button>
+            <Send
+              show={showSendModal}
+              handleClose={handleSendClose}
+              handleSend={onSubmit}
+            />
+          </Card.Footer>
+        )}
       </Card>
     </Col>
   );

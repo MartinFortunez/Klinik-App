@@ -35,3 +35,12 @@ export const formDataFacilities = (values) => {
   formData.append("deskripsi", values.description);
   return formData;
 };
+
+// Form Login
+export const formDataLogin = (values) => {
+  const respons = {
+    username: values.username,
+    password: values.password,
+  };
+  return respons;
+};
