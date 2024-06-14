@@ -6,6 +6,7 @@ import { BsStarFill } from "react-icons/bs";
 import { api } from "../../../../api/api";
 import { useQueryClient } from "react-query";
 import { handleDelete } from "../../../../utils/handleFunction";
+import { format } from "date-fns";
 
 const CardPatientReviews = ({ data }) => {
   const { ulasan_id, nik, nama_pasien, penilaian, tgl_ulasan, rating, status } =
@@ -14,6 +15,8 @@ const CardPatientReviews = ({ data }) => {
   const [showAcceptModal, setShowAcceptModal] = useState(false);
   const [statusFeedback, setStatusFeedback] = useState(status);
   const queryClient = useQueryClient();
+
+  const formattedDate = format(new Date(tgl_ulasan), "dd/MM/yyyy");
 
   const yellowStars = Math.floor(rating);
   const whiteStars = 5 - yellowStars;
@@ -59,7 +62,7 @@ const CardPatientReviews = ({ data }) => {
               <Card.Subtitle className="opacity-50">
                 Tanggal Ulasan
               </Card.Subtitle>
-              <Card.Text>{tgl_ulasan}</Card.Text>
+              <Card.Text>{formattedDate}</Card.Text>
             </Col>
           </Row>
           <Row>

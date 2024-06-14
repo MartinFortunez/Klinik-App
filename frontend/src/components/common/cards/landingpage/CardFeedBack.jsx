@@ -4,9 +4,11 @@ import { Card, Col, Row } from "react-bootstrap";
 import { BiSolidQuoteLeft } from "react-icons/bi";
 import { BsStarFill } from "react-icons/bs";
 import "../../../sass/StyledFeedBack.scss";
+import { format } from "date-fns";
 
 const CardFeedBack = ({ data, className }) => {
   const { nama_pasien, penilaian, tgl_ulasan, rating, status } = data;
+  const formattedDate = format(new Date(tgl_ulasan), "dd/MM/yyyy");
 
   const yellowStars = Math.floor(rating);
   const whiteStars = 5 - yellowStars;
@@ -24,7 +26,7 @@ const CardFeedBack = ({ data, className }) => {
           <Col xs={9}>
             <div>
               <div className="user">{nama_pasien}</div>
-              <div className="role">{tgl_ulasan}</div>
+              <div className="role">{formattedDate}</div>
             </div>
           </Col>
           <Col xs={3}>

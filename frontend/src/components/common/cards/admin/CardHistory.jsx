@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { Button, Card, Col, Row } from "react-bootstrap";
 import Send from "../../admin/history/Send";
 import { api } from "../../../../api/api";
+import { format } from "date-fns";
 
 const CardHistory = ({ data }) => {
   const {
@@ -39,6 +40,8 @@ const CardHistory = ({ data }) => {
     }
   };
 
+  const formattedDate = format(new Date(tgl_konsul), "dd/MM/yyyy");
+
   return (
     <Col>
       <Card>
@@ -49,7 +52,7 @@ const CardHistory = ({ data }) => {
               <span className="custom-underline"></span>
             </Col>
             <Col className="d-flex justify-content-end">
-              <span>{tgl_konsul}</span>
+              <span>{formattedDate}</span>
             </Col>
           </Row>
           <Row>
