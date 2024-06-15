@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Modal, Button, Container, Carousel } from "react-bootstrap";
+import { Modal, Button, Container, Carousel, Col, Row } from "react-bootstrap";
 import CardFeedBack from "../cards/landingpage/CardFeedBack";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap/dist/js/bootstrap.bundle.min.js";
@@ -8,44 +8,32 @@ import {
   CarouselControlNext,
 } from "./CarouselControlButton";
 import FormAddFeedBack from "./FormAddFeedBack";
-import "../../sass/StyledFeedBack.scss";
-import axios from "axios";
-import { useQuery, useQueryClient } from "react-query";
 import useFetch from "../../../hooks/useFetch";
 
 const FeedBack = () => {
   const [showAddModal, setShowAddModal] = useState(false);
   const [cardsPerSlide, setCardsPerSlide] = useState(2);
   const { data, isSuccess } = useFetch("feedback", "feedbackData");
+  const handleResize = () => {
+    const breakpoint = 900; // Example breakpoint for small screens
+    setCardsPerSlide(window.innerWidth > breakpoint ? 2 : 1);
+  };
 
   useEffect(() => {
-    const handleResize = () => {
-      if (window.innerWidth <= 1000) {
-        setCardsPerSlide(1);
-      } else {
-        setCardsPerSlide(2);
-      }
-    };
+    handleResize(); // Set initial state based on current window size
+    window.addEventListener("resize", handleResize); // Adjust on window resize
 
-    handleResize();
-    window.addEventListener("resize", handleResize);
-
-    return () => {
-      window.removeEventListener("resize", handleResize);
-    };
+    return () => window.removeEventListener("resize", handleResize); // Cleanup on component unmount
   }, []);
 
   const handleAddClose = () => setShowAddModal(false);
   const handleAddShow = () => setShowAddModal(true);
 
   return (
-    <div className="StyledFeedBack">
-      <div className="Title">Ulasan Pasien</div>
+    <Container fluid id="Feedback" className="py-5">
+      <h1 className="text-primary text-center mb-5">Ulasan Pasien</h1>
       <Container>
-        <Carousel
-          prevIcon={<CarouselControlPrev />}
-          nextIcon={<CarouselControlNext />}
-        >
+        <Carousel>
           {data ? (
             Array.from(
               { length: Math.ceil(data.length / cardsPerSlide) },
@@ -56,12 +44,14 @@ const FeedBack = () => {
                   .slice(startIndex, endIndex)
                   .filter((item) => item.status === "on");
                 return (
-                  <Carousel.Item key={i}>
-                    <div className="d-flex justify-content-around">
+                  <Carousel.Item key={i} className="p-5">
+                    <Row>
                       {filteredData.map((item) => (
-                        <CardFeedBack key={item.ulasan_id} data={item} />
+                        <Col xs lg={6} key={item.ulasan_id}>
+                          <CardFeedBack data={item} />
+                        </Col>
                       ))}
-                    </div>
+                    </Row>
                   </Carousel.Item>
                 );
               }
@@ -70,18 +60,22 @@ const FeedBack = () => {
             <p>Loading...</p>
           )}
         </Carousel>
-        <div className="d-flex justify-content-center mt-3">
-          <Button className="CustomButton" onClick={handleAddShow}>
+        <Col className="mt-5  d-flex justify-content-center">
+          <Button
+            variant="primary"
+            className="text-light"
+            onClick={handleAddShow}
+          >
             Kirim Feedback
           </Button>
-        </div>
+        </Col>
         <FormAddFeedBack
           show={showAddModal}
           handleClose={handleAddClose}
           data={data}
         />
       </Container>
-    </div>
+    </Container>
   );
 };
 

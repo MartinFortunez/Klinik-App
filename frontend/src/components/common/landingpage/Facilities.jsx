@@ -7,38 +7,30 @@ import dataFacilities from "../../../data/facilities.js";
 import { Container } from "react-bootstrap";
 import axios from "axios";
 import { useQuery, useQueryClient } from "react-query";
-import styled from 'styled-components';
-
-const fetchData = async () => {
-  const response = await axios.get("http://localhost:3000/dashboard/fasilitas");
-  return response.data;
-};
+import styled from "styled-components";
+import useFetch from "../../../hooks/useFetch.js";
 
 const Facilities = () => {
-  const { data, isSuccess } = useQuery("fasilitasData", fetchData, {
-    refetchOnWindowFocus: false, // Tidak merender ulang data saat jendela browser mendapatkan fokus
-    refetchOnMount: false, // Tidak merender ulang data saat komponen dipasang
-    staleTime: Infinity, // Data tidak dianggap kadaluwarsa
-  });
+  const { data, isSuccess } = useFetch("fasilitas", "fasilitasData");
 
   const CustomRow = styled(Row)`
-  text-align: center;
+    text-align: center;
 
-  @media (max-width: 576px) {
-    text-align: left;
-    padding-left: 20px;
-  }
-`;
+    @media (max-width: 576px) {
+      text-align: left;
+      padding-left: 20px;
+    }
+  `;
 
   return (
-    <Container fluid className="bg-secondary py-2">
+    <Container id="Facilities" fluid className="bg-secondary py-5">
       <CustomRow>
-      <h1 className="text-primary">Fasilitas Klinik</h1>
-      <p>
-        Lorem ipsum dolor sit amet consectetur. Ullamcorper vulputate non in
-        lorem adipiscing tempor integer blandit commodo.
-      </p>
-    </CustomRow>
+        <h1 className="text-primary">Fasilitas Klinik</h1>
+        <p>
+          Lorem ipsum dolor sit amet consectetur. Ullamcorper vulputate non in
+          lorem adipiscing tempor integer blandit commodo.
+        </p>
+      </CustomRow>
 
       <Row xs={1} md={2} className="g-4 p-5">
         {data ? (

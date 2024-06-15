@@ -40,9 +40,51 @@ $dark: #343a40;
   width: fit-content;
 }
 
+.custom-shadow {
+  box-shadow: rgba(50, 50, 93, 0.25) 0px 13px 27px -5px,
+    rgba(0, 0, 0, 0.3) 0px 8px 16px -8px;
+}
+
 // ========================= Custom Nav Landing Page ================================
 .custom-nav {
   background-color: $primary;
+}
+
+.nav-link.active {
+  color: $light !important;
+}
+.nav-link.focus {
+  color: $light !important;
+}
+.nav-link.hover {
+  color: $light !important;
+}
+
+// ========================= Custom Feedback Landing Page ================================
+
+.text-date {
+  font-size: 12px;
+}
+
+.star-color {
+  color: #fbc22f;
+}
+
+.carousel-indicators {
+  position: relative !important;
+}
+
+.carousel-indicators button {
+  background-color: $secondary !important;
+}
+
+.carousel-indicators .active {
+  background-color: $primary !important;
+}
+
+.carousel-control-next,
+.carousel-control-prev {
+  display: none !important;
 }
 
 // ========================= Custom Button ================================
