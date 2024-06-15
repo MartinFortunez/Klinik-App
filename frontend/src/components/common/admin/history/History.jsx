@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Col, Container, Form, Row } from "react-bootstrap";
+import { Col, Container, Form, Row, Spinner } from "react-bootstrap";
 import CardHistory from "../../cards/admin/CardHistory";
 import axios from "axios";
 import { useQuery, useQueryClient } from "react-query";
@@ -9,7 +9,7 @@ const History = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [filterStatus, setFilterStatus] = useState(""); // State untuk status filter
   const queryClient = useQueryClient();
-  const { data, isSuccess } = useFetch("riwayat", "riwayatData");
+  const { data, isLoading } = useFetch("riwayat", "riwayatData");
 
   // Filter data berdasarkan kata kunci pencarian dan status
   const filteredData = data
@@ -56,17 +56,17 @@ const History = () => {
         </Col>
       </Row>
       <Row xs={1} className="gx-3 gy-4 overflow-y-scroll m-0">
-        {isSuccess ? (
-          filteredData.length > 0 ? (
-            filteredData.map((item) => (
+        {isLoading ? (
+          <Spinner animation="border" role="status">
+          <span className="visually-hidden">Loading...</span>
+        </Spinner>
+      ) : data && data.length > 0 ? (
+        data.map((item) => (
               <CardHistory key={item.konsul_id} data={item} />
             ))
           ) : (
-            <p>No Data</p>
-          )
-        ) : (
-          <p>Loading...</p>
-        )}
+            <p>Tidak ada data</p>
+          )}
       </Row>
     </Container>
   );

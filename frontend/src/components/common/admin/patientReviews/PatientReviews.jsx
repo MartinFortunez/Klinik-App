@@ -1,5 +1,5 @@
 import React from "react";
-import { Col, Container, Row } from "react-bootstrap";
+import { Col, Container, Row, Spinner} from "react-bootstrap";
 import CardPatientReviews from "../../cards/admin/CardPatientReviews";
 import axios from "axios";
 import { useQuery, useQueryClient } from "react-query";
@@ -9,8 +9,8 @@ import "react-toastify/dist/ReactToastify.css";
 
 const PatientReviews = () => {
   const queryClient = useQueryClient();
-  const { data, isSuccess } = useFetch("feedback", "feedbackData");
-
+  const { data, isLoading } = useFetch("feedback", "feedbackData");
+  
   return (
     <Container fluid className="p-5 h-100 d-flex flex-column overflow-hidden">
       <ToastContainer />
@@ -19,15 +19,17 @@ const PatientReviews = () => {
           <h2>Ulasan Pasien</h2>
         </Col>
       </Row>
-      <Row xs={1} md={2} className="gx-3 gy-4 overflow-y-scroll m-0">
-        {data && data.length > 0 ? (
+      <Row xs={1} lg={2} className="gx-3 gy-4 overflow-y-auto m-0">
+        {isLoading ? (
+          <Spinner animation="border" role="status">
+            <span className="visually-hidden">Loading...</span>
+          </Spinner>
+        ) : data && data.length > 0 ? (
           data.map((item) => (
             <CardPatientReviews key={item.ulasan_id} data={item} />
           ))
-        ) : data && data.length === 0 ? (
-          <p>No Data</p>
         ) : (
-          <p>Loading...</p>
+          <p>Tidak ada data</p>
         )}
       </Row>
     </Container>

@@ -1,10 +1,8 @@
 import React from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
-import Col from "react-bootstrap/Col";
-import Row from "react-bootstrap/Row";
+import { Container, Col, Row, Spinner } from "react-bootstrap";
 import CardFacilities from "../cards/landingpage/CardFacilities.jsx";
 import dataFacilities from "../../../data/facilities.js";
-import { Container } from "react-bootstrap";
 import axios from "axios";
 import { useQuery, useQueryClient } from "react-query";
 import styled from 'styled-components';
@@ -15,7 +13,7 @@ const fetchData = async () => {
 };
 
 const Facilities = () => {
-  const { data, isSuccess } = useQuery("fasilitasData", fetchData, {
+  const { data, isLoading } = useQuery("fasilitasData", fetchData, {
     refetchOnWindowFocus: false, // Tidak merender ulang data saat jendela browser mendapatkan fokus
     refetchOnMount: false, // Tidak merender ulang data saat komponen dipasang
     staleTime: Infinity, // Data tidak dianggap kadaluwarsa
@@ -41,14 +39,18 @@ const Facilities = () => {
     </CustomRow>
 
       <Row xs={1} md={2} className="g-4 p-5">
-        {data ? (
+      {isLoading ? (
+          <Spinner animation="border" role="status">
+            <span className="visually-hidden">Loading...</span>
+          </Spinner>
+      ) : data && data.length > 0 ? (
           data.map((item) => (
             <Col lg={4} key={item.fasilitas_id}>
               <CardFacilities data={item} />
             </Col>
           ))
         ) : (
-          <p>loading bolo</p>
+          <p>Tidak ada data</p>
         )}
       </Row>
     </Container>
