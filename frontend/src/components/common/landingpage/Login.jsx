@@ -17,8 +17,7 @@ const Login = ({ show, handleClose }) => {
   const handleLogin = async (values) => {
     try {
       const response = await axios.post(
-        `http://localhost:3000/login
-`,
+        `${process.env.REACT_APP_BACKEND_URL}login`,
         {
           username: values.username,
           password: values.password,
@@ -28,7 +27,7 @@ const Login = ({ show, handleClose }) => {
       localStorage.setItem("token", token);
 
       handleClose();
-      navigate("/admin/dashboard");
+      navigate("/admin/konsultasi-masuk");
     } catch (error) {
       console.error("Login failed:", error);
       setError("Login failed. Please try again.");

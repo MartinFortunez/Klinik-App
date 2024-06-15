@@ -30,7 +30,6 @@ const ProtectedRoute = ({ element }) => {
   return isAuth ? element : <Navigate to="/" />;
 };
 
-
 function App() {
   return (
     <QueryClientProvider client={queryClient}>
@@ -38,10 +37,10 @@ function App() {
         <Routes>
           <Route path="/" element={<HomePage />} />
           <Route path="/admin" element={<DashboardAdmin />}>
-            <Route
+            {/* <Route
               path="dashboard"
               element={<ProtectedRoute element={<Dashboard />} />}
-            />
+            /> */}
             <Route
               path="jadwal-dokter"
               element={<ProtectedRoute element={<DoctorsSchedule />} />}

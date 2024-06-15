@@ -7,8 +7,7 @@ import { useQuery } from "react-query";
 const fetchProfileData = async () => {
   try {
     const response = await axios.get(
-      `http://localhost:3000/profile
-`
+      `${process.env.REACT_APP_BACKEND_URL}profile`
     );
     return response.data;
   } catch (error) {
@@ -25,7 +24,7 @@ const Topbar = () => {
         {data ? (
           <div className="d-flex flex-column align-items-end">
             <span className="fw-semibold text-primary">{data.username}</span>
-            <span>Klinik App</span>
+            <span>Akses</span>
           </div>
         ) : (
           <div className="d-flex flex-column align-items-end">

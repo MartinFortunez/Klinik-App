@@ -20,7 +20,7 @@ const Doctor = () => {
   `;
 
   return (
-    <Container fluid className="py-5">
+    <Container id="Doctor" fluid className="py-5">
       <CustomRow>
         <h1 className="text-primary">Jadwal Praktek Dokter</h1>
         <p>

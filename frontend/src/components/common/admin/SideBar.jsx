@@ -1,55 +1,67 @@
 import React from "react";
 import { Button, Col, Nav } from "react-bootstrap";
-import { BoxArrowRight, ColumnsGap } from "react-bootstrap-icons";
+import {
+  Bell,
+  BoxArrowRight,
+  CalendarWeek,
+  ChatLeftQuote,
+  ClockHistory,
+  ColumnsGap,
+  PersonVcard,
+  PersonVcardFill,
+  PersonWheelchair,
+  Send,
+} from "react-bootstrap-icons";
 import { NavLink } from "react-router-dom";
 
 const SideBar = ({ onLogout }) => {
   const links = [
+    // {
+    //   path: "/admin/dashboard",
+    //   label: "Dashboard",
+    //   icon: <ColumnsGap />,
+    // },
     {
-      path: "/admin/dashboard",
-      label: "Dashboard",
-      icon: <ColumnsGap />,
+      path: "/admin/konsultasi-masuk",
+      label: "Konsultasi Masuk",
+      icon: <Bell size={24} />,
     },
     {
       path: "/admin/jadwal-dokter",
       label: "Jadwal Dokter",
-      icon: <ColumnsGap />,
+      icon: <CalendarWeek size={24} />,
     },
-    {
-      path: "/admin/konsultasi-masuk",
-      label: "Konsultasi Masuk",
-      icon: <ColumnsGap />,
-    },
+
     {
       path: "/admin/reminder-pasien",
       label: "Reminder Pasien",
-      icon: <ColumnsGap />,
+      icon: <Send size={24} />,
     },
     {
       path: "/admin/riwayat",
       label: "Riwayat",
-      icon: <ColumnsGap />,
+      icon: <ClockHistory size={24} />,
     },
     {
       path: "/admin/dokter",
       label: "Dokter",
-      icon: <ColumnsGap />,
+      icon: <PersonVcard size={24} />,
     },
     {
       path: "/admin/ulasan-pasien",
       label: "Ulasan Pasien",
-      icon: <ColumnsGap />,
+      icon: <ChatLeftQuote size={24} />,
     },
     {
       path: "/admin/fasilitas",
       label: "Fasilitas",
-      icon: <ColumnsGap />,
+      icon: <PersonWheelchair size={24} />,
     },
   ];
   return (
-    <div className="d-flex flex-column bg-light justify-content-between px-2 px-lg-4 vh-100 pb-5">
+    <Col className="d-flex flex-column bg-light justify-content-between px-2 px-lg-4 vh-100 pb-5">
       <Nav className="flex-column gap-2">
-        <div className="logo mb-4 "></div>
+        <div className="logo mb-4"></div>
         {links.map((link, index) => (
           <Nav.Item key={index}>
             <NavLink
@@ -67,16 +79,16 @@ const SideBar = ({ onLogout }) => {
         ))}
       </Nav>
       <Button
-        variant=""
-        className="d-flex align-items-center text-danger rounded fw-semibold"
+        variant="danger"
+        className="d-flex bg-transparent align-items-center text-danger rounded fw-semibold border-0"
         onClick={onLogout}
       >
         <span className="me-lg-2">
-          <BoxArrowRight />
+          <BoxArrowRight size={24} />
         </span>
         <span className="d-none d-lg-block">Logout</span>
       </Button>
-    </div>
+    </Col>
   );
 };
 

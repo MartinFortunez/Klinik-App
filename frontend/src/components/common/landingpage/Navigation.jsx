@@ -4,7 +4,6 @@ import "bootstrap-icons/font/bootstrap-icons.css";
 import Login from "./Login";
 import "../../../sass/custom.scss";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
 
 const Navigation = () => {
   // State to manage modal visibility
@@ -25,7 +24,7 @@ const Navigation = () => {
       handleShowModal();
     } else {
       // Redirect to admin dashboard or perform any other action
-      navigate("/admin/dashboard");
+      navigate("/admin/konsultasi-masuk");
     }
   };
 
@@ -33,25 +32,27 @@ const Navigation = () => {
     <Navbar
       collapseOnSelect
       expand="lg"
-      className="custom-nav sticky-top px-2 px-md-3 px-lg-5  navbar-dark"
+      className="custom-nav px-2 px-md-3 px-lg-5  navbar-dark"
     >
       <Container fluid>
-        <Navbar.Brand href="#home">React-Bootstrap</Navbar.Brand>
+        <Navbar.Brand href="#home">Klinik App</Navbar.Brand>
         <Navbar.Toggle aria-controls="responsive-navbar-nav" />
         <Navbar.Collapse id="responsive-navbar-nav">
           <Nav className="me-auto"></Nav>
           <Nav>
-            <Nav.Link href="#deets">Beranda</Nav.Link>
-            <Nav.Link eventKey={2} href="#memes">
+            <Nav.Link href="#Hero" className="text-light">
+              Beranda
+            </Nav.Link>
+            <Nav.Link eventKey={2} href="#About" className="text-light">
               Tentang Kami
             </Nav.Link>
-            <Nav.Link eventKey={3} href="#memes">
-              Fasilitas
-            </Nav.Link>
-            <Nav.Link eventKey={4} href="#memes">
+            <Nav.Link eventKey={4} href="#Doctor" className="text-light">
               Jadwal Dokter
             </Nav.Link>
-            <Nav.Link eventKey={5} href="#memes">
+            <Nav.Link eventKey={3} href="#Facilities" className="text-light">
+              Fasilitas
+            </Nav.Link>
+            <Nav.Link eventKey={5} href="#Feedback" className="text-light">
               Ulasan
             </Nav.Link>
           </Nav>

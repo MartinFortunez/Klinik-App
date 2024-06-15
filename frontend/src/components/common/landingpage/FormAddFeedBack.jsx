@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Button, Col, Form, Modal, Row } from "react-bootstrap";
 import { BsStarFill } from "react-icons/bs";
-import "../../sass/StyledFeedBack.scss";
 import { Formik } from "formik";
 import axios from "axios";
 import { useMutation, useQueryClient } from "react-query";

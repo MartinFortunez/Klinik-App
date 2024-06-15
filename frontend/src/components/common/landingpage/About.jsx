@@ -4,7 +4,7 @@ import { Container, Row, Col, Image } from "react-bootstrap";
 
 const About = () => {
   return (
-    <Container fluid className="py-2 bg-secondary pb-5">
+    <Container id="About" fluid className="py-2 bg-secondary pb-5">
       <Row className="g-5 gx-0 m-0 justify-content-center align-items-lg-center">
         <Col md={5} className="d-none d-lg-block">
           <Image src={imgAbout} fluid />
