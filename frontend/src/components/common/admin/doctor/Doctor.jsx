@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Button, Col, Container, Row } from "react-bootstrap";
+import { Button, Col, Container, Row, Spinner } from "react-bootstrap";
 import CardDoctor from "../../cards/admin/CardDoctor";
 import Add from "./Add";
 import axios from "axios";
@@ -14,7 +14,7 @@ import "react-toastify/dist/ReactToastify.css";
 const Doctor = () => {
   const [showAddModal, setShowAddModal] = useState(false);
   const queryClient = useQueryClient();
-  const { data, isSuccess } = useFetch("dokter-klinik", "doctorData");
+  const { data, isLoading } = useFetch("dokter-klinik", "doctorData");
 
   const handleAddClose = () => setShowAddModal(false);
   const handleAddShow = () => setShowAddModal(true);
@@ -62,10 +62,16 @@ const Doctor = () => {
         </Col>
       </Row>
       <Row xs={1} className="gx-3 gy-4 overflow-y-scroll m-0">
-        {data ? (
-          data.map((item) => <CardDoctor key={item.dokter_id} data={item} />)
+        {isLoading ? (
+          <Spinner animation="border" role="status">
+            <span className="visually-hidden">Loading...</span>
+          </Spinner>
+        ) : data && data.length > 0 ? (
+          data.map((item) => (
+          <CardDoctor key={item.dokter_id} data={item} />
+        ))
         ) : (
-          <p>loading bolo</p>
+          <p>Tidak ada data</p>
         )}
       </Row>
     </Container>
