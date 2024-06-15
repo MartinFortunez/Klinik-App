@@ -8,9 +8,11 @@ const Accept = ({ data, show, handleClose }) => {
 
   const onSubmit = async () => {
     api("put", `jadwal-konsultasi/${data}/setuju`, "");
+    await queryClient.invalidateQueries("reminderData");
     await queryClient.invalidateQueries("konsultasiMasukData");
 
     // Menunggu hingga refetch selesai
+    await queryClient.refetchQueries("reminderData");
     await queryClient.refetchQueries("konsultasiMasukData");
     handleClose();
   };

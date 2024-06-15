@@ -8,6 +8,8 @@ import { api, postData } from "../../../../api/api";
 import { handleSubmit } from "../../../../utils/handleFunction";
 import { formDataDoctor } from "../../../../utils/body";
 import useFetch from "../../../../hooks/useFetch";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const Doctor = () => {
   const [showAddModal, setShowAddModal] = useState(false);
@@ -17,7 +19,9 @@ const Doctor = () => {
   const handleAddClose = () => setShowAddModal(false);
   const handleAddShow = () => setShowAddModal(true);
 
-  const onSubmit = (values, actions) => {
+  const onSubmit = async (values, actions) => {
+    try {
+      await
     handleSubmit(
       "post",
       "dokter-klinik/add",
@@ -27,10 +31,17 @@ const Doctor = () => {
       queryClient,
       "doctorData"
     );
+    // Display toast notification upon successful addition
+    toast.success("Berhasil menambahkan dokter!");
+  } catch (error) {
+    console.error("Error adding doctor:", error);
+    // Handle error
+  }
   };
 
   return (
     <Container fluid className="p-5 h-100 d-flex flex-column overflow-hidden">
+      <ToastContainer />
       <Row className="align-items-center">
         <Col>
           <h2>Data Dokter</h2>

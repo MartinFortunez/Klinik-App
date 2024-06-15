@@ -7,7 +7,8 @@ import { useQuery } from "react-query";
 const fetchProfileData = async () => {
   try {
     const response = await axios.get(
-      `${process.env.REACT_APP_BACKEND_URL}profile`
+      `http://localhost:3000/profile
+`
     );
     return response.data;
   } catch (error) {

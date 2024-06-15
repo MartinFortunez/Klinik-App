@@ -31,7 +31,7 @@ const Facilities = () => {
 `;
 
   return (
-    <Container fluid className="bg-secondary py-5">
+    <Container fluid className="bg-secondary py-2">
       <CustomRow>
       <h1 className="text-primary">Fasilitas Klinik</h1>
       <p>

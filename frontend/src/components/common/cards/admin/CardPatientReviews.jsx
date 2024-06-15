@@ -7,6 +7,7 @@ import { api } from "../../../../api/api";
 import { useQueryClient } from "react-query";
 import { handleDelete } from "../../../../utils/handleFunction";
 import { format } from "date-fns";
+import { toast } from "react-toastify";
 
 const CardPatientReviews = ({ data }) => {
   const { ulasan_id, nik, nama_pasien, penilaian, tgl_ulasan, rating, status } =
@@ -40,13 +41,20 @@ const CardPatientReviews = ({ data }) => {
     await queryClient.refetchQueries("feedbackData");
   };
 
-  const onDelete = () => {
-    handleDelete(
+  const onDelete = async () => {
+    try {
+    await handleDelete(
       "delete",
       `feedback/delete/${ulasan_id}`,
       queryClient,
       "feedbackData"
     );
+    // Display toast notification upon successful deletion
+    toast.success("Berhasil menghapus ulasan pasien!");
+  } catch (error) {
+    console.error("Error deleting patient reviews:", error);
+    // Handle error
+  }
   };
 
   return (
