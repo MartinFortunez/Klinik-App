@@ -32,49 +32,51 @@ const FeedBack = () => {
   return (
     <Container fluid id="Feedback" className="py-5">
       <h1 className="text-primary text-center mb-5">Ulasan Pasien</h1>
-      <Container>
-        <Carousel>
-          {data ? (
-            Array.from(
-              { length: Math.ceil(data.length / cardsPerSlide) },
-              (_, i) => {
-                const startIndex = i * cardsPerSlide;
-                const endIndex = startIndex + cardsPerSlide;
-                const filteredData = data
-                  .slice(startIndex, endIndex)
-                  .filter((item) => item.status === "on");
-                return (
-                  <Carousel.Item key={i} className="p-5">
-                    <Row>
-                      {filteredData.map((item) => (
-                        <Col xs lg={6} key={item.ulasan_id}>
-                          <CardFeedBack data={item} />
-                        </Col>
-                      ))}
-                    </Row>
-                  </Carousel.Item>
-                );
-              }
-            )
-          ) : (
-            <p>Loading...</p>
-          )}
-        </Carousel>
-        <Col className="mt-5  d-flex justify-content-center">
-          <Button
-            variant="primary"
-            className="text-light"
-            onClick={handleAddShow}
-          >
-            Kirim Feedback
-          </Button>
+      <Row className="justify-content-center">
+        <Col xs={11} md={10} lg={8}>
+          <Carousel>
+            {data ? (
+              Array.from(
+                { length: Math.ceil(data.length / cardsPerSlide) },
+                (_, i) => {
+                  const startIndex = i * cardsPerSlide;
+                  const endIndex = startIndex + cardsPerSlide;
+                  const filteredData = data
+                    .slice(startIndex, endIndex)
+                    .filter((item) => item.status === "on");
+                  return (
+                    <Carousel.Item key={i}>
+                      <Row>
+                        {filteredData.map((item) => (
+                          <Col xs lg={6} key={item.ulasan_id}>
+                            <CardFeedBack data={item} />
+                          </Col>
+                        ))}
+                      </Row>
+                    </Carousel.Item>
+                  );
+                }
+              )
+            ) : (
+              <p>Loading...</p>
+            )}
+          </Carousel>
+          <Col className="mt-5  d-flex justify-content-center">
+            <Button
+              variant="primary"
+              className="text-light"
+              onClick={handleAddShow}
+            >
+              Kirim Feedback
+            </Button>
+          </Col>
         </Col>
         <FormAddFeedBack
           show={showAddModal}
           handleClose={handleAddClose}
           data={data}
         />
-      </Container>
+      </Row>
     </Container>
   );
 };
