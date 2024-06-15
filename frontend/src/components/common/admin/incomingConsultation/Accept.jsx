@@ -2,19 +2,27 @@ import React from "react";
 import { Button, Col, Modal, Row } from "react-bootstrap";
 import { useQueryClient } from "react-query";
 import { api } from "../../../../api/api";
+import { toast } from "react-toastify";
 
 const Accept = ({ data, show, handleClose }) => {
   const queryClient = useQueryClient();
 
   const onSubmit = async () => {
-    api("put", `jadwal-konsultasi/${data}/setuju`, "");
-    await queryClient.invalidateQueries("reminderData");
-    await queryClient.invalidateQueries("konsultasiMasukData");
+    try {
+      api("put", `jadwal-konsultasi/${data}/setuju`, "");
+      await queryClient.invalidateQueries("reminderData");
+      await queryClient.invalidateQueries("konsultasiMasukData");
 
-    // Menunggu hingga refetch selesai
-    await queryClient.refetchQueries("reminderData");
-    await queryClient.refetchQueries("konsultasiMasukData");
-    handleClose();
+      // Menunggu hingga refetch selesai
+      await queryClient.refetchQueries("reminderData");
+      await queryClient.refetchQueries("konsultasiMasukData");
+      handleClose();
+      // Display toast notification upon successful addition
+      toast.success("Berhasil menerima Konsultasi!");
+    } catch (error) {
+      console.error("Error adding doctor:", error);
+      // Handle error
+    }
   };
 
   return (

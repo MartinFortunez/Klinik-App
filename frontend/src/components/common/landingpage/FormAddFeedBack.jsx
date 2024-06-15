@@ -4,6 +4,23 @@ import { BsStarFill } from "react-icons/bs";
 import { Formik } from "formik";
 import axios from "axios";
 import { useMutation, useQueryClient } from "react-query";
+import { api } from "../../../api/api";
+import * as yup from "yup";
+import { toast } from "react-toastify";
+
+const validationSchema = yup.object().shape({
+  NIK: yup
+    .string()
+    .matches(/^[0-9]+$/, "NIK harus berupa angka")
+    .length(16, "NIK harus terdiri dari 16 digit")
+    .required("NIK wajib diisi"),
+  namaPasien: yup.string().required("Nama wajib diisi"),
+  penilaian: yup.string().required("Penilaian wajib diisi"),
+  rating: yup
+    .number()
+    .moreThan(0, "Rating wajib diisi")
+    .required("Rating wajib diisi"),
+});
 
 const FormAddFeedBack = ({ data, show, handleClose }) => {
   const [ratingPasien, setRatingPasien] = useState(0);
@@ -13,10 +30,9 @@ const FormAddFeedBack = ({ data, show, handleClose }) => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get(
-          "http://localhost:3000/dashboard/riwayat"
-        );
-        setAppointmentData(response.data);
+        const result = await api("get", "riwayat");
+
+        setAppointmentData(result);
       } catch (error) {
         console.error("Error fetching appointment data:", error);
       }
@@ -32,11 +48,17 @@ const FormAddFeedBack = ({ data, show, handleClose }) => {
 
   const addFeedbackMutation = useMutation(
     (feedbackData) =>
-      axios.post("http://localhost:3000/dashboard/feedback/add", feedbackData),
+      axios.post(
+        `${process.env.REACT_APP_BACKEND_URL}dashboard/feedback/add`,
+        feedbackData
+      ),
     {
       onSuccess: () => {
         queryClient.invalidateQueries("feedbackData");
         handleClose();
+        toast.success(
+          "Berhasil menambahkan ulasan, perlu persetujuan admin untuk ditampilkan!"
+        );
       },
     }
   );
@@ -73,6 +95,7 @@ const FormAddFeedBack = ({ data, show, handleClose }) => {
       const isPatientInAppointment = checkPatientInAppointment(NIK, namaPasien);
 
       if (!isPatientInAppointment) {
+        toast.error("Data yang Anda masukkan belum melakukan konsultasi!");
         console.log(
           "Patient not found in appointment or status is not approved."
         );
@@ -82,6 +105,7 @@ const FormAddFeedBack = ({ data, show, handleClose }) => {
       const appointmentStatus = getAppointmentStatus(NIK, namaPasien);
 
       if (appointmentStatus !== "complete") {
+        toast.error("Data yang Anda masukkan belum melakukan konsultasi!");
         console.log(
           "Cannot add feedback for appointments that are not complete."
         );
@@ -106,7 +130,10 @@ const FormAddFeedBack = ({ data, show, handleClose }) => {
   return (
     <Modal
       show={show}
-      onHide={handleClose}
+      onHide={() => {
+        setRatingPasien(0);
+        handleClose();
+      }}
       size="lg"
       aria-labelledby="contained-modal-title-vcenter"
       centered
@@ -118,6 +145,7 @@ const FormAddFeedBack = ({ data, show, handleClose }) => {
       </Modal.Header>
       <Modal.Body>
         <Formik
+          validationSchema={validationSchema}
           onSubmit={handleSubmit}
           initialValues={{
             NIK: "",
@@ -154,6 +182,9 @@ const FormAddFeedBack = ({ data, show, handleClose }) => {
                     onClick={() => handleStarClick(index, setFieldValue)}
                   />
                 ))}
+                {touched.rating && errors.rating && (
+                  <div className="text-danger">{errors.rating}</div>
+                )}
               </Form.Group>
               <Form.Group>
                 <Form.Group controlId="validationNIK" className="mb-3">
@@ -211,6 +242,8 @@ const FormAddFeedBack = ({ data, show, handleClose }) => {
                     type="button"
                     className="w-100 bg-transparent border-0"
                     onClick={() => {
+                      setFieldValue("rating", 0);
+                      setRatingPasien(0);
                       handleReset();
                       handleClose();
                     }}

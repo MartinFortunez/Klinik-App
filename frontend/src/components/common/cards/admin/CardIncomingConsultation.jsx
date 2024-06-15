@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { Button, Card, Col, Row } from "react-bootstrap";
 import Reject from "../../admin/incomingConsultation/Reject";
 import Accept from "../../admin/incomingConsultation/Accept";
+import { format } from "date-fns";
 
 const CardIncomingConsultation = ({ data }) => {
   const {
@@ -21,6 +22,8 @@ const CardIncomingConsultation = ({ data }) => {
   } = data;
   const [showRejectModal, setShowRejectModal] = useState(false);
   const [showAcceptModal, setShowAcceptModal] = useState(false);
+  const formattedDateTglKonsul = format(new Date(tgl_konsul), "dd/MM/yyyy");
+  const formattedDateTglLahir = format(new Date(tgl_lahir), "dd/MM/yyyy");
 
   const handleRejectClose = () => setShowRejectModal(false);
   const handleRejectShow = () => setShowRejectModal(true);
@@ -38,7 +41,7 @@ const CardIncomingConsultation = ({ data }) => {
               <span className="custom-underline"></span>
             </Col>
             <Col className="d-flex justify-content-end">
-              <span>{tgl_konsul}</span>
+              <span>{formattedDateTglKonsul}</span>
             </Col>
           </Row>
           <Row>
@@ -72,7 +75,7 @@ const CardIncomingConsultation = ({ data }) => {
               <Card.Subtitle className="opacity-50">
                 Tanggal Lahir
               </Card.Subtitle>
-              <Card.Text>{tgl_lahir}</Card.Text>
+              <Card.Text>{formattedDateTglLahir}</Card.Text>
             </Col>
             <Col className="text-end">
               <Card.Subtitle className="opacity-50">

@@ -44,3 +44,19 @@ export const formDataLogin = (values) => {
   };
   return respons;
 };
+
+// Form Add Konsul
+export const formDataAddKonsul = (values) => {
+  const respons = {
+    nik: values.NIK,
+    nama_pasien: values.nama,
+    alamat: values.alamat,
+    gol_darah: values.golonganDarah,
+    tgl_lahir: values.tanggalLahir,
+    no_wa: values.nohp,
+    jadwal_id: values.jadwalId,
+    dokter_id: values.dokterId,
+    jenis_kelamin: values.jenisKelamin,
+  };
+  return respons;
+};

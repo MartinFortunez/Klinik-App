@@ -58,15 +58,15 @@ const History = () => {
       <Row xs={1} className="gx-3 gy-4 overflow-y-scroll m-0">
         {isLoading ? (
           <Spinner animation="border" role="status">
-          <span className="visually-hidden">Loading...</span>
-        </Spinner>
-      ) : data && data.length > 0 ? (
-        data.map((item) => (
-              <CardHistory key={item.konsul_id} data={item} />
-            ))
-          ) : (
-            <p>Tidak ada data</p>
-          )}
+            <span className="visually-hidden">Loading...</span>
+          </Spinner>
+        ) : filteredData && filteredData.length > 0 ? (
+          filteredData.map((item) => (
+            <CardHistory key={item.konsul_id} data={item} />
+          ))
+        ) : (
+          <p>Tidak ada data</p>
+        )}
       </Row>
     </Container>
   );

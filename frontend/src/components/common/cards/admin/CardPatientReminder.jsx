@@ -5,6 +5,7 @@ import Send from "../../admin/patientReminder/Send";
 import { api } from "../../../../api/api";
 import { useQueryClient } from "react-query";
 import { format } from "date-fns";
+import { toast } from "react-toastify";
 
 const CardPatientReminder = ({ data }) => {
   const { konsul_id, nik, nama_pasien, tgl_konsul, no_wa, tgl_tenggat } = data;
@@ -21,13 +22,20 @@ const CardPatientReminder = ({ data }) => {
   const handleSendShow = () => setShowSendModal(true);
 
   const onCancel = async () => {
-    api("put", `jadwal-konsultasi/${konsul_id}/cancel`, "");
+    try {
+      api("put", `jadwal-konsultasi/${konsul_id}/cancel`, "");
 
-    await queryClient.invalidateQueries("reminderData");
+      await queryClient.invalidateQueries("reminderData");
 
-    // Menunggu hingga refetch selesai
-    await queryClient.refetchQueries("reminderData");
-    handleCancelClose();
+      // Menunggu hingga refetch selesai
+      await queryClient.refetchQueries("reminderData");
+      handleCancelClose();
+      toast.success("Berhasil membatalkan konsultasi!");
+    } catch (error) {
+      toast.warning("Gagal membatalkan konsultasi!");
+      console.error("Error adding doctor schedule:", error);
+      // Handle error
+    }
   };
 
   return (

@@ -3,9 +3,9 @@ import { Button, Card, Col, Row } from "react-bootstrap";
 import Delete from "../../admin/doctorsSchedule/Delete";
 import Edit from "../../admin/doctorsSchedule/Edit";
 import axios from "axios";
-
 import { useQueryClient } from "react-query";
 import { handleDelete } from "../../../../utils/handleFunction";
+import { toast } from "react-toastify";
 
 const CardDoctorsSchedule = ({ data, dataDoctor }) => {
   const { dokter_id, jadwal_id, sesi, nama_dokter, spesialis } = data;
@@ -21,13 +21,24 @@ const CardDoctorsSchedule = ({ data, dataDoctor }) => {
   const handleEditClose = () => setShowEditModal(false);
   const handleEditShow = () => setShowEditModal(true);
 
-  const onDelete = () => {
-    handleDelete(
-      "delete",
-      `jadwal-dokter-spesialis/delete/${jadwal_id}`,
-      queryClient,
-      "jadwalDokterData"
-    );
+  const onDelete = async () => {
+    try {
+      await handleDelete(
+        "delete",
+        `jadwal-dokter-spesialis/delete/${jadwal_id}`,
+        queryClient,
+        "jadwalDokterData"
+      );
+      // Display toast notification upon successful addition
+      toast.success("Berhasil menghapus jadwal dokter!");
+    } catch (error) {
+      console.error("Error delete doctor schedule:", error);
+      if (error.response && error.response.status === 500) {
+        toast.warning("Gagal menghapus jadwal dokter: Server error (500)!");
+      } else {
+        toast.error("Gagal menghapus jadwal dokter!");
+      }
+    }
   };
 
   return (

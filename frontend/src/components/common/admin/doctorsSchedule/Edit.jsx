@@ -6,6 +6,7 @@ import { useQuery, useQueryClient } from "react-query";
 import axios from "axios";
 import { handleSubmit } from "../../../../utils/handleFunction";
 import { formDataEditSchedule } from "../../../../utils/body";
+import { toast } from "react-toastify";
 
 const Edit = ({ show, handleClose, data, dataDoctor }) => {
   const { dokter_id, jadwal_id, sesi, nama_dokter, spesialis, status } = data;
@@ -20,15 +21,23 @@ const Edit = ({ show, handleClose, data, dataDoctor }) => {
   const [selectedDokter, setSelectedDokter] = useState(null);
 
   const onSubmit = (values, actions) => {
-    handleSubmit(
-      "put",
-      `jadwal-dokter-spesialis/edit/${jadwal_id}`,
-      formDataEditSchedule(values),
-      actions,
-      handleClose,
-      queryClient,
-      "jadwalDokterData"
-    );
+    try {
+      handleSubmit(
+        "put",
+        `jadwal-dokter-spesialis/edit/${jadwal_id}`,
+        formDataEditSchedule(values),
+        actions,
+        handleClose,
+        queryClient,
+        "jadwalDokterData"
+      );
+      // Display toast notification upon successful addition
+      toast.success("Berhasil mengubah jadwal dokter!");
+    } catch (error) {
+      toast.warning("Gagal mengubah jadwal dokter!");
+      console.error("Error edit doctor schedule:", error);
+      // Handle error
+    }
   };
   return (
     <Modal

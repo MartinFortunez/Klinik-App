@@ -4,6 +4,8 @@ import CardPatientReminder from "../../cards/admin/CardPatientReminder";
 import axios from "axios";
 import { useQuery, useQueryClient } from "react-query";
 import useFetch from "../../../../hooks/useFetch";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const PatientReminder = () => {
   const [showAddModal, setShowAddModal] = useState(false);
@@ -14,6 +16,7 @@ const PatientReminder = () => {
   const handleAddShow = () => setShowAddModal(true);
   return (
     <Container fluid className="p-5 h-100 d-flex flex-column overflow-hidden">
+      <ToastContainer />
       <Row className="align-items-center">
         <Col>
           <h2>Reminder Pasien</h2>

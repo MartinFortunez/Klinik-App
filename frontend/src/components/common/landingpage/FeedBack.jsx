@@ -13,7 +13,7 @@ import useFetch from "../../../hooks/useFetch";
 const FeedBack = () => {
   const [showAddModal, setShowAddModal] = useState(false);
   const [cardsPerSlide, setCardsPerSlide] = useState(2);
-  const { data, isSuccess } = useFetch("feedback", "feedbackData");
+  const { data, isLoading } = useFetch("feedback", "feedbackData");
   const handleResize = () => {
     const breakpoint = 900; // Example breakpoint for small screens
     setCardsPerSlide(window.innerWidth > breakpoint ? 2 : 1);

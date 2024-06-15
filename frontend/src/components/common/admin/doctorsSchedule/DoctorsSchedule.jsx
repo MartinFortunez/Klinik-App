@@ -7,6 +7,9 @@ import { useQuery, useQueryClient } from "react-query";
 import { formDataAddSchedule } from "../../../../utils/body";
 import { handleSubmit } from "../../../../utils/handleFunction";
 import useFetch from "../../../../hooks/useFetch";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+
 
 const DoctorsSchedule = () => {
   const [showAddModal, setShowAddModal] = useState(false);
@@ -27,19 +30,28 @@ const DoctorsSchedule = () => {
   const handleAddShow = () => setShowAddModal(true);
 
   const onSubmit = (values, actions) => {
-    handleSubmit(
-      "post",
-      "jadwal-dokter-spesialis/add",
-      formDataAddSchedule(values),
-      actions,
-      handleAddClose,
-      queryClient,
-      "jadwalDokterData"
-    );
+    try {
+      handleSubmit(
+        "post",
+        "jadwal-dokter-spesialis/add",
+        formDataAddSchedule(values),
+        actions,
+        handleAddClose,
+        queryClient,
+        "jadwalDokterData"
+      );
+      // Display toast notification upon successful addition
+      toast.success("Berhasil menambahkan jadwal dokter!");
+    } catch (error) {
+      toast.warning("Gagal menambahkan jadwal dokter!");
+      console.error("Error adding doctor schedule:", error);
+      // Handle error
+    }
   };
 
   return (
     <Container fluid className="p-5 h-100 d-flex flex-column overflow-hidden">
+      <ToastContainer />
       <Row className="align-items-center">
         <Col>
           <h2>Jadwal Dokter</h2>

@@ -1,11 +1,11 @@
 import React from "react";
 import { Col, Container, Row } from "react-bootstrap";
 import CardIncomingConsultation from "../../cards/admin/CardIncomingConsultation";
-import { useQueryClient } from "react-query";
 import useFetch from "../../../../hooks/useFetch";
-const IncomingConsultation = () => {
-  const queryClient = useQueryClient();
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
+const IncomingConsultation = () => {
   const { data, isSuccess } = useFetch(
     "jadwal-konsultasi",
     "konsultasiMasukData"
@@ -13,6 +13,7 @@ const IncomingConsultation = () => {
 
   return (
     <Container fluid className="p-5 h-100 d-flex flex-column overflow-hidden">
+      <ToastContainer />
       <Row className="align-items-center">
         <Col>
           <h2>Konsultasi Masuk</h2>
