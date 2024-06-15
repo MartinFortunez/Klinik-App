@@ -5,18 +5,26 @@ import Edit from "../../admin/doctor/Edit";
 import axios from "axios";
 import { useQueryClient } from "react-query";
 import { handleDelete } from "../../../../utils/handleFunction";
+import { toast } from "react-toastify";
 
 const CardDoctor = ({ data }) => {
   const { dokter_id, sip, nama_dokter, spesialis, foto_dokter } = data;
   const queryClient = useQueryClient();
 
-  const onDelete = () => {
-    handleDelete(
+  const onDelete = async () => {
+    try {
+    await handleDelete(
       "delete",
       `dokter-klinik/delete/${dokter_id}`,
       queryClient,
       "doctorData"
     );
+    // Display toast notification upon successful deletion
+    toast.success("Berhasil menghapus dokter!");
+  } catch (error) {
+    console.error("Error deleting doctor:", error);
+    // Handle error
+  }
   };
 
   const [showDeleteModal, setShowDeleteModal] = useState(false);

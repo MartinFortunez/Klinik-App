@@ -6,22 +6,23 @@ import { useQuery, useQueryClient } from "react-query";
 import axios from "axios";
 import { formDataDoctor } from "../../../../utils/body";
 import { handleSubmit } from "../../../../utils/handleFunction";
+import { toast } from "react-toastify";
 
-// const FILE_SIZE = 500 * 1024;
-// const SUPPORTED_FORMATS = ["image/jpg", "image/jpeg", "image/gif", "image/png"];
+const FILE_SIZE = 500 * 1024;
+const SUPPORTED_FORMATS = ["image/jpg", "image/jpeg", "image/gif", "image/png"];
 
 const validationSchema = yup.object().shape({
-  imageFile: yup.mixed().required(),
-  // .test(
-  //   "fileSize",
-  //   "Ukuran file terlalu besar",
-  //   (value) => value && value.size <= FILE_SIZE
-  // )
-  // .test(
-  //   "fileFormat",
-  //   "Format file tidak didukung",
-  //   (value) => value && SUPPORTED_FORMATS.includes(value.type)
-  // ),
+  imageFile: yup.mixed().required()
+  .test(
+    "fileSize",
+    "Ukuran file terlalu besar",
+    (value) => value && value.size <= FILE_SIZE
+  )
+  .test(
+    "fileFormat",
+    "Format file tidak didukung",
+    (value) => value && SUPPORTED_FORMATS.includes(value.type)
+  ),
   namaDokter: yup.string().required("nama wajib diisi"),
   sip: yup.string().required("id dokter wajib diisi"),
   spesialis: yup.string().required("spesialis wajib diisi"),
@@ -32,6 +33,7 @@ const Edit = ({ show, handleClose, data }) => {
   const queryClient = useQueryClient();
 
   const onSubmit = (values, actions) => {
+    try {
     handleSubmit(
       "put",
       `dokter-klinik/edit/${dokter_id}`,
@@ -41,6 +43,11 @@ const Edit = ({ show, handleClose, data }) => {
       queryClient,
       "doctorData"
     );
+    toast.success("Berhasil ubah dokter!");
+    } catch (error) {
+      console.error("Error adding doctor:", error);
+      // Handle error
+    }
   };
 
   return (

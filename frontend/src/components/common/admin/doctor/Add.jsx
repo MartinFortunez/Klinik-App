@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import { Button, Col, Form, Image, Modal, Row } from "react-bootstrap";
 import * as yup from "yup";
 
-const FILE_SIZE = 100 * 1024;
+const FILE_SIZE = 500 * 1024;
 const SUPPORTED_FORMATS = ["image/jpg", "image/jpeg", "image/gif", "image/png"];
 
 const validationSchema = yup.object().shape({

@@ -17,7 +17,8 @@ const Login = ({ show, handleClose }) => {
   const handleLogin = async (values) => {
     try {
       const response = await axios.post(
-        `${process.env.REACT_APP_BACKEND_URL}login`,
+        `http://localhost:3000/login
+`,
         {
           username: values.username,
           password: values.password,
