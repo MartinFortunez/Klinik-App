@@ -58,14 +58,18 @@ const CardDoctor = ({ data }) => {
               <Card.Text>{nama_dokter}</Card.Text>
             </Col>
           </Row>
-          <Col>
-            <Card.Subtitle className="opacity-50">SIP Dokter</Card.Subtitle>
-            <Card.Text>{sip}</Card.Text>
-          </Col>
-          <Col>
-            <Card.Subtitle className="opacity-50">Spesialis</Card.Subtitle>
-            <Card.Text>{spesialis}</Card.Text>
-          </Col>
+          <Row>
+            <Col>
+              <Card.Subtitle className="opacity-50">SIP Dokter</Card.Subtitle>
+              <Card.Text>{sip}</Card.Text>
+            </Col>
+          </Row>
+          <Row>
+            <Col>
+              <Card.Subtitle className="opacity-50">Spesialis</Card.Subtitle>
+              <Card.Text>{spesialis}</Card.Text>
+            </Col>
+          </Row>
         </Card.Body>
         <Card.Footer className="bg-transparent d-flex justify-content-end gap-2">
           <Button variant="outline-danger" onClick={handleDeleteShow}>
