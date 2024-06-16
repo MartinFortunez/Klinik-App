@@ -1,58 +1,40 @@
-import React from "react";
-import { Container, Row, Col } from "react-bootstrap";
+import React from 'react';
+import { Container, Row, Col } from 'react-bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { FaInstagram, FaWhatsapp, FaEnvelope } from 'react-icons/fa';
-import '../../sass/StyledFooter.scss';
+import '../../sass/StyledFooter.scss'; 
 
 const Footer = () => {
   return (
-    <footer className="StyledFooter bg-dark text-white py-5">
+    <footer className="StyledFooter">
       <Container>
-        <Row className="justify-content-center">
-          <Col md={4} className="mb-4 mb-md-0">
-            <div className="d-flex flex-column gap-3">
-              <div className="bg-secondary" style={{ height: '59px', width: '215px' }}></div>
-              <p className="text-wrapper">
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et
-                dolore magna aliqua.
-              </p>
-              <div>
-                <p className="text-wrapper2">Lorem ipsum dolor sit amet</p>
-                <div className="d-flex gap-2">
-                  <a href="https://www.instagram.com" target="_blank" className="SocialLink bg-red">
-                    <FaInstagram color="white" />
-                  </a>
-                  <a href="https://www.whatsapp.com" target="_blank" className="SocialLink bg-green">
-                    <FaWhatsapp color="white" />
-                  </a>
-                  <a href="mailto:someone@example.com" target="_blank" className="SocialLink bg-blue">
-                    <FaEnvelope color="white" />
-                  </a>
-                </div>
-              </div>
+        <Row>
+          <Col md={8}>
+            <h5>Alamat</h5>
+            <p>
+              Jl. Ambulu No.48, Krajan Kulon, Tj. Rejo, Kec. Wuluhan,
+              Kabupaten Jember, Jawa Timur 68162
+            </p>
+          </Col>
+          <Col md={4} className="text-md-right d-flex flex-column align-items-md-end">
+            <h5>Media Sosial</h5>
+            <div className="social-icons">
+              <a href="https://www.instagram.com" target="_blank" className="SocialLink bg-red" rel="noopener noreferrer">
+                <FaInstagram color="white" />
+              </a>
+              <a href="https://www.whatsapp.com" target="_blank" className="SocialLink bg-green" rel="noopener noreferrer">
+                <FaWhatsapp color="white" />
+              </a>
+              <a href="mailto:someone@example.com" target="_blank" className="SocialLink bg-blue" rel="noopener noreferrer">
+                <FaEnvelope color="white" />
+              </a>
             </div>
           </Col>
-          <Col md={8}>
-            <Row>
-              <Col md={4} className="d-flex flex-column gap-2">
-                <p className="text-wrapper3">Lorem ipsum</p>
-                <p className="text-wrapper4">Lorem ipsum</p>
-                <p className="text-wrapper4">Lorem ipsum</p>
-              </Col>
-              <Col md={4} className="d-flex flex-column gap-2">
-                <p className="text-wrapper3">Lorem ipsum</p>
-                <p className="text-wrapper4">Lorem ipsum</p>
-                <p className="text-wrapper4">Lorem ipsum</p>
-              </Col>
-              <Col md={4} className="d-flex flex-column gap-2">
-                <p className="text-wrapper3">Lorem ipsum</p>
-                <p className="text-wrapper4">Lorem ipsum</p>
-                <p className="text-wrapper4">Lorem ipsum</p>
-              </Col>
-            </Row>
-            <div className="mt-4 text-right">
-              <p className="text-wrapper5">Created by Klinik App | © 2024 All Rights Reserved by Law</p>
-            </div>
+        </Row>
+        <Row className="mt-3">
+          <Col className="text-center">
+            <hr className="border-light" />
+            <p className="mb-0">Created by Klinik App | &copy; 2024 All Rights Reserved by Law</p>
           </Col>
         </Row>
       </Container>
