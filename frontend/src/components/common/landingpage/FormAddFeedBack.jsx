@@ -86,9 +86,6 @@ const FormAddFeedBack = ({ data, show, handleClose }) => {
 
       if (appointmentStatus !== "complete") {
         toast.error("Data yang Anda masukkan belum melakukan konsultasi!");
-        console.log(
-          "Cannot add feedback for appointments that are not complete."
-        );
         return;
       }
 

@@ -29,7 +29,10 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(corsMiddleware);
 
-app.use("/", indexRouter);
+app.get("/", (req, res) => {
+  res.send("Selamat datang di aplikasi klinik!");
+});
+app.use("/features", indexRouter);
 
 // Handle 404 - Not Found
 app.use((req, res, next) => {

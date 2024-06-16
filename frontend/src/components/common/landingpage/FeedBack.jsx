@@ -9,7 +9,7 @@ import useFetch from "../../../hooks/useFetch";
 const FeedBack = () => {
   const [showAddModal, setShowAddModal] = useState(false);
   const [cardsPerSlide, setCardsPerSlide] = useState(2);
-  const { data, isLoading } = useFetch("feedback", "feedbackData");
+  const { data, isLoading, isSuccess } = useFetch("feedback", "feedbackData");
 
   const handleResize = () => {
     const breakpoint = 900;
@@ -37,6 +37,8 @@ const FeedBack = () => {
                 <div>Loading feedback...</div>
               </Carousel.Item>
             ) : (
+              isSuccess &&
+              data &&
               data
                 .filter((item) => item.status === "on")
                 .reduce((acc, item, index, array) => {

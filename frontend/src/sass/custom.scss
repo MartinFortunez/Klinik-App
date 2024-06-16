@@ -10,11 +10,7 @@ $dark: #343a40;
 
 // ========================= Custom Class ================================
 .custom-gradient {
-  background: linear-gradient(
-    to top,
-    rgba(16, 35, 35, 1),
-    rgba(88, 163, 153, 1)
-  );
+  background: linear-gradient(to top, #102323, rgba(88, 163, 153, 1));
 }
 
 .custom-bg-hero {
@@ -26,7 +22,7 @@ $dark: #343a40;
 }
 
 .logo {
-  height: 40px;
+  height: 50px;
   width: 100%;
 }
 
@@ -43,6 +39,10 @@ $dark: #343a40;
 .custom-shadow {
   box-shadow: rgba(50, 50, 93, 0.25) 0px 13px 27px -5px,
     rgba(0, 0, 0, 0.3) 0px 8px 16px -8px;
+}
+
+.bg-footer {
+  background-color: #102323;
 }
 
 // ========================= Custom Nav Landing Page ================================
@@ -87,7 +87,7 @@ $dark: #343a40;
   display: none !important;
 }
 
-// ========================= Custom Button ================================
+// ========================= Custom footer ================================
 
 // ========================= Custom CardIncomingConsultation ================================
 

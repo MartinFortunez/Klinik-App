@@ -1,5 +1,5 @@
 import React from "react";
-import { Button, Image, Container, Col, Row, NavLink } from "react-bootstrap";
+import { Button, Image, Container, Col, Row} from "react-bootstrap";
 import imgHero from "../../../assets/img-hero.png";
 
 const Hero = () => {

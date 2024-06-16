@@ -6,7 +6,7 @@ import { BsStarFill } from "react-icons/bs";
 import { format } from "date-fns";
 
 const CardFeedBack = ({ data, className }) => {
-  const { nama_pasien, penilaian, tgl_ulasan, rating, status } = data;
+  const { nama_pasien, penilaian, tgl_ulasan, rating } = data;
   const formattedDate = format(new Date(tgl_ulasan), "dd/MM/yyyy");
 
   const yellowStars = Math.floor(rating);

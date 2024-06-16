@@ -17,7 +17,6 @@ const DoctorsSchedule = () => {
     "jadwalDokterData"
   );
 
-  data && console.log(data.schedules);
 
   // Function to sort the schedule data in ascending order by jadwal_id
   const sortedSchedules = data
@@ -98,7 +97,7 @@ const DoctorsSchedule = () => {
           />
         </Col>
       </Row>
-      <Row xs={1} className="gx-3 gy-4 overflow-y-scroll m-0">
+      <Row xs={1} className="gx-3 gy-4 overflow-y-auto m-0">
         {isLoading ? (
           <Spinner animation="border" role="status">
             <span className="visually-hidden">Loading...</span>

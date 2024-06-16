@@ -1,8 +1,6 @@
 import { Formik } from "formik";
 import React, { useState } from "react";
 import { Button, Col, Form, Modal, Row } from "react-bootstrap";
-import axios from "axios";
-import { useQuery, useQueryClient } from "react-query";
 import useFetch from "../../../../hooks/useFetch";
 import * as yup from "yup";
 
@@ -76,7 +74,6 @@ const Add = ({ show, handleClose, handleAdd }) => {
                         },
                       });
                     }
-                    console.log(selected);
                   }}
                   isInvalid={touched.namaDokter && !!errors.namaDokter}
                 >

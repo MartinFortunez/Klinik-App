@@ -1,14 +1,11 @@
 import React from "react";
 import { Col, Container, Row, Spinner } from "react-bootstrap";
 import CardPatientReviews from "../../cards/admin/CardPatientReviews";
-import axios from "axios";
-import { useQuery, useQueryClient } from "react-query";
 import useFetch from "../../../../hooks/useFetch";
-import { ToastContainer, toast } from "react-toastify";
+import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 const PatientReviews = () => {
-  const queryClient = useQueryClient();
   const { data, isLoading } = useFetch("feedback", "feedbackData");
 
   return (

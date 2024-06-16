@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import { Button, Card, Col, Row } from "react-bootstrap";
 import Reject from "../../admin/patientReviews/Reject";
-import Accept from "../../admin/patientReviews/Accept";
 import { BsStarFill } from "react-icons/bs";
 import { api } from "../../../../api/api";
 import { useQueryClient } from "react-query";
@@ -13,7 +12,6 @@ const CardPatientReviews = ({ data }) => {
   const { ulasan_id, nik, nama_pasien, penilaian, tgl_ulasan, rating, status } =
     data;
   const [showRejectModal, setShowRejectModal] = useState(false);
-  const [showAcceptModal, setShowAcceptModal] = useState(false);
   const [statusFeedback, setStatusFeedback] = useState(status);
   const queryClient = useQueryClient();
 
@@ -32,7 +30,6 @@ const CardPatientReviews = ({ data }) => {
     const response = {
       status: newStatus,
     };
-    console.log(response);
     await api("put", `feedback/edit/${ulasan_id}`, response);
     // Menunggu hingga refetch selesai
     await queryClient.refetchQueries("feedbackData");

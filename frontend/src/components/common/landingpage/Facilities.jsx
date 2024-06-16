@@ -2,23 +2,11 @@ import React from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { Container, Col, Row, Spinner } from "react-bootstrap";
 import CardFacilities from "../cards/landingpage/CardFacilities.jsx";
-import dataFacilities from "../../../data/facilities.js";
-import axios from "axios";
-import { useQuery, useQueryClient } from "react-query";
-import styled from "styled-components";
 import useFetch from "../../../hooks/useFetch.js";
 
 const Facilities = () => {
   const { data, isLoading } = useFetch("fasilitas", "fasilitasData");
 
-  const CustomRow = styled(Row)`
-    text-align: center;
-
-    @media (max-width: 576px) {
-      text-align: left;
-      padding-left: 20px;
-    }
-  `;
 
   return (
     <Container id="Facilities" fluid className="bg-secondary p-4 p-md-5">

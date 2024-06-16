@@ -9,7 +9,7 @@ import { toast } from "react-toastify";
 
 const CardDoctor = ({ data }) => {
   const [showAddModal, setShowAddModal] = useState(false);
-  const { dokter_id, sip, nama_dokter, spesialis, foto_dokter } = data;
+  const { dokter_id, nama_dokter, spesialis, foto_dokter } = data;
   const queryClient = useQueryClient();
 
   const styleUnderline = {

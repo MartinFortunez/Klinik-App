@@ -1,9 +1,8 @@
 import { Formik } from "formik";
-import React, { useState } from "react";
+import React from "react";
 import { Button, Col, Form, Image, Modal, Row } from "react-bootstrap";
 import * as yup from "yup";
-import { useQuery, useQueryClient } from "react-query";
-import axios from "axios";
+import { useQueryClient } from "react-query";
 import { formDataDoctor } from "../../../../utils/body";
 import { handleSubmit } from "../../../../utils/handleFunction";
 import { toast } from "react-toastify";

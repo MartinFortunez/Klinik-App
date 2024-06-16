@@ -18,7 +18,6 @@ const CardIncomingConsultation = ({ data }) => {
     jenis_kelamin,
     tgl_konsul,
     konsul_id,
-    tgl_tenggat,
   } = data;
   const [showRejectModal, setShowRejectModal] = useState(false);
   const [showAcceptModal, setShowAcceptModal] = useState(false);

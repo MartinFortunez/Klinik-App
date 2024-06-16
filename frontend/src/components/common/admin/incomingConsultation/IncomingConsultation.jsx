@@ -2,7 +2,7 @@ import React from "react";
 import { Col, Container, Row, Spinner } from "react-bootstrap";
 import CardIncomingConsultation from "../../cards/admin/CardIncomingConsultation";
 import useFetch from "../../../../hooks/useFetch";
-import { ToastContainer, toast } from "react-toastify";
+import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 const IncomingConsultation = () => {

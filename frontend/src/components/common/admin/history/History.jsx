@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import { Col, Container, Form, Row, Spinner } from "react-bootstrap";
 import CardHistory from "../../cards/admin/CardHistory";
-import { useQueryClient } from "react-query";
 import useFetch from "../../../../hooks/useFetch";
 
 const History = () => {
@@ -30,7 +29,7 @@ const History = () => {
       fluid
       className="p-3 p-md-5 h-100 d-flex flex-column overflow-hidden"
     >
-      <Row className="align-items-center">
+      <Row className="align-items-center mb-3">
         <Col>
           <h2>Riwayat</h2>
         </Col>
@@ -43,7 +42,7 @@ const History = () => {
             onChange={(e) => setSearchQuery(e.target.value)}
           />
         </Col>
-        <Col md="auto" className="mt-2 mb-3 mt-md-0">
+        <Col md="auto" className="mt-2 mt-md-0 mt-md-0">
           {/* Dropdown untuk filter status */}
           <Form.Select
             onChange={handleStatusFilterChange}
@@ -56,7 +55,7 @@ const History = () => {
           </Form.Select>
         </Col>
       </Row>
-      <Row xs={1} className="gx-3 gy-4 overflow-y-scroll m-0">
+      <Row xs={1} className="gx-3 gy-4 overflow-y-auto m-0">
         {isLoading ? (
           <Spinner animation="border" role="status">
             <span className="visually-hidden">Loading...</span>

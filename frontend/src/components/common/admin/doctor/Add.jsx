@@ -1,5 +1,5 @@
 import { Formik } from "formik";
-import React, { useState } from "react";
+import React from "react";
 import { Button, Col, Form, Image, Modal, Row } from "react-bootstrap";
 import * as yup from "yup";
 
@@ -17,9 +17,6 @@ const validationSchema = yup.object().shape({
 });
 
 const Add = ({ show, handleClose, handleAdd }) => {
-  const [selectedFile, setSelectedFile] = useState(null);
-  const [previewUrl, setPreviewUrl] = useState(null);
-
   return (
     <Modal
       show={show}

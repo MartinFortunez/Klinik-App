@@ -7,9 +7,8 @@ import { handleDelete } from "../../../../utils/handleFunction";
 import { toast } from "react-toastify";
 
 const CardDoctorsSchedule = ({ data, dataDoctor }) => {
-  const { dokter_id, jadwal_id, sesi, nama_dokter, spesialis } = data;
+  const { jadwal_id, sesi, nama_dokter, spesialis } = data;
   const queryClient = useQueryClient();
-  console.log(jadwal_id);
 
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [showEditModal, setShowEditModal] = useState(false);

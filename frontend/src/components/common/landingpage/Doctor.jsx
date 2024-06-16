@@ -2,7 +2,6 @@ import React from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import CardDoctor from "../cards/landingpage/CardDoctor.jsx";
 import { Container, Col, Row, Spinner } from "react-bootstrap";
-import styled from "styled-components";
 import useFetch from "../../../hooks/useFetch.js";
 
 const Doctor = () => {

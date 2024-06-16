@@ -1,9 +1,7 @@
 import { Formik } from "formik";
 import React, { useState } from "react";
 import { Button, Col, Form, Modal, Row } from "react-bootstrap";
-import * as yup from "yup";
-import { useQuery, useQueryClient } from "react-query";
-import axios from "axios";
+import { useQueryClient } from "react-query";
 import { handleSubmit } from "../../../../utils/handleFunction";
 import { formDataEditSchedule } from "../../../../utils/body";
 import { toast } from "react-toastify";
@@ -99,7 +97,6 @@ const Edit = ({ show, handleClose, data, dataDoctor }) => {
                         },
                       });
                     }
-                    console.log(selected);
                   }}
                   isInvalid={touched.namaDokter && !!errors.namaDokter}
                 >

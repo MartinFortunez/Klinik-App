@@ -4,6 +4,7 @@ import "bootstrap-icons/font/bootstrap-icons.css";
 import Login from "./Login";
 import "../../../sass/custom.scss";
 import { useNavigate } from "react-router-dom";
+import { HospitalFill } from "react-bootstrap-icons";
 
 const Navigation = () => {
   // State to manage modal visibility
@@ -16,7 +17,7 @@ const Navigation = () => {
   // Function to handle hiding the modal    icon: <HospitalFill />,
   const handleCloseModal = () => setShowModal(false);
 
-  const [token, setToken] = useState(localStorage.getItem("token"));
+  const [token] = useState(localStorage.getItem("token"));
 
   // Function to handle login button click
   const handleLoginClick = () => {
@@ -35,7 +36,10 @@ const Navigation = () => {
       className="custom-nav px-2 px-md-3 px-lg-5  navbar-dark"
     >
       <Container fluid>
-        <Navbar.Brand href="#home">Klinik App</Navbar.Brand>
+        <Navbar.Brand href="#Hero" className="d-flex align-items-end gap-2">
+          <HospitalFill size={40} />
+          <span className="fw-bold fs-4">Klinik App</span>
+        </Navbar.Brand>
         <Navbar.Toggle aria-controls="responsive-navbar-nav" />
         <Navbar.Collapse id="responsive-navbar-nav">
           <Nav className="me-auto"></Nav>

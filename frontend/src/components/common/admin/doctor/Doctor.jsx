@@ -19,26 +19,28 @@ const Doctor = () => {
 
   const onSubmit = async (values, actions) => {
     try {
-      await
-    handleSubmit(
-      "post",
-      "dokter-klinik/add",
-      formDataDoctor(values),
-      actions,
-      handleAddClose,
-      queryClient,
-      "doctorData"
-    );
-    // Display toast notification upon successful addition
-    toast.success("Berhasil menambahkan dokter!");
-  } catch (error) {
-    console.error("Error adding doctor:", error);
-    // Handle error
-  }
+      await handleSubmit(
+        "post",
+        "dokter-klinik/add",
+        formDataDoctor(values),
+        actions,
+        handleAddClose,
+        queryClient,
+        "doctorData"
+      );
+      // Display toast notification upon successful addition
+      toast.success("Berhasil menambahkan dokter!");
+    } catch (error) {
+      console.error("Error adding doctor:", error);
+      // Handle error
+    }
   };
 
   return (
-    <Container fluid className="p-3 p-md-5 h-100 d-flex flex-column overflow-hidden">
+    <Container
+      fluid
+      className="p-3 p-md-5 h-100 d-flex flex-column overflow-hidden"
+    >
       <ToastContainer />
       <Row className="align-items-center mb-3">
         <Col>
@@ -59,15 +61,13 @@ const Doctor = () => {
           />
         </Col>
       </Row>
-      <Row xs={1} md={2} lg={3} className="gx-3 gy-4 overflow-y-scroll m-0">
+      <Row xs={1} md={2} lg={3} xl={4} className="gx-3 gy-4 overflow-y-auto m-0">
         {isLoading ? (
           <Spinner animation="border" role="status">
             <span className="visually-hidden">Loading...</span>
           </Spinner>
         ) : data && data.length > 0 ? (
-          data.map((item) => (
-          <CardDoctor key={item.dokter_id} data={item} />
-        ))
+          data.map((item) => <CardDoctor key={item.dokter_id} data={item} />)
         ) : (
           <p>Tidak ada data</p>
         )}

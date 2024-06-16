@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import { Button, Card, Col, Row } from "react-bootstrap";
 import Delete from "../../admin/doctor/Delete";
 import Edit from "../../admin/doctor/Edit";
-import axios from "axios";
 import { useQueryClient } from "react-query";
 import { handleDelete } from "../../../../utils/handleFunction";
 import { toast } from "react-toastify";
