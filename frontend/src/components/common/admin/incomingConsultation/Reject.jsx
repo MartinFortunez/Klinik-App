@@ -2,17 +2,24 @@ import React from "react";
 import { Button, Col, Modal, Row } from "react-bootstrap";
 import { useQueryClient } from "react-query";
 import { api } from "../../../../api/api";
+import { toast } from "react-toastify";
 
 const Reject = ({ data, show, handleClose }) => {
   const queryClient = useQueryClient();
 
   const onSubmit = async () => {
-    api("delete", `jadwal-konsultasi/reject/${data}`, "");
-    await queryClient.invalidateQueries("konsultasiMasukData");
+    try {
+      api("delete", `jadwal-konsultasi/reject/${data}`, "");
+      await queryClient.invalidateQueries("konsultasiMasukData");
 
-    // Menunggu hingga refetch selesai
-    await queryClient.refetchQueries("konsultasiMasukData");
-    handleClose();
+      // Menunggu hingga refetch selesai
+      await queryClient.refetchQueries("konsultasiMasukData");
+      handleClose();
+      toast.success("Berhasil menolak Konsultasi!");
+    } catch (error) {
+      console.error("Error adding doctor:", error);
+      // Handle error
+    }
   };
   return (
     <Modal show={show} onHide={handleClose} centered>

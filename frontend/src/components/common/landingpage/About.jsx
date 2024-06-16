@@ -9,16 +9,19 @@ const About = () => {
         <Col md={5} className="d-none d-lg-block">
           <Image src={imgAbout} fluid />
         </Col>
-        <Col xs={12} md={11} lg={5} className="gy-3">
+        <Col xs={12} lg={5} className="gy-3 px-3 px-md-4">
           <Row>
-            <h1>Tentang Kami</h1>
+            <h1 className="text-primary">Tentang Kami</h1>
             <p>
-              This is a simple hero unit, a simple jumbotron-style component for
-              calling extra attention to featured content or information.
+              Klinik didirikan dengan visi untuk menjadi pusat perawatan
+              kesehatan terkemuka yang menyediakan pelayanan berkualitas tinggi
+              dengan pendekatan holistik. Sejak awal pendiriannya, kami telah
+              berkomitmen untuk memberikan perawatan medis yang komprehensif dan
+              personal kepada setiap pasien.
             </p>
           </Row>
           <Row>
-            <h1>Lokasi</h1>
+            <h1 className="text-primary">Lokasi</h1>
             <p>
               Jl. Ambulu No.48, Krajan Kulon, Tj. Rejo, Kec. Wuluhan, Kabupaten
               Jember, Jawa Timur 68162

@@ -5,22 +5,23 @@ import { api } from "../../../../api/api";
 import { toast } from "react-toastify";
 
 const Accept = ({ data, show, handleClose }) => {
+  const { konsul_id, nama_pasien } = data;
   const queryClient = useQueryClient();
 
   const onSubmit = async () => {
     try {
-      api("put", `jadwal-konsultasi/${data}/setuju`, "");
+      api("put", `jadwal-konsultasi/${konsul_id}/complete`, "");
       await queryClient.invalidateQueries("reminderData");
-      await queryClient.invalidateQueries("konsultasiMasukData");
+      await queryClient.invalidateQueries("riwayatData");
 
       // Menunggu hingga refetch selesai
       await queryClient.refetchQueries("reminderData");
-      await queryClient.refetchQueries("konsultasiMasukData");
+      await queryClient.refetchQueries("riwayatData");
       handleClose();
       // Display toast notification upon successful addition
-      toast.success("Berhasil menerima Konsultasi!");
+      toast.success("Berhasil konfirmasi konsultasi telah dilakukan!");
     } catch (error) {
-      console.error("Error adding doctor:", error);
+      console.error("Error confirm consul:", error);
       // Handle error
     }
   };
@@ -28,10 +29,10 @@ const Accept = ({ data, show, handleClose }) => {
   return (
     <Modal show={show} onHide={handleClose} centered>
       <Modal.Header closeButton className="border-0">
-        <Modal.Title>Terima Konsultasi</Modal.Title>
+        <Modal.Title>Konfirmasi Konsultasi</Modal.Title>
       </Modal.Header>
       <Modal.Body>
-        Apakah Anda yakin untuk menerima pengajuan konsultasi?
+        Konfirmasi jika konsultasi telah dilakukan oleh {nama_pasien}
       </Modal.Body>
       <Modal.Footer as={Row} className="border-0">
         <Col>
@@ -49,7 +50,7 @@ const Accept = ({ data, show, handleClose }) => {
             className="w-100 text-light"
             onClick={onSubmit}
           >
-            Terima
+            Konfirmasi
           </Button>
         </Col>
       </Modal.Footer>

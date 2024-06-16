@@ -4,6 +4,26 @@ import { BsStarFill } from "react-icons/bs";
 import { Formik } from "formik";
 import axios from "axios";
 import { useMutation, useQueryClient } from "react-query";
+import { api } from "../../../api/api";
+import * as yup from "yup";
+import { toast } from "react-toastify";
+
+const validationSchema = yup.object().shape({
+  NIK: yup
+    .string()
+    .matches(/^[0-9]+$/, "NIK harus berupa angka")
+    .length(16, "NIK harus terdiri dari 16 digit")
+    .required("NIK wajib diisi"),
+  namaPasien: yup
+    .string()
+    .matches(/^[^0-9]+$/, "Nama tidak boleh mengandung angka")
+    .required("Nama wajib diisi"),
+  penilaian: yup.string().required("Penilaian wajib diisi"),
+  rating: yup
+    .number()
+    .moreThan(0, "Rating wajib diisi")
+    .required("Rating wajib diisi"),
+});
 
 const FormAddFeedBack = ({ data, show, handleClose }) => {
   const [ratingPasien, setRatingPasien] = useState(0);
@@ -13,10 +33,9 @@ const FormAddFeedBack = ({ data, show, handleClose }) => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get(
-          "http://localhost:3000/dashboard/riwayat"
-        );
-        setAppointmentData(response.data);
+        const result = await api("get", "riwayat");
+
+        setAppointmentData(result);
       } catch (error) {
         console.error("Error fetching appointment data:", error);
       }
@@ -32,27 +51,20 @@ const FormAddFeedBack = ({ data, show, handleClose }) => {
 
   const addFeedbackMutation = useMutation(
     (feedbackData) =>
-      axios.post("http://localhost:3000/dashboard/feedback/add", feedbackData),
+      axios.post(
+        `${process.env.REACT_APP_BACKEND_URL}dashboard/feedback/add`,
+        feedbackData
+      ),
     {
       onSuccess: () => {
         queryClient.invalidateQueries("feedbackData");
         handleClose();
+        toast.success(
+          "Berhasil menambahkan ulasan, perlu persetujuan admin untuk ditampilkan!"
+        );
       },
     }
   );
-
-  const checkPatientInAppointment = (NIK, namaPasien) => {
-    if (!Array.isArray(appointmentData.schedules)) {
-      console.error("Appointment schedules data is not an array.");
-      return false;
-    }
-
-    const foundAppointment = appointmentData.schedules.find((appointment) => {
-      return appointment.nik === NIK && appointment.nama_pasien === namaPasien;
-    });
-
-    return !!foundAppointment;
-  };
 
   const getAppointmentStatus = (NIK, namaPasien) => {
     const appointment = appointmentData.schedules.find((appointment) => {
@@ -70,21 +82,10 @@ const FormAddFeedBack = ({ data, show, handleClose }) => {
         return;
       }
 
-      const isPatientInAppointment = checkPatientInAppointment(NIK, namaPasien);
-
-      if (!isPatientInAppointment) {
-        console.log(
-          "Patient not found in appointment or status is not approved."
-        );
-        return;
-      }
-
       const appointmentStatus = getAppointmentStatus(NIK, namaPasien);
 
       if (appointmentStatus !== "complete") {
-        console.log(
-          "Cannot add feedback for appointments that are not complete."
-        );
+        toast.error("Data yang Anda masukkan belum melakukan konsultasi!");
         return;
       }
 
@@ -106,7 +107,10 @@ const FormAddFeedBack = ({ data, show, handleClose }) => {
   return (
     <Modal
       show={show}
-      onHide={handleClose}
+      onHide={() => {
+        setRatingPasien(0);
+        handleClose();
+      }}
       size="lg"
       aria-labelledby="contained-modal-title-vcenter"
       centered
@@ -118,6 +122,7 @@ const FormAddFeedBack = ({ data, show, handleClose }) => {
       </Modal.Header>
       <Modal.Body>
         <Formik
+          validationSchema={validationSchema}
           onSubmit={handleSubmit}
           initialValues={{
             NIK: "",
@@ -146,14 +151,17 @@ const FormAddFeedBack = ({ data, show, handleClose }) => {
               </Form.Text>
               <Form.Group>
                 {[1, 2, 3, 4, 5].map((index) => (
-                  <BsStarFill
+                  <BsStarFill size={24}
                     key={index}
                     className={`star ${
-                      index <= ratingPasien ? "text-primary" : "text-secondary"
+                      index <= ratingPasien ? "star-color" : "text-secondary"
                     }`}
                     onClick={() => handleStarClick(index, setFieldValue)}
                   />
                 ))}
+                {touched.rating && errors.rating && (
+                  <div className="text-danger">{errors.rating}</div>
+                )}
               </Form.Group>
               <Form.Group>
                 <Form.Group controlId="validationNIK" className="mb-3">
@@ -211,6 +219,8 @@ const FormAddFeedBack = ({ data, show, handleClose }) => {
                     type="button"
                     className="w-100 bg-transparent border-0"
                     onClick={() => {
+                      setFieldValue("rating", 0);
+                      setRatingPasien(0);
                       handleReset();
                       handleClose();
                     }}

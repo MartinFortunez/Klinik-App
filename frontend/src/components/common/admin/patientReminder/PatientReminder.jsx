@@ -1,33 +1,35 @@
-import React, { useState } from "react";
-import { Col, Container, Row } from "react-bootstrap";
+import React from "react";
+import { Col, Container, Row, Spinner } from "react-bootstrap";
 import CardPatientReminder from "../../cards/admin/CardPatientReminder";
-import axios from "axios";
-import { useQuery, useQueryClient } from "react-query";
 import useFetch from "../../../../hooks/useFetch";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const PatientReminder = () => {
-  const [showAddModal, setShowAddModal] = useState(false);
-  const queryClient = useQueryClient();
-  const { data, isSuccess } = useFetch("reminder", "reminderData");
+  const { data, isLoading } = useFetch("reminder", "reminderData");
 
-  const handleAddClose = () => setShowAddModal(false);
-  const handleAddShow = () => setShowAddModal(true);
   return (
-    <Container fluid className="p-5 h-100 d-flex flex-column overflow-hidden">
-      <Row className="align-items-center">
+    <Container
+      fluid
+      className="p-3 p-md-5 h-100 d-flex flex-column overflow-hidden"
+    >
+      <ToastContainer />
+      <Row className="align-items-center mb-3">
         <Col>
           <h2>Reminder Pasien</h2>
         </Col>
       </Row>
-      <Row xs={1} className="gx-3 gy-4 overflow-y-scroll m-0">
-        {data && data.schedules.length > 0 ? (
+      <Row xs={1} className="gx-3 gy-4 overflow-y-auto m-0">
+        {isLoading ? (
+          <Spinner animation="border" role="status">
+            <span className="visually-hidden">Loading...</span>
+          </Spinner>
+        ) : data && data.schedules.length > 0 ? (
           data.schedules.map((item) => (
             <CardPatientReminder key={item.konsul_id} data={item} />
           ))
-        ) : data && data.schedules.length === 0 ? (
-          <p>No Data</p>
         ) : (
-          <p>Loading...</p>
+          <p>Tidak ada data</p>
         )}
       </Row>
     </Container>

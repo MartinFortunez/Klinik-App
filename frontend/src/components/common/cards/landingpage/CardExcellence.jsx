@@ -4,7 +4,7 @@ import { Card } from "react-bootstrap";
 const CardExcellence = ({ title, desc, icons, className }) => {
   return (
     <Card
-      className={`d-flex flex-column align-items-center border-0 rounded-0 p-4 text-center ${className}`}
+      className={`d-flex flex-column align-items-center border-0 rounded-0 p-4 text-center h-100 ${className}`}
     >
       {icons}
       <Card.Body>

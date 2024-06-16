@@ -6,7 +6,6 @@ import {
 } from "react-router-dom";
 import HomePage from "./pages/HomePage";
 import DashboardAdmin from "./pages/DashboardAdmin";
-import Dashboard from "./components/common/admin/dashboard/Dashboard";
 import DoctorsSchedule from "./components/common/admin/doctorsSchedule/DoctorsSchedule";
 import PatientReminder from "./components/common/admin/patientReminder/PatientReminder";
 import History from "./components/common/admin/history/History";
@@ -31,16 +30,13 @@ const ProtectedRoute = ({ element }) => {
 };
 
 function App() {
+  
   return (
     <QueryClientProvider client={queryClient}>
       <Router>
         <Routes>
           <Route path="/" element={<HomePage />} />
           <Route path="/admin" element={<DashboardAdmin />}>
-            {/* <Route
-              path="dashboard"
-              element={<ProtectedRoute element={<Dashboard />} />}
-            /> */}
             <Route
               path="jadwal-dokter"
               element={<ProtectedRoute element={<DoctorsSchedule />} />}

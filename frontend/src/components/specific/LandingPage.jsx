@@ -8,10 +8,13 @@ import About from "../common/landingpage/About";
 import "../../sass/custom.scss";
 import Superiority from "../common/landingpage/Superiority";
 import Facilities from "../common/landingpage/Facilities";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const LandingPage = () => {
   return (
     <div className="d-flex flex-column">
+      <ToastContainer />
       <Navigation />
       <Hero />
       <Superiority />

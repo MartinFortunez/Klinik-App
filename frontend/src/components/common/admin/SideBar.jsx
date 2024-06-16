@@ -6,9 +6,8 @@ import {
   CalendarWeek,
   ChatLeftQuote,
   ClockHistory,
-  ColumnsGap,
+  HospitalFill,
   PersonVcard,
-  PersonVcardFill,
   PersonWheelchair,
   Send,
 } from "react-bootstrap-icons";
@@ -16,11 +15,6 @@ import { NavLink } from "react-router-dom";
 
 const SideBar = ({ onLogout }) => {
   const links = [
-    // {
-    //   path: "/admin/dashboard",
-    //   label: "Dashboard",
-    //   icon: <ColumnsGap />,
-    // },
     {
       path: "/admin/konsultasi-masuk",
       label: "Konsultasi Masuk",
@@ -61,7 +55,11 @@ const SideBar = ({ onLogout }) => {
   return (
     <Col className="d-flex flex-column bg-light justify-content-between px-2 px-lg-4 vh-100 pb-5">
       <Nav className="flex-column gap-2">
-        <div className="logo mb-4"></div>
+        <div className="logo mb-3 d-flex justify-content-center justify-content-lg-start align-items-end text-primary gap-2">
+          {" "}
+          <HospitalFill size={32} />
+          <span className="fw-bold fs-5 d-none d-lg-block">Klinik App</span>
+        </div>
         {links.map((link, index) => (
           <Nav.Item key={index}>
             <NavLink
