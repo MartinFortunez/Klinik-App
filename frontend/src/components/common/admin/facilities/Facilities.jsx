@@ -66,7 +66,7 @@ const Facilities = () => {
           <Spinner animation="border" role="status">
             <span className="visually-hidden">Loading...</span>
           </Spinner>
-        ) : data && data.length > 0 ? (
+        ) : data && Array.isArray(data) && data.length > 0 ? (
           data.map((item) => (
             <CardFacilities key={item.fasilitas_id} data={item} />
           ))

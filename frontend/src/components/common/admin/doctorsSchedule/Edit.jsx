@@ -103,6 +103,7 @@ const Edit = ({ show, handleClose, data, dataDoctor }) => {
                   {" "}
                   <option value="">Pilih Dokter</option>
                   {dataDoctor &&
+                    Array.isArray(dataDoctor) &&
                     dataDoctor.map((item) => (
                       <option key={item.dokter_id} value={item.nama_dokter}>
                         {item.nama_dokter}

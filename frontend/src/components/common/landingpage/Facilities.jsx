@@ -7,7 +7,6 @@ import useFetch from "../../../hooks/useFetch.js";
 const Facilities = () => {
   const { data, isLoading } = useFetch("fasilitas", "fasilitasData");
 
-
   return (
     <Container id="Facilities" fluid className="bg-secondary p-4 p-md-5">
       <Row>
@@ -23,7 +22,7 @@ const Facilities = () => {
           <Spinner animation="border" role="status">
             <span className="visually-hidden">Loading...</span>
           </Spinner>
-        ) : data && data.length > 0 ? (
+        ) : data && Array.isArray(data) && data.length > 0 ? (
           data.map((item) => (
             <Col lg={4} key={item.fasilitas_id}>
               <CardFacilities data={item} />

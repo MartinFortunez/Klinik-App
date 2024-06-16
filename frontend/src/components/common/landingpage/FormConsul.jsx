@@ -22,7 +22,10 @@ const validationSchema = yup.object().shape({
     .max(12, "Nomor Hp/Wa maksimal terdiri dari 12 digit")
     .required("Nomor Hp/Wa wajib diisi"),
   tanggalLahir: yup.string().required("Tanggal lahir wajib diisi"),
-  golonganDarah: yup.string().notOneOf(["Pilih Jenis Kelamin"], "Jenis kelamin harus dipilih").required("Golongan darah wajib diisi"),
+  golonganDarah: yup
+    .string()
+    .notOneOf(["Pilih Jenis Kelamin"], "Jenis kelamin harus dipilih")
+    .required("Golongan darah wajib diisi"),
   spesialis: yup.string().required("Spesialis wajib diisi"),
   namaDokter: yup.string().required("Nama dokter wajib diisi"),
   jenisKelamin: yup
@@ -217,7 +220,9 @@ const FormConsul = ({ dataDoctor, show, handleClose, handleAdd }) => {
                       aria-label="Default select example"
                       onChange={handleChange}
                       isValid={touched.golonganDarah && !errors.golonganDarah}
-                      isInvalid={touched.golonganDarah && !!errors.golonganDarah}
+                      isInvalid={
+                        touched.golonganDarah && !!errors.golonganDarah
+                      }
                     >
                       <option>Pilih Golongan Darah</option>
                       <option value="A+">A+</option>
@@ -291,6 +296,7 @@ const FormConsul = ({ dataDoctor, show, handleClose, handleAdd }) => {
                     >
                       <option>Pilih Sesi</option>
                       {sesiData &&
+                        Array.isArray(sesiData) &&
                         sesiData.map((item) => (
                           <option key={item.jadwal_id} value={item.jadwal_id}>
                             {item.sesi}

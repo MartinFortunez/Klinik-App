@@ -9,15 +9,16 @@ const History = () => {
   const { data, isLoading } = useFetch("riwayat", "riwayatData");
 
   // Filter data berdasarkan kata kunci pencarian dan status
-  const filteredData = data
-    ? data.schedules.filter(
-        (item) =>
-          item.nik.startsWith(searchQuery) && // Pencarian dimulai dari awal angka NIK
-          (filterStatus
-            ? item.status.toLowerCase() === filterStatus.toLowerCase()
-            : true)
-      )
-    : [];
+  const filteredData =
+    data && Array.isArray(data)
+      ? data.schedules.filter(
+          (item) =>
+            item.nik.startsWith(searchQuery) && // Pencarian dimulai dari awal angka NIK
+            (filterStatus
+              ? item.status.toLowerCase() === filterStatus.toLowerCase()
+              : true)
+        )
+      : [];
 
   // Fungsi untuk menangani perubahan status filter
   const handleStatusFilterChange = (e) => {
@@ -60,7 +61,9 @@ const History = () => {
           <Spinner animation="border" role="status">
             <span className="visually-hidden">Loading...</span>
           </Spinner>
-        ) : filteredData && filteredData.length > 0 ? (
+        ) : filteredData &&
+          Array.isArray(filteredData) &&
+          filteredData.length > 0 ? (
           filteredData.map((item) => (
             <CardHistory key={item.konsul_id} data={item} />
           ))

@@ -81,6 +81,7 @@ const Add = ({ show, handleClose, handleAdd }) => {
                   <option value="">Pilih Dokter</option>
                   {isSuccess &&
                     data &&
+                    Array.isArray(data) &&
                     data.map((item) => (
                       <option key={item.dokter_id} value={item.nama_dokter}>
                         {item.nama_dokter}

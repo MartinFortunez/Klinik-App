@@ -1,5 +1,12 @@
 import React, { useState, useEffect } from "react";
-import { Button, Container, Carousel, Col, Row } from "react-bootstrap";
+import {
+  Button,
+  Container,
+  Carousel,
+  Col,
+  Row,
+  Spinner,
+} from "react-bootstrap";
 import CardFeedBack from "../cards/landingpage/CardFeedBack";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap/dist/js/bootstrap.bundle.min.js";
@@ -34,14 +41,14 @@ const FeedBack = () => {
           <Carousel>
             {isLoading ? (
               <Carousel.Item>
-                <div>Loading feedback...</div>
+                <Spinner animation="border" role="status">
+                  <span className="visually-hidden">Loading...</span>
+                </Spinner>
               </Carousel.Item>
-            ) : (
-              isSuccess &&
-              data &&
+            ) : isSuccess && data && Array.isArray(data) && data.length > 0 ? (
               data
                 .filter((item) => item.status === "on")
-                .reduce((acc, item, index, array) => {
+                .reduce((acc, item, index) => {
                   const chunkIndex = Math.floor(index / cardsPerSlide);
                   if (!acc[chunkIndex]) {
                     acc[chunkIndex] = [];
@@ -60,6 +67,10 @@ const FeedBack = () => {
                     </Row>
                   </Carousel.Item>
                 ))
+            ) : (
+              <Carousel.Item>
+                <p className="text-center">Tidak ada ulasan</p>
+              </Carousel.Item>
             )}
           </Carousel>
           <Col className="mt-5  d-flex justify-content-center">

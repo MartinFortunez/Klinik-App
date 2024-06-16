@@ -24,7 +24,7 @@ const PatientReviews = () => {
           <Spinner animation="border" role="status">
             <span className="visually-hidden">Loading...</span>
           </Spinner>
-        ) : data && data.length > 0 ? (
+        ) : data && Array.isArray(data) && data.length > 0 ? (
           data.map((item) => (
             <CardPatientReviews key={item.ulasan_id} data={item} />
           ))
