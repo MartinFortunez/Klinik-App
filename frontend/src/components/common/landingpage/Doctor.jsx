@@ -7,7 +7,6 @@ import useFetch from "../../../hooks/useFetch.js";
 const Doctor = () => {
   const { data, isLoading } = useFetch("dokter-klinik", "doctorData");
 
-
   return (
     <Container id="Doctor" fluid className="p-4 p-md-5">
       <Row>
@@ -22,7 +21,7 @@ const Doctor = () => {
           <Spinner animation="border" role="status">
             <span className="visually-hidden">Loading...</span>
           </Spinner>
-        ) : data && data.length > 0 ? (
+        ) : data && Array.isArray(data) && data.length > 0 ? (
           data.map((item) => (
             <Col xs lg={4} key={item.dokter_id}>
               <CardDoctor data={item} />

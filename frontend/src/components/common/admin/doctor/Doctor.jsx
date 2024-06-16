@@ -61,12 +61,18 @@ const Doctor = () => {
           />
         </Col>
       </Row>
-      <Row xs={1} md={2} lg={3} xl={4} className="gx-3 gy-4 overflow-y-auto m-0">
+      <Row
+        xs={1}
+        md={2}
+        lg={3}
+        xl={4}
+        className="gx-3 gy-4 overflow-y-auto m-0"
+      >
         {isLoading ? (
           <Spinner animation="border" role="status">
             <span className="visually-hidden">Loading...</span>
           </Spinner>
-        ) : data && data.length > 0 ? (
+        ) : data && Array.isArray(data) && data.length > 0 ? (
           data.map((item) => <CardDoctor key={item.dokter_id} data={item} />)
         ) : (
           <p>Tidak ada data</p>

@@ -17,11 +17,11 @@ const DoctorsSchedule = () => {
     "jadwalDokterData"
   );
 
-
   // Function to sort the schedule data in ascending order by jadwal_id
-  const sortedSchedules = data
-    ? [...data.schedules].sort((a, b) => a.dokter_id - b.dokter_id)
-    : [];
+  const sortedSchedules =
+    data && Array.isArray(data)
+      ? [...data.schedules].sort((a, b) => a.dokter_id - b.dokter_id)
+      : [];
 
   const handleAddClose = () => setShowAddModal(false);
   const handleAddShow = () => setShowAddModal(true);
@@ -76,7 +76,10 @@ const DoctorsSchedule = () => {
   };
 
   return (
-    <Container fluid className="p-3 p-md-5 h-100 d-flex flex-column overflow-hidden">
+    <Container
+      fluid
+      className="p-3 p-md-5 h-100 d-flex flex-column overflow-hidden"
+    >
       <ToastContainer />
       <Row className="align-items-center mb-3">
         <Col>
@@ -102,7 +105,9 @@ const DoctorsSchedule = () => {
           <Spinner animation="border" role="status">
             <span className="visually-hidden">Loading...</span>
           </Spinner>
-        ) : sortedSchedules && sortedSchedules.length > 0 ? (
+        ) : sortedSchedules &&
+          Array.isArray(sortedSchedules) &&
+          sortedSchedules.length > 0 ? (
           sortedSchedules.map((item) => (
             <CardDoctorsSchedule
               key={item.jadwal_id}
