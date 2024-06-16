@@ -14,7 +14,10 @@ const validationSchema = yup.object().shape({
     .matches(/^[0-9]+$/, "NIK harus berupa angka")
     .length(16, "NIK harus terdiri dari 16 digit")
     .required("NIK wajib diisi"),
-  namaPasien: yup.string().required("Nama wajib diisi"),
+  namaPasien: yup
+    .string()
+    .matches(/^[^0-9]+$/, "Nama tidak boleh mengandung angka")
+    .required("Nama wajib diisi"),
   penilaian: yup.string().required("Penilaian wajib diisi"),
   rating: yup
     .number()
@@ -63,19 +66,6 @@ const FormAddFeedBack = ({ data, show, handleClose }) => {
     }
   );
 
-  const checkPatientInAppointment = (NIK, namaPasien) => {
-    if (!Array.isArray(appointmentData.schedules)) {
-      console.error("Appointment schedules data is not an array.");
-      return false;
-    }
-
-    const foundAppointment = appointmentData.schedules.find((appointment) => {
-      return appointment.nik === NIK && appointment.nama_pasien === namaPasien;
-    });
-
-    return !!foundAppointment;
-  };
-
   const getAppointmentStatus = (NIK, namaPasien) => {
     const appointment = appointmentData.schedules.find((appointment) => {
       return appointment.nik === NIK && appointment.nama_pasien === namaPasien;
@@ -89,16 +79,6 @@ const FormAddFeedBack = ({ data, show, handleClose }) => {
     try {
       if (!appointmentData) {
         console.error("Appointment data is not available yet.");
-        return;
-      }
-
-      const isPatientInAppointment = checkPatientInAppointment(NIK, namaPasien);
-
-      if (!isPatientInAppointment) {
-        toast.error("Data yang Anda masukkan belum melakukan konsultasi!");
-        console.log(
-          "Patient not found in appointment or status is not approved."
-        );
         return;
       }
 
@@ -174,10 +154,10 @@ const FormAddFeedBack = ({ data, show, handleClose }) => {
               </Form.Text>
               <Form.Group>
                 {[1, 2, 3, 4, 5].map((index) => (
-                  <BsStarFill
+                  <BsStarFill size={24}
                     key={index}
                     className={`star ${
-                      index <= ratingPasien ? "text-primary" : "text-secondary"
+                      index <= ratingPasien ? "star-color" : "text-secondary"
                     }`}
                     onClick={() => handleStarClick(index, setFieldValue)}
                   />

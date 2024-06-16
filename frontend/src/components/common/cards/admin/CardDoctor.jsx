@@ -13,18 +13,18 @@ const CardDoctor = ({ data }) => {
 
   const onDelete = async () => {
     try {
-    await handleDelete(
-      "delete",
-      `dokter-klinik/delete/${dokter_id}`,
-      queryClient,
-      "doctorData"
-    );
-    // Display toast notification upon successful deletion
-    toast.success("Berhasil menghapus dokter!");
-  } catch (error) {
-    console.error("Error deleting doctor:", error);
-    // Handle error
-  }
+      await handleDelete(
+        "delete",
+        `dokter-klinik/delete/${dokter_id}`,
+        queryClient,
+        "doctorData"
+      );
+      // Display toast notification upon successful deletion
+      toast.success("Berhasil menghapus dokter!");
+    } catch (error) {
+      console.error("Error deleting doctor:", error);
+      // Handle error
+    }
   };
 
   const [showDeleteModal, setShowDeleteModal] = useState(false);
@@ -38,30 +38,34 @@ const CardDoctor = ({ data }) => {
 
   return (
     <Col>
-      <Card className="border-0 d-flex flex-column">
-        <Card.Body>
+      <Card>
+        <Card.Body className="d-flex flex-column gap-3">
           <Row className="align-items-center">
-            <Col>
+            <Col xs="auto">
               <Card.Img
                 variant="left"
                 src={`data:image/jpeg;base64,${foto_dokter}`}
                 className="custom-card-img"
-                style={{ width: "100px", height: "100px", objectFit: "cover" }}
+                style={{
+                  width: "80px",
+                  height: "80px",
+                  objectFit: "cover",
+                }}
               />
             </Col>
             <Col>
               <Card.Subtitle className="opacity-50">Nama</Card.Subtitle>
               <Card.Text>{nama_dokter}</Card.Text>
             </Col>
-            <Col className="text-center">
-              <Card.Subtitle className="opacity-50">Id Dokter</Card.Subtitle>
-              <Card.Text>{sip}</Card.Text>
-            </Col>
-            <Col className="text-end">
-              <Card.Subtitle className="opacity-50">Spesialis</Card.Subtitle>
-              <Card.Text>{spesialis}</Card.Text>
-            </Col>
           </Row>
+          <Col>
+            <Card.Subtitle className="opacity-50">SIP Dokter</Card.Subtitle>
+            <Card.Text>{sip}</Card.Text>
+          </Col>
+          <Col>
+            <Card.Subtitle className="opacity-50">Spesialis</Card.Subtitle>
+            <Card.Text>{spesialis}</Card.Text>
+          </Col>
         </Card.Body>
         <Card.Footer className="bg-transparent d-flex justify-content-end gap-2">
           <Button variant="outline-danger" onClick={handleDeleteShow}>

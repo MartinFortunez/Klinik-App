@@ -1,14 +1,12 @@
 import React, { useState } from "react";
 import { Col, Container, Form, Row, Spinner } from "react-bootstrap";
 import CardHistory from "../../cards/admin/CardHistory";
-import axios from "axios";
-import { useQuery, useQueryClient } from "react-query";
+import { useQueryClient } from "react-query";
 import useFetch from "../../../../hooks/useFetch";
 
 const History = () => {
   const [searchQuery, setSearchQuery] = useState("");
-  const [filterStatus, setFilterStatus] = useState(""); // State untuk status filter
-  const queryClient = useQueryClient();
+  const [filterStatus, setFilterStatus] = useState("");
   const { data, isLoading } = useFetch("riwayat", "riwayatData");
 
   // Filter data berdasarkan kata kunci pencarian dan status
@@ -18,7 +16,7 @@ const History = () => {
           item.nik.startsWith(searchQuery) && // Pencarian dimulai dari awal angka NIK
           (filterStatus
             ? item.status.toLowerCase() === filterStatus.toLowerCase()
-            : true) // Filter berdasarkan status jika ada
+            : true)
       )
     : [];
 
@@ -28,12 +26,15 @@ const History = () => {
   };
 
   return (
-    <Container fluid className="p-5 h-100 d-flex flex-column overflow-hidden">
+    <Container
+      fluid
+      className="p-3 p-md-5 h-100 d-flex flex-column overflow-hidden"
+    >
       <Row className="align-items-center">
         <Col>
           <h2>Riwayat</h2>
         </Col>
-        <Col xs={4}>
+        <Col md={4}>
           {/* Input field untuk pencarian */}
           <Form.Control
             type="text"
@@ -42,16 +43,16 @@ const History = () => {
             onChange={(e) => setSearchQuery(e.target.value)}
           />
         </Col>
-        <Col xs="auto">
+        <Col md="auto" className="mt-2 mb-3 mt-md-0">
           {/* Dropdown untuk filter status */}
           <Form.Select
             onChange={handleStatusFilterChange}
             value={filterStatus}
             aria-label="Filter by status"
           >
-            <option value="">All Status</option>
-            <option value="Complete">Complete</option>
-            <option value="Cancel">Cancel</option>
+            <option value="">Semua Status</option>
+            <option value="Complete">Selesai</option>
+            <option value="Cancel">Dibatalkan</option>
           </Form.Select>
         </Col>
       </Row>

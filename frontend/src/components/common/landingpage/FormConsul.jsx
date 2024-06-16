@@ -10,7 +10,10 @@ const validationSchema = yup.object().shape({
     .matches(/^[0-9]+$/, "NIK harus berupa angka")
     .length(16, "NIK harus terdiri dari 16 digit")
     .required("NIK wajib diisi"),
-  nama: yup.string().required("Nama wajib diisi"),
+  nama: yup
+    .string()
+    .matches(/^[^0-9]+$/, "Nama tidak boleh mengandung angka")
+    .required("Nama wajib diisi"),
   alamat: yup.string().required("Alamat wajib diisi"),
   nohp: yup
     .string()
@@ -19,12 +22,12 @@ const validationSchema = yup.object().shape({
     .max(12, "Nomor Hp/Wa maksimal terdiri dari 12 digit")
     .required("Nomor Hp/Wa wajib diisi"),
   tanggalLahir: yup.string().required("Tanggal lahir wajib diisi"),
-  golonganDarah: yup.string().required("Golongan darah wajib diisi"),
+  golonganDarah: yup.string().notOneOf(["Pilih Jenis Kelamin"], "Jenis kelamin harus dipilih").required("Golongan darah wajib diisi"),
   spesialis: yup.string().required("Spesialis wajib diisi"),
   namaDokter: yup.string().required("Nama dokter wajib diisi"),
   jenisKelamin: yup
     .string()
-    .notOneOf(["Pilih Jenis Kelamin"], "Jenis kelamin harus dipilih")
+    .notOneOf(["Pilih Golongan Darah"], "Jenis Golongan darah harus dipilih")
     .required("Jenis kelamin wajib dipilih"),
   jadwalId: yup.string().required("Sesi wajib dipilih"),
 });
@@ -204,21 +207,28 @@ const FormConsul = ({ dataDoctor, show, handleClose, handleAdd }) => {
                   </Form.Group>
                   <Form.Group
                     as={Col}
-                    controlId="validationGolongandarah"
+                    controlId="validationGolonganDarah"
                     className="mb-3"
                   >
                     <Form.Label>Golongan Darah</Form.Label>
-                    <Form.Control
+                    <Form.Select
                       name="golonganDarah"
-                      type="text"
-                      placeholder="Masukkan golongan darah"
                       value={values.golonganDarah}
+                      aria-label="Default select example"
                       onChange={handleChange}
                       isValid={touched.golonganDarah && !errors.golonganDarah}
-                      isInvalid={
-                        touched.golonganDarah && !!errors.golonganDarah
-                      }
-                    />
+                      isInvalid={touched.golonganDarah && !!errors.golonganDarah}
+                    >
+                      <option>Pilih Golongan Darah</option>
+                      <option value="A+">A+</option>
+                      <option value="B+">B+</option>
+                      <option value="AB+">AB+</option>
+                      <option value="O+">O+</option>
+                      <option value="A-">A-</option>
+                      <option value="B-">B-</option>
+                      <option value="AB-">AB-</option>
+                      <option value="O-">O-</option>
+                    </Form.Select>
                     <Form.Control.Feedback type="invalid">
                       {errors.golonganDarah}
                     </Form.Control.Feedback>

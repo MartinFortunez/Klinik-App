@@ -3,21 +3,18 @@ import React, { useState } from "react";
 import { Button, Col, Form, Modal, Row } from "react-bootstrap";
 import axios from "axios";
 import { useQuery, useQueryClient } from "react-query";
+import useFetch from "../../../../hooks/useFetch";
+import * as yup from "yup";
 
-const fetchData = async () => {
-  const response = await axios.get(
-    "http://localhost:3000/dashboard/dokter-klinik"
-  );
-  return response.data;
-};
+const validationSchema = yup.object().shape({
+  namaDokter: yup.string().required("Nama Dokter wajib diisi"),
+  jam: yup.string().required("Jam wajib diisi"),
+  hari: yup.string().required("Hari wajib diisi"),
+});
 
 const Add = ({ show, handleClose, handleAdd }) => {
-  const queryClient = useQueryClient();
-  const { data, isSuccess } = useQuery("dokterData", fetchData, {
-    refetchOnWindowFocus: false, // Tidak merender ulang data saat jendela browser mendapatkan fokus
-    refetchOnMount: false, // Tidak merender ulang data saat komponen dipasang
-    staleTime: Infinity, // Data tidak dianggap kadaluwarsa
-  });
+  const { data, isSuccess } = useFetch("dokter-klinik", "doctorData");
+
   const [selectedDokter, setSelectedDokter] = useState(null);
   return (
     <Modal
@@ -31,6 +28,7 @@ const Add = ({ show, handleClose, handleAdd }) => {
       </Modal.Header>
       <Modal.Body>
         <Formik
+          validationSchema={validationSchema}
           onSubmit={handleAdd}
           initialValues={{
             idDokter: "",

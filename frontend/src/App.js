@@ -31,6 +31,7 @@ const ProtectedRoute = ({ element }) => {
 };
 
 function App() {
+  
   return (
     <QueryClientProvider client={queryClient}>
       <Router>

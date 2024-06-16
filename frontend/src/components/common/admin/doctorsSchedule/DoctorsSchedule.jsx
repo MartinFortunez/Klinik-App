@@ -1,36 +1,56 @@
 import React, { useState } from "react";
-import { Button, Col, Container, Row } from "react-bootstrap";
+import { Button, Col, Container, Row, Spinner } from "react-bootstrap";
 import CardDoctorsSchedule from "../../cards/admin/CardDoctorsSchedule";
 import Add from "./Add";
-import axios from "axios";
-import { useQuery, useQueryClient } from "react-query";
+import { useQueryClient } from "react-query";
 import { formDataAddSchedule } from "../../../../utils/body";
 import { handleSubmit } from "../../../../utils/handleFunction";
 import useFetch from "../../../../hooks/useFetch";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
-
 const DoctorsSchedule = () => {
   const [showAddModal, setShowAddModal] = useState(false);
   const queryClient = useQueryClient();
-  const { data, isSuccess } = useFetch(
+  const { data, isLoading } = useFetch(
     "jadwal-dokter-spesialis",
     "jadwalDokterData"
   );
+
+  data && console.log(data.schedules);
 
   // Function to sort the schedule data in ascending order by jadwal_id
   const sortedSchedules = data
     ? [...data.schedules].sort((a, b) => a.dokter_id - b.dokter_id)
     : [];
 
-  isSuccess && console.log(data);
-
   const handleAddClose = () => setShowAddModal(false);
   const handleAddShow = () => setShowAddModal(true);
 
-  const onSubmit = (values, actions) => {
+  const onSubmit = async (values, actions) => {
     try {
+      // Check for duplicate schedule
+      const isDuplicate = data.schedules.some(
+        (schedule) =>
+          schedule.dokter_id === values.idDokter &&
+          schedule.sesi === `${values.hari} (${values.jam})`
+      );
+
+      if (isDuplicate) {
+        toast.error("Jadwal dokter sudah ada!");
+        return;
+      }
+
+      const doctorSchedules = data.schedules.filter(
+        (schedule) => schedule.dokter_id === values.idDokter
+      );
+
+      // Validate the number of schedules
+      if (doctorSchedules.length >= 3) {
+        toast.error("Dokter ini sudah memiliki 3 jadwal!");
+        return;
+      }
+
       handleSubmit(
         "post",
         "jadwal-dokter-spesialis/add",
@@ -40,19 +60,26 @@ const DoctorsSchedule = () => {
         queryClient,
         "jadwalDokterData"
       );
+
+      // Update query client to refetch data
+      await queryClient.invalidateQueries("jadwalDokterData");
+
       // Display toast notification upon successful addition
       toast.success("Berhasil menambahkan jadwal dokter!");
+
+      // Close modal after successful addition
+      handleAddClose();
     } catch (error) {
-      toast.warning("Gagal menambahkan jadwal dokter!");
+      toast.error("Gagal menambahkan jadwal dokter!");
       console.error("Error adding doctor schedule:", error);
       // Handle error
     }
   };
 
   return (
-    <Container fluid className="p-5 h-100 d-flex flex-column overflow-hidden">
+    <Container fluid className="p-3 p-md-5 h-100 d-flex flex-column overflow-hidden">
       <ToastContainer />
-      <Row className="align-items-center">
+      <Row className="align-items-center mb-3">
         <Col>
           <h2>Jadwal Dokter</h2>
         </Col>
@@ -72,7 +99,11 @@ const DoctorsSchedule = () => {
         </Col>
       </Row>
       <Row xs={1} className="gx-3 gy-4 overflow-y-scroll m-0">
-        {sortedSchedules.length > 0 ? (
+        {isLoading ? (
+          <Spinner animation="border" role="status">
+            <span className="visually-hidden">Loading...</span>
+          </Spinner>
+        ) : sortedSchedules && sortedSchedules.length > 0 ? (
           sortedSchedules.map((item) => (
             <CardDoctorsSchedule
               key={item.jadwal_id}
@@ -81,7 +112,7 @@ const DoctorsSchedule = () => {
             />
           ))
         ) : (
-          <p>loading bolo</p>
+          <p>Tidak ada data</p>
         )}
       </Row>
     </Container>

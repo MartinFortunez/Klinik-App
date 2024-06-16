@@ -2,9 +2,7 @@ import React, { useState } from "react";
 import { Button, Col, Container, Row, Spinner } from "react-bootstrap";
 import CardDoctor from "../../cards/admin/CardDoctor";
 import Add from "./Add";
-import axios from "axios";
-import { useQuery, useQueryClient } from "react-query";
-import { api, postData } from "../../../../api/api";
+import { useQueryClient } from "react-query";
 import { handleSubmit } from "../../../../utils/handleFunction";
 import { formDataDoctor } from "../../../../utils/body";
 import useFetch from "../../../../hooks/useFetch";
@@ -40,7 +38,7 @@ const Doctor = () => {
   };
 
   return (
-    <Container fluid className="p-5 h-100 d-flex flex-column overflow-hidden">
+    <Container fluid className="p-3 p-md-5 h-100 d-flex flex-column overflow-hidden">
       <ToastContainer />
       <Row className="align-items-center">
         <Col>
@@ -61,7 +59,7 @@ const Doctor = () => {
           />
         </Col>
       </Row>
-      <Row xs={1} className="gx-3 gy-4 overflow-y-scroll m-0">
+      <Row xs={1} md={2} lg={3} className="gx-3 gy-4 overflow-y-scroll m-0">
         {isLoading ? (
           <Spinner animation="border" role="status">
             <span className="visually-hidden">Loading...</span>

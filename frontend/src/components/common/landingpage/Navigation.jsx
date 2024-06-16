@@ -56,7 +56,7 @@ const Navigation = () => {
               Ulasan
             </Nav.Link>
           </Nav>
-          <Nav className="ms-lg-3">
+          <Nav className="ms-lg-3 mt-3 mt-lg-0">
             <Button
               variant="primary"
               onClick={handleLoginClick}
