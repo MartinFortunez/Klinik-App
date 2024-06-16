@@ -40,7 +40,7 @@ const Doctor = () => {
   return (
     <Container fluid className="p-3 p-md-5 h-100 d-flex flex-column overflow-hidden">
       <ToastContainer />
-      <Row className="align-items-center">
+      <Row className="align-items-center mb-3">
         <Col>
           <h2>Data Dokter</h2>
         </Col>
