@@ -10,7 +10,7 @@ const History = () => {
 
   // Filter data berdasarkan kata kunci pencarian dan status
   const filteredData =
-    data && Array.isArray(data)
+    data && Array.isArray(data.schedules)
       ? data.schedules.filter(
           (item) =>
             item.nik.startsWith(searchQuery) && // Pencarian dimulai dari awal angka NIK

@@ -27,7 +27,9 @@ const IncomingConsultation = () => {
           <Spinner animation="border" role="status">
             <span className="visually-hidden">Loading...</span>
           </Spinner>
-        ) : data && Array.isArray(data) && data.schedules.length > 0 ? (
+        ) : data &&
+          Array.isArray(data.schedules) &&
+          data.schedules.length > 0 ? (
           data.schedules.map((item) => (
             <CardIncomingConsultation key={item.konsul_id} data={item} />
           ))

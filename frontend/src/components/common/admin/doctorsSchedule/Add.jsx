@@ -1,6 +1,6 @@
 import { Formik } from "formik";
 import React, { useState } from "react";
-import { Button, Col, Form, Modal, Row } from "react-bootstrap";
+import { Button, Col, Form, Modal, Row, Spinner } from "react-bootstrap";
 import useFetch from "../../../../hooks/useFetch";
 import * as yup from "yup";
 
@@ -10,7 +10,7 @@ const validationSchema = yup.object().shape({
   hari: yup.string().required("Hari wajib diisi"),
 });
 
-const Add = ({ show, handleClose, handleAdd }) => {
+const Add = ({ show, handleClose, handleAdd, isLoading }) => {
   const { data, isSuccess } = useFetch("dokter-klinik", "doctorData");
 
   const [selectedDokter, setSelectedDokter] = useState(null);
@@ -155,8 +155,13 @@ const Add = ({ show, handleClose, handleAdd }) => {
                     variant="primary"
                     type="submit"
                     className="w-100 text-light"
+                    disabled={isLoading}
                   >
-                    Tambahkan
+                    {isLoading ? (
+                      <Spinner animation="border" size="sm" />
+                    ) : (
+                      "Tambahkan"
+                    )}
                   </Button>
                 </Col>
               </Form.Group>

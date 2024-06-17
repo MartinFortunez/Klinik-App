@@ -1,7 +1,8 @@
 import React from "react";
-import { Button, Col, Modal, Row } from "react-bootstrap";
+import { Button, Col, Modal, Row, Spinner } from "react-bootstrap";
 
-const Delete = ({ data, show, handleClose, handleDelete }) => {
+const Delete = ({ data, show, handleClose, handleDelete, isLoading }) => {
+  console.log(isLoading);
   const { nama_dokter } = data;
 
   return (
@@ -24,8 +25,13 @@ const Delete = ({ data, show, handleClose, handleDelete }) => {
           </Button>
         </Col>
         <Col>
-          <Button variant="danger" className="w-100" onClick={handleDelete}>
-            Hapus
+          <Button
+            variant="danger"
+            className="w-100"
+            onClick={handleDelete}
+            disabled={isLoading}
+          >
+            {isLoading ? <Spinner animation="border" size="sm" /> : "Hapus"}
           </Button>
         </Col>
       </Modal.Footer>

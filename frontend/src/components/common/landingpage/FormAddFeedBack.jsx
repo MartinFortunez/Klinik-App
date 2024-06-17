@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Button, Col, Form, Modal, Row } from "react-bootstrap";
+import { Button, Col, Form, Modal, Row, Spinner } from "react-bootstrap";
 import { BsStarFill } from "react-icons/bs";
 import { Formik } from "formik";
 import axios from "axios";
@@ -29,6 +29,7 @@ const FormAddFeedBack = ({ data, show, handleClose }) => {
   const [ratingPasien, setRatingPasien] = useState(0);
   const queryClient = useQueryClient();
   const [appointmentData, setAppointmentData] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -76,6 +77,7 @@ const FormAddFeedBack = ({ data, show, handleClose }) => {
 
   const handleSubmit = async (values, { setSubmitting }) => {
     const { NIK, namaPasien, penilaian, rating } = values;
+    setIsLoading(true);
     try {
       if (!appointmentData) {
         console.error("Appointment data is not available yet.");
@@ -101,6 +103,7 @@ const FormAddFeedBack = ({ data, show, handleClose }) => {
       console.error("Failed to add feedback:", error);
     } finally {
       setSubmitting(false);
+      setIsLoading(false);
     }
   };
 
@@ -151,7 +154,8 @@ const FormAddFeedBack = ({ data, show, handleClose }) => {
               </Form.Text>
               <Form.Group>
                 {[1, 2, 3, 4, 5].map((index) => (
-                  <BsStarFill size={24}
+                  <BsStarFill
+                    size={24}
                     key={index}
                     className={`star ${
                       index <= ratingPasien ? "star-color" : "text-secondary"
@@ -233,8 +237,13 @@ const FormAddFeedBack = ({ data, show, handleClose }) => {
                     variant="primary"
                     type="submit"
                     className="w-100 text-light"
+                    disabled={isLoading}
                   >
-                    Kirim Feedback
+                    {isLoading ? (
+                      <Spinner animation="border" size="sm" />
+                    ) : (
+                      "Kirim Feedback"
+                    )}
                   </Button>
                 </Col>
               </Form.Group>

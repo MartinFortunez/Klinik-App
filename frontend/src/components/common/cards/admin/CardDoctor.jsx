@@ -9,8 +9,10 @@ import { toast } from "react-toastify";
 const CardDoctor = ({ data }) => {
   const { dokter_id, sip, nama_dokter, spesialis, foto_dokter } = data;
   const queryClient = useQueryClient();
+  const [isLoading, setIsLoading] = useState(false);
 
   const onDelete = async () => {
+    setIsLoading(true);
     try {
       await handleDelete(
         "delete",
@@ -21,8 +23,11 @@ const CardDoctor = ({ data }) => {
       // Display toast notification upon successful deletion
       toast.success("Berhasil menghapus dokter!");
     } catch (error) {
-      console.error("Error deleting doctor:", error);
-      // Handle error
+      toast.error(
+        "Gagal menghapus dokter. Dokter ini digunakan pada data lain!"
+      );
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -86,6 +91,7 @@ const CardDoctor = ({ data }) => {
             handleClose={handleDeleteClose}
             handleDelete={onDelete}
             data={data}
+            isLoading={isLoading}
           />
 
           <Edit

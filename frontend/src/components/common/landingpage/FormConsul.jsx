@@ -1,6 +1,6 @@
 import { Formik } from "formik";
 import React, { useEffect, useState } from "react";
-import { Modal, Form, Button, Row, Col } from "react-bootstrap";
+import { Modal, Form, Button, Row, Col, Spinner } from "react-bootstrap";
 import * as yup from "yup";
 import { api } from "../../../api/api";
 
@@ -35,7 +35,13 @@ const validationSchema = yup.object().shape({
   jadwalId: yup.string().required("Sesi wajib dipilih"),
 });
 
-const FormConsul = ({ dataDoctor, show, handleClose, handleAdd }) => {
+const FormConsul = ({
+  dataDoctor,
+  show,
+  handleClose,
+  handleAdd,
+  isLoading,
+}) => {
   const { dokter_id, nama_dokter, spesialis } = dataDoctor;
   const [sesiData, setSesiData] = useState(null);
 
@@ -74,13 +80,13 @@ const FormConsul = ({ dataDoctor, show, handleClose, handleAdd }) => {
             nama: "",
             alamat: "",
             nohp: "",
-            jenisKelamin: "", // Nilai awal untuk jenisKelamin
+            jenisKelamin: "",
             tanggalLahir: "",
             golonganDarah: "",
             spesialis: spesialis,
             namaDokter: nama_dokter,
             dokterId: dokter_id,
-            jadwalId: "", // Nilai awal untuk jadwalId
+            jadwalId: "",
           }}
         >
           {({
@@ -328,8 +334,14 @@ const FormConsul = ({ dataDoctor, show, handleClose, handleAdd }) => {
                     variant="primary"
                     type="submit"
                     className="w-100 text-light"
+                    disabled={isLoading}
                   >
-                    Kirim Konsultasi
+                    {" "}
+                    {isLoading ? (
+                      <Spinner animation="border" size="sm" />
+                    ) : (
+                      "Kirim Konsultasi"
+                    )}
                   </Button>
                 </Col>
               </Form.Group>

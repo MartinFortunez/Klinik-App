@@ -46,27 +46,33 @@ const FeedBack = () => {
                 </Spinner>
               </Carousel.Item>
             ) : isSuccess && data && Array.isArray(data) && data.length > 0 ? (
-              data
-                .filter((item) => item.status === "on")
-                .reduce((acc, item, index) => {
-                  const chunkIndex = Math.floor(index / cardsPerSlide);
-                  if (!acc[chunkIndex]) {
-                    acc[chunkIndex] = [];
-                  }
-                  acc[chunkIndex].push(item);
-                  return acc;
-                }, [])
-                .map((chunk, index) => (
-                  <Carousel.Item key={index}>
-                    <Row>
-                      {chunk.map((feedback) => (
-                        <Col key={feedback.id} md={6}>
-                          <CardFeedBack data={feedback} />
-                        </Col>
-                      ))}
-                    </Row>
-                  </Carousel.Item>
-                ))
+              data.filter((item) => item.status === "on").length > 0 ? (
+                data
+                  .filter((item) => item.status === "on")
+                  .reduce((acc, item, index) => {
+                    const chunkIndex = Math.floor(index / cardsPerSlide);
+                    if (!acc[chunkIndex]) {
+                      acc[chunkIndex] = [];
+                    }
+                    acc[chunkIndex].push(item);
+                    return acc;
+                  }, [])
+                  .map((chunk, index) => (
+                    <Carousel.Item key={index}>
+                      <Row>
+                        {chunk.map((feedback) => (
+                          <Col key={feedback.id} md={6}>
+                            <CardFeedBack data={feedback} />
+                          </Col>
+                        ))}
+                      </Row>
+                    </Carousel.Item>
+                  ))
+              ) : (
+                <Carousel.Item>
+                  <p className="text-center">Tidak ada ulasan</p>
+                </Carousel.Item>
+              )
             ) : (
               <Carousel.Item>
                 <p className="text-center">Tidak ada ulasan</p>

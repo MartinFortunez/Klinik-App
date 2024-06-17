@@ -11,6 +11,7 @@ const CardDoctor = ({ data }) => {
   const [showAddModal, setShowAddModal] = useState(false);
   const { dokter_id, nama_dokter, spesialis, foto_dokter } = data;
   const queryClient = useQueryClient();
+  const [isLoading, setIsLoading] = useState(false);
 
   const styleUnderline = {
     position: "absolute",
@@ -22,6 +23,7 @@ const CardDoctor = ({ data }) => {
   };
 
   const onSubmit = async (values, actions) => {
+    setIsLoading(true);
     try {
       await handleSubmit(
         "post",
@@ -36,7 +38,8 @@ const CardDoctor = ({ data }) => {
       toast.success("Berhasil mengirimkan konsultasi!");
     } catch (error) {
       console.error("Error adding consul:", error);
-      // Handle error
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -71,6 +74,7 @@ const CardDoctor = ({ data }) => {
           handleClose={handleAddClose}
           handleAdd={onSubmit}
           dataDoctor={data}
+          isLoading={isLoading}
         />
       </Card.Body>
     </Card>

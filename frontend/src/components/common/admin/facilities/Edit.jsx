@@ -1,6 +1,6 @@
 import { Formik } from "formik";
-import React from "react";
-import { Button, Col, Form, Image, Modal, Row } from "react-bootstrap";
+import React, { useState } from "react";
+import { Button, Col, Form, Image, Modal, Row, Spinner } from "react-bootstrap";
 import * as yup from "yup";
 import { useQueryClient } from "react-query";
 import { handleSubmit } from "../../../../utils/handleFunction";
@@ -16,8 +16,10 @@ const validationSchema = yup.object().shape({
 const Edit = ({ show, handleClose, data }) => {
   const { fasilitas_id, foto_fasilitas, judul, deskripsi } = data;
   const queryClient = useQueryClient();
+  const [isLoading, setIsLoading] = useState(false);
 
   const onSubmit = (values, actions) => {
+    setIsLoading(true);
     try {
       handleSubmit(
         "put",
@@ -32,6 +34,8 @@ const Edit = ({ show, handleClose, data }) => {
     } catch (error) {
       console.error("Error adding facility:", error);
       // Handle error
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -138,8 +142,13 @@ const Edit = ({ show, handleClose, data }) => {
                     variant="primary"
                     type="submit"
                     className="w-100 text-light"
+                    disabled={isLoading}
                   >
-                    Simpan
+                    {isLoading ? (
+                      <Spinner animation="border" size="sm" />
+                    ) : (
+                      "Simpan"
+                    )}
                   </Button>
                 </Col>
               </Form.Group>

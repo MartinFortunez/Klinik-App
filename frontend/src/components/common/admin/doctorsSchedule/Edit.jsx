@@ -1,6 +1,6 @@
 import { Formik } from "formik";
 import React, { useState } from "react";
-import { Button, Col, Form, Modal, Row } from "react-bootstrap";
+import { Button, Col, Form, Modal, Row, Spinner } from "react-bootstrap";
 import { useQueryClient } from "react-query";
 import { handleSubmit } from "../../../../utils/handleFunction";
 import { formDataEditSchedule } from "../../../../utils/body";
@@ -17,8 +17,10 @@ const Edit = ({ show, handleClose, data, dataDoctor }) => {
   const jam = sesi.substring(startIndex + 1, endIndex).trim(); // Mengambil teks di antara tanda kurung dan menghapus spasi di sekitarnya
   const queryClient = useQueryClient();
   const [selectedDokter, setSelectedDokter] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
 
   const onSubmit = (values, actions) => {
+    setIsLoading(true);
     try {
       handleSubmit(
         "put",
@@ -35,6 +37,8 @@ const Edit = ({ show, handleClose, data, dataDoctor }) => {
       toast.warning("Gagal mengubah jadwal dokter!");
       console.error("Error edit doctor schedule:", error);
       // Handle error
+    } finally {
+      setIsLoading(false);
     }
   };
   return (
@@ -177,8 +181,13 @@ const Edit = ({ show, handleClose, data, dataDoctor }) => {
                     variant="primary"
                     type="submit"
                     className="w-100 text-light"
+                    disabled={isLoading}
                   >
-                    Konfirmasi
+                    {isLoading ? (
+                      <Spinner animation="border" size="sm" />
+                    ) : (
+                      "Konfirmasi"
+                    )}
                   </Button>
                 </Col>
               </Form.Group>

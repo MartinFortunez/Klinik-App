@@ -11,15 +11,16 @@ import "react-toastify/dist/ReactToastify.css";
 
 const DoctorsSchedule = () => {
   const [showAddModal, setShowAddModal] = useState(false);
+  const [loading, setLoading] = useState(false);
+
   const queryClient = useQueryClient();
   const { data, isLoading } = useFetch(
     "jadwal-dokter-spesialis",
     "jadwalDokterData"
   );
 
-  // Function to sort the schedule data in ascending order by jadwal_id
   const sortedSchedules =
-    data && Array.isArray(data)
+    data && Array.isArray(data.schedules)
       ? [...data.schedules].sort((a, b) => a.dokter_id - b.dokter_id)
       : [];
 
@@ -27,6 +28,8 @@ const DoctorsSchedule = () => {
   const handleAddShow = () => setShowAddModal(true);
 
   const onSubmit = async (values, actions) => {
+    setLoading(true);
+
     try {
       // Check for duplicate schedule
       const isDuplicate = data.schedules.some(
@@ -72,6 +75,8 @@ const DoctorsSchedule = () => {
       toast.error("Gagal menambahkan jadwal dokter!");
       console.error("Error adding doctor schedule:", error);
       // Handle error
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -97,6 +102,7 @@ const DoctorsSchedule = () => {
             show={showAddModal}
             handleClose={handleAddClose}
             handleAdd={onSubmit}
+            isLoading={loading}
           />
         </Col>
       </Row>

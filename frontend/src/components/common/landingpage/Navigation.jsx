@@ -37,8 +37,8 @@ const Navigation = () => {
     >
       <Container fluid>
         <Navbar.Brand href="#Hero" className="d-flex align-items-end gap-2">
-          <HospitalFill size={40} />
-          <span className="fw-bold fs-4">Klinik App</span>
+          <HospitalFill size={32} />
+          <span className="fw-bold fs-5 d-none d-md-block">Klinik App</span>
         </Navbar.Brand>
         <Navbar.Toggle aria-controls="responsive-navbar-nav" />
         <Navbar.Collapse id="responsive-navbar-nav">

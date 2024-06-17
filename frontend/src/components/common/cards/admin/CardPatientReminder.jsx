@@ -13,6 +13,7 @@ const CardPatientReminder = ({ data }) => {
   const [showCancelModal, setShowCancelModal] = useState(false);
   const [showSendModal, setShowSendModal] = useState(false);
   const [showAcceptModal, setShowAcceptModal] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   const queryClient = useQueryClient();
   const formattedDateTglKonsul = format(new Date(tgl_konsul), "dd/MM/yyyy");
@@ -28,6 +29,7 @@ const CardPatientReminder = ({ data }) => {
   const handleAcceptShow = () => setShowAcceptModal(true);
 
   const onCancel = async () => {
+    setIsLoading(true);
     try {
       api("put", `jadwal-konsultasi/${konsul_id}/cancel`, "");
 
@@ -41,6 +43,8 @@ const CardPatientReminder = ({ data }) => {
       toast.warning("Gagal membatalkan konsultasi!");
       console.error("Error adding doctor schedule:", error);
       // Handle error
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -109,6 +113,7 @@ const CardPatientReminder = ({ data }) => {
             show={showCancelModal}
             handleClose={handleCancelClose}
             handleCancel={onCancel}
+            isLoading={isLoading}
           />
 
           <Send
