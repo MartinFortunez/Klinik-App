@@ -1,9 +1,3 @@
-.StyledFooter {
-  background-color: #151515;
-  color: white;
-  padding: 50px 0;
-}
-
 .text-wrapper {
   color: var(--Color-Light, #fff);
   font-family: "Inter-Regular", Helvetica;
@@ -43,6 +37,7 @@
   position: relative;
   text-align: justify;
   white-space: nowrap;
+  width: -moz-fit-content; /* Support for Firefox */
   width: fit-content;
 }
 
@@ -56,6 +51,7 @@
   position: relative;
   text-align: justify;
   white-space: nowrap;
+  width: -moz-fit-content; /* Support for Firefox */
   width: fit-content;
 }
 
@@ -68,6 +64,7 @@
   line-height: normal;
   position: relative;
   text-align: justify;
+  width: -moz-fit-content; /* Support for Firefox */
   width: fit-content;
 }
 
@@ -82,15 +79,38 @@
   background-color: #d9d9d9;
   text-decoration: none;
 
-  &.bg-red {
-    background-color: red;
+  .social-icons {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px; 
+    margin-top: 10px; 
   }
 
-  &.bg-green {
-    background-color: green;
+  .SocialLink {
+    height: 43px;
+    width: 43px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: none;
+    border-radius: 50%;
+    background-color: #d9d9d9;
+    text-decoration: none;
+
+    &.bg-red {
+      background-color: red;
+    }
+
+    &.bg-green {
+      background-color: green;
+    }
+
+    &.bg-blue {
+      background-color: blue;
+    }
   }
 
-  &.bg-blue {
-    background-color: blue;
+  p {
+    margin-top: 20px;
   }
 }

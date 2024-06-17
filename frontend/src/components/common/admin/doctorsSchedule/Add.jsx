@@ -1,23 +1,18 @@
 import { Formik } from "formik";
 import React, { useState } from "react";
-import { Button, Col, Form, Modal, Row } from "react-bootstrap";
-import axios from "axios";
-import { useQuery, useQueryClient } from "react-query";
+import { Button, Col, Form, Modal, Row, Spinner } from "react-bootstrap";
+import useFetch from "../../../../hooks/useFetch";
+import * as yup from "yup";
 
-const fetchData = async () => {
-  const response = await axios.get(
-    "http://localhost:3000/dashboard/dokter-klinik"
-  );
-  return response.data;
-};
+const validationSchema = yup.object().shape({
+  namaDokter: yup.string().required("Nama Dokter wajib diisi"),
+  jam: yup.string().required("Jam wajib diisi"),
+  hari: yup.string().required("Hari wajib diisi"),
+});
 
-const Add = ({ show, handleClose, handleAdd }) => {
-  const queryClient = useQueryClient();
-  const { data, isSuccess } = useQuery("dokterData", fetchData, {
-    refetchOnWindowFocus: false, // Tidak merender ulang data saat jendela browser mendapatkan fokus
-    refetchOnMount: false, // Tidak merender ulang data saat komponen dipasang
-    staleTime: Infinity, // Data tidak dianggap kadaluwarsa
-  });
+const Add = ({ show, handleClose, handleAdd, isLoading }) => {
+  const { data, isSuccess } = useFetch("dokter-klinik", "doctorData");
+
   const [selectedDokter, setSelectedDokter] = useState(null);
   return (
     <Modal
@@ -31,6 +26,7 @@ const Add = ({ show, handleClose, handleAdd }) => {
       </Modal.Header>
       <Modal.Body>
         <Formik
+          validationSchema={validationSchema}
           onSubmit={handleAdd}
           initialValues={{
             idDokter: "",
@@ -78,7 +74,6 @@ const Add = ({ show, handleClose, handleAdd }) => {
                         },
                       });
                     }
-                    console.log(selected);
                   }}
                   isInvalid={touched.namaDokter && !!errors.namaDokter}
                 >
@@ -86,6 +81,7 @@ const Add = ({ show, handleClose, handleAdd }) => {
                   <option value="">Pilih Dokter</option>
                   {isSuccess &&
                     data &&
+                    Array.isArray(data) &&
                     data.map((item) => (
                       <option key={item.dokter_id} value={item.nama_dokter}>
                         {item.nama_dokter}
@@ -159,8 +155,13 @@ const Add = ({ show, handleClose, handleAdd }) => {
                     variant="primary"
                     type="submit"
                     className="w-100 text-light"
+                    disabled={isLoading}
                   >
-                    Tambahkan
+                    {isLoading ? (
+                      <Spinner animation="border" size="sm" />
+                    ) : (
+                      "Tambahkan"
+                    )}
                   </Button>
                 </Col>
               </Form.Group>

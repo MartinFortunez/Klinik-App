@@ -26,15 +26,19 @@ export const handleSubmit = async (
   }
 };
 
-export const handleDelete = async (hapus, url, queryClient, keyClient) => {
+export const handleDelete = async (method, url, queryClient, keyClient) => {
   try {
-    api(hapus, url, "");
-    // Setelah berhasil menghapus, refetch data
-    await queryClient.invalidateQueries(`${keyClient}`);
-
-    // Menunggu hingga refetch selesai
-    await queryClient.refetchQueries(`${keyClient}`);
+    const response = await api(method, url, "");
+    await queryClient.invalidateQueries(keyClient);
+    await queryClient.refetchQueries(keyClient);
+    return response;
   } catch (error) {
-    console.error("Failed to delete facility:", error);
+    console.error("Failed to delete:", error);
+
+    if (error.response && error.response.status === 500) {
+      throw new Error("Failed to delete schedule. Server error occurred.");
+    } else {
+      throw new Error("Failed to delete schedule. Unknown error occurred.");
+    }
   }
 };

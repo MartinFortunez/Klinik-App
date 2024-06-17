@@ -4,7 +4,7 @@ import "bootstrap-icons/font/bootstrap-icons.css";
 import Login from "./Login";
 import "../../../sass/custom.scss";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
+import { HospitalFill } from "react-bootstrap-icons";
 
 const Navigation = () => {
   // State to manage modal visibility
@@ -17,7 +17,7 @@ const Navigation = () => {
   // Function to handle hiding the modal    icon: <HospitalFill />,
   const handleCloseModal = () => setShowModal(false);
 
-  const [token, setToken] = useState(localStorage.getItem("token"));
+  const [token] = useState(localStorage.getItem("token"));
 
   // Function to handle login button click
   const handleLoginClick = () => {
@@ -25,7 +25,7 @@ const Navigation = () => {
       handleShowModal();
     } else {
       // Redirect to admin dashboard or perform any other action
-      navigate("/admin/dashboard");
+      navigate("/admin/konsultasi-masuk");
     }
   };
 
@@ -33,29 +33,34 @@ const Navigation = () => {
     <Navbar
       collapseOnSelect
       expand="lg"
-      className="custom-nav sticky-top px-2 px-md-3 px-lg-5  navbar-dark"
+      className="custom-nav px-2 px-md-3 px-lg-5  navbar-dark"
     >
       <Container fluid>
-        <Navbar.Brand href="#home">React-Bootstrap</Navbar.Brand>
+        <Navbar.Brand href="#Hero" className="d-flex align-items-end gap-2">
+          <HospitalFill size={32} />
+          <span className="fw-bold fs-5 d-none d-md-block">Klinik App</span>
+        </Navbar.Brand>
         <Navbar.Toggle aria-controls="responsive-navbar-nav" />
         <Navbar.Collapse id="responsive-navbar-nav">
           <Nav className="me-auto"></Nav>
           <Nav>
-            <Nav.Link href="#deets">Beranda</Nav.Link>
-            <Nav.Link eventKey={2} href="#memes">
+            <Nav.Link href="#Hero" className="text-light">
+              Beranda
+            </Nav.Link>
+            <Nav.Link eventKey={2} href="#About" className="text-light">
               Tentang Kami
             </Nav.Link>
-            <Nav.Link eventKey={3} href="#memes">
-              Fasilitas
-            </Nav.Link>
-            <Nav.Link eventKey={4} href="#memes">
+            <Nav.Link eventKey={4} href="#Doctor" className="text-light">
               Jadwal Dokter
             </Nav.Link>
-            <Nav.Link eventKey={5} href="#memes">
+            <Nav.Link eventKey={3} href="#Facilities" className="text-light">
+              Fasilitas
+            </Nav.Link>
+            <Nav.Link eventKey={5} href="#Feedback" className="text-light">
               Ulasan
             </Nav.Link>
           </Nav>
-          <Nav className="ms-lg-3">
+          <Nav className="ms-lg-3 mt-3 mt-lg-0">
             <Button
               variant="primary"
               onClick={handleLoginClick}

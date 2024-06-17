@@ -1,52 +1,48 @@
 import { Formik } from "formik";
 import React, { useState } from "react";
-import { Button, Col, Form, Image, Modal, Row } from "react-bootstrap";
+import { Button, Col, Form, Image, Modal, Row, Spinner } from "react-bootstrap";
 import * as yup from "yup";
-import { useQuery, useQueryClient } from "react-query";
-import axios from "axios";
+import { useQueryClient } from "react-query";
 import { formDataDoctor } from "../../../../utils/body";
 import { handleSubmit } from "../../../../utils/handleFunction";
 import { toast } from "react-toastify";
 
-const FILE_SIZE = 500 * 1024;
-const SUPPORTED_FORMATS = ["image/jpg", "image/jpeg", "image/gif", "image/png"];
-
 const validationSchema = yup.object().shape({
-  imageFile: yup.mixed().required()
-  .test(
-    "fileSize",
-    "Ukuran file terlalu besar",
-    (value) => value && value.size <= FILE_SIZE
-  )
-  .test(
-    "fileFormat",
-    "Format file tidak didukung",
-    (value) => value && SUPPORTED_FORMATS.includes(value.type)
-  ),
-  namaDokter: yup.string().required("nama wajib diisi"),
-  sip: yup.string().required("id dokter wajib diisi"),
-  spesialis: yup.string().required("spesialis wajib diisi"),
+  imageFile: yup.mixed().required("Gambar/foto wajib diisi"),
+  namaDokter: yup
+    .string()
+    .matches(/^[^0-9]+$/, "Nama tidak boleh mengandung angka")
+    .required("Nama wajib diisi"),
+  sip: yup.string().required("SIP dokter wajib diisi"),
+  spesialis: yup
+    .string()
+    .notOneOf(["Pilih Spesialis"], "Spesialis harus dipilih")
+    .required("Spesialis wajib dipilih"),
 });
 
 const Edit = ({ show, handleClose, data }) => {
   const { dokter_id, nama_dokter, sip, spesialis, foto_dokter } = data;
   const queryClient = useQueryClient();
+  const [isLoading, setIsLoading] = useState(false);
 
   const onSubmit = (values, actions) => {
+    setIsLoading(true);
     try {
-    handleSubmit(
-      "put",
-      `dokter-klinik/edit/${dokter_id}`,
-      formDataDoctor(values),
-      actions,
-      handleClose,
-      queryClient,
-      "doctorData"
-    );
-    toast.success("Berhasil ubah dokter!");
+      handleSubmit(
+        "put",
+        `dokter-klinik/edit/${dokter_id}`,
+        formDataDoctor(values),
+        actions,
+        handleClose,
+        queryClient,
+        "doctorData"
+      );
+      toast.success("Berhasil ubah dokter!");
     } catch (error) {
       console.error("Error adding doctor:", error);
       // Handle error
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -150,9 +146,9 @@ const Edit = ({ show, handleClose, data }) => {
                     isInvalid={touched.spesialis && !!errors.spesialis}
                   >
                     <option>Pilih Spesialis</option>
-                    <option value="1">Spesialis 1</option>
-                    <option value="2">Spesialis 2</option>
-                    <option value="3">Spesialis 3</option>
+                    <option value="Jantung">Jantung</option>
+                    <option value="Paru-Paru">Paru-Paru</option>
+                    <option value="Syaraf">Syaraf</option>
                   </Form.Select>
                   <Form.Control.Feedback type="invalid">
                     {errors.spesialis}
@@ -175,8 +171,13 @@ const Edit = ({ show, handleClose, data }) => {
                     variant="primary"
                     type="submit"
                     className="w-100 text-light"
+                    disabled={isLoading}
                   >
-                    Simpan
+                    {isLoading ? (
+                      <Spinner animation="border" size="sm" />
+                    ) : (
+                      "Simpan"
+                    )}
                   </Button>
                 </Col>
               </Form.Group>

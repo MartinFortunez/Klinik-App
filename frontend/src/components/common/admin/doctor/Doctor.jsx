@@ -2,9 +2,7 @@ import React, { useState } from "react";
 import { Button, Col, Container, Row, Spinner } from "react-bootstrap";
 import CardDoctor from "../../cards/admin/CardDoctor";
 import Add from "./Add";
-import axios from "axios";
-import { useQuery, useQueryClient } from "react-query";
-import { api, postData } from "../../../../api/api";
+import { useQueryClient } from "react-query";
 import { handleSubmit } from "../../../../utils/handleFunction";
 import { formDataDoctor } from "../../../../utils/body";
 import useFetch from "../../../../hooks/useFetch";
@@ -15,34 +13,39 @@ const Doctor = () => {
   const [showAddModal, setShowAddModal] = useState(false);
   const queryClient = useQueryClient();
   const { data, isLoading } = useFetch("dokter-klinik", "doctorData");
-
+  const [loading, setLoading] = useState(false);
   const handleAddClose = () => setShowAddModal(false);
   const handleAddShow = () => setShowAddModal(true);
 
   const onSubmit = async (values, actions) => {
+    setLoading(true);
     try {
-      await
-    handleSubmit(
-      "post",
-      "dokter-klinik/add",
-      formDataDoctor(values),
-      actions,
-      handleAddClose,
-      queryClient,
-      "doctorData"
-    );
-    // Display toast notification upon successful addition
-    toast.success("Berhasil menambahkan dokter!");
-  } catch (error) {
-    console.error("Error adding doctor:", error);
-    // Handle error
-  }
+      await handleSubmit(
+        "post",
+        "dokter-klinik/add",
+        formDataDoctor(values),
+        actions,
+        handleAddClose,
+        queryClient,
+        "doctorData"
+      );
+      // Display toast notification upon successful addition
+      toast.success("Berhasil menambahkan dokter!");
+    } catch (error) {
+      console.error("Error adding doctor:", error);
+      // Handle error
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
-    <Container fluid className="p-5 h-100 d-flex flex-column overflow-hidden">
+    <Container
+      fluid
+      className="p-3 p-md-5 h-100 d-flex flex-column overflow-hidden"
+    >
       <ToastContainer />
-      <Row className="align-items-center">
+      <Row className="align-items-center mb-3">
         <Col>
           <h2>Data Dokter</h2>
         </Col>
@@ -58,18 +61,23 @@ const Doctor = () => {
             show={showAddModal}
             handleClose={handleAddClose}
             handleAdd={onSubmit}
+            isLoading={loading}
           />
         </Col>
       </Row>
-      <Row xs={1} className="gx-3 gy-4 overflow-y-scroll m-0">
+      <Row
+        xs={1}
+        md={2}
+        lg={3}
+        xl={4}
+        className="gx-3 gy-4 overflow-y-auto m-0"
+      >
         {isLoading ? (
           <Spinner animation="border" role="status">
             <span className="visually-hidden">Loading...</span>
           </Spinner>
-        ) : data && data.length > 0 ? (
-          data.map((item) => (
-          <CardDoctor key={item.dokter_id} data={item} />
-        ))
+        ) : data && Array.isArray(data) && data.length > 0 ? (
+          data.map((item) => <CardDoctor key={item.dokter_id} data={item} />)
         ) : (
           <p>Tidak ada data</p>
         )}

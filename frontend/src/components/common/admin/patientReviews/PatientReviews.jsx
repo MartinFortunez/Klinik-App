@@ -1,20 +1,20 @@
 import React from "react";
-import { Col, Container, Row, Spinner} from "react-bootstrap";
+import { Col, Container, Row, Spinner } from "react-bootstrap";
 import CardPatientReviews from "../../cards/admin/CardPatientReviews";
-import axios from "axios";
-import { useQuery, useQueryClient } from "react-query";
 import useFetch from "../../../../hooks/useFetch";
-import { ToastContainer, toast } from "react-toastify";
+import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 const PatientReviews = () => {
-  const queryClient = useQueryClient();
   const { data, isLoading } = useFetch("feedback", "feedbackData");
-  
+
   return (
-    <Container fluid className="p-5 h-100 d-flex flex-column overflow-hidden">
+    <Container
+      fluid
+      className="p-3 p-md-5 h-100 d-flex flex-column overflow-hidden"
+    >
       <ToastContainer />
-      <Row className="align-items-center">
+      <Row className="align-items-center mb-3">
         <Col>
           <h2>Ulasan Pasien</h2>
         </Col>
@@ -24,7 +24,7 @@ const PatientReviews = () => {
           <Spinner animation="border" role="status">
             <span className="visually-hidden">Loading...</span>
           </Spinner>
-        ) : data && data.length > 0 ? (
+        ) : data && Array.isArray(data) && data.length > 0 ? (
           data.map((item) => (
             <CardPatientReviews key={item.ulasan_id} data={item} />
           ))

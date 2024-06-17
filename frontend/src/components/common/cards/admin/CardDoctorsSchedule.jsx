@@ -2,15 +2,14 @@ import React, { useState } from "react";
 import { Button, Card, Col, Row } from "react-bootstrap";
 import Delete from "../../admin/doctorsSchedule/Delete";
 import Edit from "../../admin/doctorsSchedule/Edit";
-import axios from "axios";
-
 import { useQueryClient } from "react-query";
 import { handleDelete } from "../../../../utils/handleFunction";
+import { toast } from "react-toastify";
 
 const CardDoctorsSchedule = ({ data, dataDoctor }) => {
-  const { dokter_id, jadwal_id, sesi, nama_dokter, spesialis } = data;
+  const { jadwal_id, sesi, nama_dokter, spesialis } = data;
   const queryClient = useQueryClient();
-  console.log(jadwal_id);
+  const [isLoading, setIsLoading] = useState(false);
 
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [showEditModal, setShowEditModal] = useState(false);
@@ -21,13 +20,24 @@ const CardDoctorsSchedule = ({ data, dataDoctor }) => {
   const handleEditClose = () => setShowEditModal(false);
   const handleEditShow = () => setShowEditModal(true);
 
-  const onDelete = () => {
-    handleDelete(
-      "delete",
-      `jadwal-dokter-spesialis/delete/${jadwal_id}`,
-      queryClient,
-      "jadwalDokterData"
-    );
+  const onDelete = async () => {
+    setIsLoading(true);
+    try {
+      await handleDelete(
+        "delete",
+        `jadwal-dokter-spesialis/delete/${jadwal_id}`,
+        queryClient,
+        "jadwalDokterData"
+      );
+
+      toast.success("Berhasil menghapus jadwal dokter!");
+    } catch (error) {
+      toast.error(
+        "Gagal menghapus jadwal dokter. Jadwal ini digunakan pada data lain!"
+      );
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -35,19 +45,25 @@ const CardDoctorsSchedule = ({ data, dataDoctor }) => {
       <Card>
         <Card.Body className="d-flex flex-column gap-3">
           <Row>
-            <Col className="d-flex flex-column">
-              <Card.Subtitle className="opacity-50">Id Dokter</Card.Subtitle>
-              <Card.Text>{dokter_id}</Card.Text>
+            <Col
+              xs={12}
+              md={8}
+              className="d-flex mt-md-0 gap-2 align-items-lg-center justify-content-md-between"
+            >
+              <Col className="text-start">
+                <Card.Subtitle className="opacity-50">
+                  Nama Dokter
+                </Card.Subtitle>
+                <Card.Text>{nama_dokter}</Card.Text>
+              </Col>
+              <Col className="text-md-center text-end">
+                <Card.Subtitle className="opacity-50">
+                  Spesialisasi
+                </Card.Subtitle>
+                <Card.Text>{spesialis}</Card.Text>
+              </Col>
             </Col>
-            <Col className="text-center">
-              <Card.Subtitle className="opacity-50">Nama Dokter</Card.Subtitle>
-              <Card.Text>{nama_dokter}</Card.Text>
-            </Col>
-            <Col className="text-center">
-              <Card.Subtitle className="opacity-50">Spesialisasi</Card.Subtitle>
-              <Card.Text>{spesialis}</Card.Text>
-            </Col>
-            <Col className="text-end">
+            <Col md={4} className="text-md-end mt-3 mt-md-0">
               <Card.Subtitle className="opacity-50">
                 Jadwal Dokter
               </Card.Subtitle>
@@ -71,6 +87,7 @@ const CardDoctorsSchedule = ({ data, dataDoctor }) => {
             handleClose={handleDeleteClose}
             handleDelete={onDelete}
             data={data}
+            isLoading={isLoading}
           />
 
           <Edit
