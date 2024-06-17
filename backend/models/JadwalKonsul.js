@@ -3,7 +3,7 @@ const connection = require("../config/database");
 class JadwalKonsul {
   static getAll(callback) {
     const query = `
-    SELECT * FROM jadwal_konsul JOIN dokter USING (dokter_id) JOIN jadwal_dokter USING (jadwal_id) WHERE jadwal_konsul.status = 'pending';
+    SELECT jadwal_konsul.*, dokter.nama_dokter, dokter.spesialis, jadwal_dokter.sesi FROM jadwal_konsul JOIN dokter USING (dokter_id) JOIN jadwal_dokter USING (jadwal_id) WHERE jadwal_konsul.status = 'pending';
     `;
     connection.query(query, (err, results) => {
       if (err) return callback(err);
@@ -24,7 +24,7 @@ class JadwalKonsul {
 
   static getAllReminderUser(callback) {
     const query = `
-    SELECT * FROM jadwal_konsul JOIN dokter USING (dokter_id) JOIN jadwal_dokter USING (jadwal_id) WHERE jadwal_konsul.status ='approve';
+    SELECT jadwal_konsul.*, dokter.nama_dokter, dokter.spesialis, jadwal_dokter.sesi FROM jadwal_konsul JOIN dokter USING (dokter_id) JOIN jadwal_dokter USING (jadwal_id) WHERE jadwal_konsul.status ='approve';
     `;
     connection.query(query, (err, results) => {
       if (err) return callback(err);
