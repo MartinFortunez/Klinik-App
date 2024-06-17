@@ -14,10 +14,12 @@ const Facilities = () => {
   const queryClient = useQueryClient();
   const { data, isLoading } = useFetch("fasilitas", "fasilitasData");
 
+  const [loading, setLoading] = useState(false);
   const handleAddClose = () => setShowAddModal(false);
   const handleAddShow = () => setShowAddModal(true);
 
   const onSubmit = async (values, actions) => {
+    setLoading(true);
     try {
       await handleSubmit(
         "post",
@@ -33,6 +35,8 @@ const Facilities = () => {
     } catch (error) {
       console.error("Error adding facility:", error);
       // Handle error
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -58,6 +62,7 @@ const Facilities = () => {
             show={showAddModal}
             handleClose={handleAddClose}
             handleAdd={onSubmit}
+            isLoading={loading}
           />
         </Col>
       </Row>

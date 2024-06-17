@@ -9,6 +9,7 @@ import { toast } from "react-toastify";
 const CardDoctorsSchedule = ({ data, dataDoctor }) => {
   const { jadwal_id, sesi, nama_dokter, spesialis } = data;
   const queryClient = useQueryClient();
+  const [isLoading, setIsLoading] = useState(false);
 
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [showEditModal, setShowEditModal] = useState(false);
@@ -20,6 +21,7 @@ const CardDoctorsSchedule = ({ data, dataDoctor }) => {
   const handleEditShow = () => setShowEditModal(true);
 
   const onDelete = async () => {
+    setIsLoading(true);
     try {
       await handleDelete(
         "delete",
@@ -27,15 +29,14 @@ const CardDoctorsSchedule = ({ data, dataDoctor }) => {
         queryClient,
         "jadwalDokterData"
       );
+
       toast.success("Berhasil menghapus jadwal dokter!");
     } catch (error) {
-      toast.error("Gagal menghapus jadwal dokter!");
-
-      if (error.response) {
-        console.error("Error response:", error.response.data);
-      } else {
-        console.error("Error:", error.message);
-      }
+      toast.error(
+        "Gagal menghapus jadwal dokter. Jadwal ini digunakan pada data lain!"
+      );
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -86,6 +87,7 @@ const CardDoctorsSchedule = ({ data, dataDoctor }) => {
             handleClose={handleDeleteClose}
             handleDelete={onDelete}
             data={data}
+            isLoading={isLoading}
           />
 
           <Edit

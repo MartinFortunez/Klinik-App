@@ -1,6 +1,6 @@
 import { Formik } from "formik";
 import React from "react";
-import { Button, Col, Form, Image, Modal, Row } from "react-bootstrap";
+import { Button, Col, Form, Image, Modal, Row, Spinner } from "react-bootstrap";
 import * as yup from "yup";
 
 const validationSchema = yup.object().shape({
@@ -16,7 +16,7 @@ const validationSchema = yup.object().shape({
     .required("Spesialis wajib dipilih"),
 });
 
-const Add = ({ show, handleClose, handleAdd }) => {
+const Add = ({ show, handleClose, handleAdd, isLoading }) => {
   return (
     <Modal
       show={show}
@@ -135,9 +135,13 @@ const Add = ({ show, handleClose, handleAdd }) => {
                     variant="primary"
                     type="submit"
                     className="w-100 text-light"
-                    // onClick={handleAdd}
+                    disabled={isLoading}
                   >
-                    Tambahkan
+                    {isLoading ? (
+                      <Spinner animation="border" size="sm" />
+                    ) : (
+                      "Tambahkan"
+                    )}
                   </Button>
                 </Col>
               </Form.Group>

@@ -1,7 +1,7 @@
 import React from "react";
-import { Button, Col, Modal, Row } from "react-bootstrap";
+import { Button, Col, Modal, Row, Spinner } from "react-bootstrap";
 
-const Reject = ({ data, show, handleClose, handleReject }) => {
+const Reject = ({ data, show, handleClose, handleReject, isLoading }) => {
   const { nama_pasien } = data;
   return (
     <Modal show={show} onHide={handleClose} centered>
@@ -23,8 +23,13 @@ const Reject = ({ data, show, handleClose, handleReject }) => {
           </Button>
         </Col>
         <Col>
-          <Button variant="danger" className="w-100" onClick={handleReject}>
-            Hapus
+          <Button
+            variant="danger"
+            className="w-100"
+            onClick={handleReject}
+            disabled={isLoading}
+          >
+            {isLoading ? <Spinner animation="border" size="sm" /> : "Hapus"}
           </Button>
         </Col>
       </Modal.Footer>

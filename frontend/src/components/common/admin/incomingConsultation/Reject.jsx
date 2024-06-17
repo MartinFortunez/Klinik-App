@@ -1,13 +1,15 @@
-import React from "react";
-import { Button, Col, Modal, Row } from "react-bootstrap";
+import React, { useState } from "react";
+import { Button, Col, Modal, Row, Spinner } from "react-bootstrap";
 import { useQueryClient } from "react-query";
 import { api } from "../../../../api/api";
 import { toast } from "react-toastify";
 
 const Reject = ({ data, show, handleClose }) => {
   const queryClient = useQueryClient();
+  const [isLoading, setIsLoading] = useState(false);
 
   const onSubmit = async () => {
+    setIsLoading(true);
     try {
       api("delete", `jadwal-konsultasi/reject/${data}`, "");
       await queryClient.invalidateQueries("konsultasiMasukData");
@@ -19,6 +21,8 @@ const Reject = ({ data, show, handleClose }) => {
     } catch (error) {
       console.error("Error adding doctor:", error);
       // Handle error
+    } finally {
+      setIsLoading(false);
     }
   };
   return (
@@ -40,8 +44,13 @@ const Reject = ({ data, show, handleClose }) => {
           </Button>
         </Col>
         <Col>
-          <Button variant="danger" className="w-100" onClick={onSubmit}>
-            Tolak
+          <Button
+            variant="danger"
+            className="w-100"
+            onClick={onSubmit}
+            disabled={isLoading}
+          >
+            {isLoading ? <Spinner animation="border" size="sm" /> : "Tolak"}
           </Button>
         </Col>
       </Modal.Footer>

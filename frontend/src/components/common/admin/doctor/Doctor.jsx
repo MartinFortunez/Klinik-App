@@ -13,11 +13,12 @@ const Doctor = () => {
   const [showAddModal, setShowAddModal] = useState(false);
   const queryClient = useQueryClient();
   const { data, isLoading } = useFetch("dokter-klinik", "doctorData");
-
+  const [loading, setLoading] = useState(false);
   const handleAddClose = () => setShowAddModal(false);
   const handleAddShow = () => setShowAddModal(true);
 
   const onSubmit = async (values, actions) => {
+    setLoading(true);
     try {
       await handleSubmit(
         "post",
@@ -33,6 +34,8 @@ const Doctor = () => {
     } catch (error) {
       console.error("Error adding doctor:", error);
       // Handle error
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -58,6 +61,7 @@ const Doctor = () => {
             show={showAddModal}
             handleClose={handleAddClose}
             handleAdd={onSubmit}
+            isLoading={loading}
           />
         </Col>
       </Row>

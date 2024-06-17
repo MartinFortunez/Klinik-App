@@ -1,6 +1,6 @@
 import { Formik } from "formik";
 import React, { useEffect, useState } from "react";
-import { Modal, Form, Button, Row, Col } from "react-bootstrap";
+import { Modal, Form, Button, Row, Col, Spinner } from "react-bootstrap";
 import * as yup from "yup";
 import { api } from "../../../api/api";
 
@@ -35,12 +35,39 @@ const validationSchema = yup.object().shape({
   jadwalId: yup.string().required("Sesi wajib dipilih"),
 });
 
-const FormConsul = ({ dataDoctor, show, handleClose, handleAdd }) => {
+const FormConsul = ({
+  dataDoctor,
+  show,
+  handleClose,
+  handleAdd,
+  isLoading,
+}) => {
   const { dokter_id, nama_dokter, spesialis } = dataDoctor;
   const [sesiData, setSesiData] = useState(null);
+  const [bookedSessions, setBookedSessions] = useState([]);
 
   useEffect(() => {
     const fetchData = async () => {
+      try {
+        const jadwalKonsultasiData = await api("get", `jadwal-konsultasi`);
+        const reminderData = await api("get", `reminder`);
+
+        const bookedJadwalIds = [
+          ...jadwalKonsultasiData.schedules.map((item) => item.jadwal_id),
+          ...reminderData.schedules.map((item) => item.jadwal_id),
+        ];
+
+        setBookedSessions(bookedJadwalIds);
+      } catch (error) {
+        console.error("Error fetching booked session data:", error);
+      }
+    };
+
+    fetchData();
+  }, []);
+
+  useEffect(() => {
+    const fetchSesiData = async () => {
       try {
         const result = await api("get", `jadwal-dokter/${dokter_id}`);
         setSesiData(result);
@@ -49,7 +76,7 @@ const FormConsul = ({ dataDoctor, show, handleClose, handleAdd }) => {
       }
     };
 
-    fetchData();
+    fetchSesiData();
   }, [dokter_id]);
 
   return (
@@ -74,13 +101,13 @@ const FormConsul = ({ dataDoctor, show, handleClose, handleAdd }) => {
             nama: "",
             alamat: "",
             nohp: "",
-            jenisKelamin: "", // Nilai awal untuk jenisKelamin
+            jenisKelamin: "",
             tanggalLahir: "",
             golonganDarah: "",
             spesialis: spesialis,
             namaDokter: nama_dokter,
             dokterId: dokter_id,
-            jadwalId: "", // Nilai awal untuk jadwalId
+            jadwalId: "",
           }}
         >
           {({
@@ -298,7 +325,11 @@ const FormConsul = ({ dataDoctor, show, handleClose, handleAdd }) => {
                       {sesiData &&
                         Array.isArray(sesiData) &&
                         sesiData.map((item) => (
-                          <option key={item.jadwal_id} value={item.jadwal_id}>
+                          <option
+                            key={item.jadwal_id}
+                            value={item.jadwal_id}
+                            disabled={bookedSessions.includes(item.jadwal_id)}
+                          >
                             {item.sesi}
                           </option>
                         ))}
@@ -328,8 +359,13 @@ const FormConsul = ({ dataDoctor, show, handleClose, handleAdd }) => {
                     variant="primary"
                     type="submit"
                     className="w-100 text-light"
+                    disabled={isLoading}
                   >
-                    Kirim Konsultasi
+                    {isLoading ? (
+                      <Spinner animation="border" size="sm" />
+                    ) : (
+                      "Kirim Konsultasi"
+                    )}
                   </Button>
                 </Col>
               </Form.Group>
