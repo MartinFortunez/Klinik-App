@@ -27,7 +27,6 @@ const Edit = ({ show, handleClose, data }) => {
 
   const onSubmit = (values, actions) => {
     setIsLoading(true);
-    console.log(isLoading);
     try {
       handleSubmit(
         "put",

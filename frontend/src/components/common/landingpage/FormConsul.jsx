@@ -44,9 +44,30 @@ const FormConsul = ({
 }) => {
   const { dokter_id, nama_dokter, spesialis } = dataDoctor;
   const [sesiData, setSesiData] = useState(null);
+  const [bookedSessions, setBookedSessions] = useState([]);
 
   useEffect(() => {
     const fetchData = async () => {
+      try {
+        const jadwalKonsultasiData = await api("get", `jadwal-konsultasi`);
+        const reminderData = await api("get", `reminder`);
+
+        const bookedJadwalIds = [
+          ...jadwalKonsultasiData.schedules.map((item) => item.jadwal_id),
+          ...reminderData.schedules.map((item) => item.jadwal_id),
+        ];
+
+        setBookedSessions(bookedJadwalIds);
+      } catch (error) {
+        console.error("Error fetching booked session data:", error);
+      }
+    };
+
+    fetchData();
+  }, []);
+
+  useEffect(() => {
+    const fetchSesiData = async () => {
       try {
         const result = await api("get", `jadwal-dokter/${dokter_id}`);
         setSesiData(result);
@@ -55,7 +76,7 @@ const FormConsul = ({
       }
     };
 
-    fetchData();
+    fetchSesiData();
   }, [dokter_id]);
 
   return (
@@ -304,7 +325,11 @@ const FormConsul = ({
                       {sesiData &&
                         Array.isArray(sesiData) &&
                         sesiData.map((item) => (
-                          <option key={item.jadwal_id} value={item.jadwal_id}>
+                          <option
+                            key={item.jadwal_id}
+                            value={item.jadwal_id}
+                            disabled={bookedSessions.includes(item.jadwal_id)}
+                          >
                             {item.sesi}
                           </option>
                         ))}
@@ -336,7 +361,6 @@ const FormConsul = ({
                     className="w-100 text-light"
                     disabled={isLoading}
                   >
-                    {" "}
                     {isLoading ? (
                       <Spinner animation="border" size="sm" />
                     ) : (

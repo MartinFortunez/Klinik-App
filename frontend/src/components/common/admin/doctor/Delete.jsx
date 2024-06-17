@@ -1,8 +1,7 @@
 import React from "react";
 import { Button, Col, Modal, Row, Spinner } from "react-bootstrap";
 
-const Delete = ({ data, show, handleClose, handleDelete, isLoading }) => {
-  console.log(isLoading);
+const Delete = ({ data, show, handleClose, handleDelete, isLoading }) => {;
   const { nama_dokter } = data;
 
   return (

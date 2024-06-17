@@ -23,7 +23,7 @@ const CardDoctorsSchedule = ({ data, dataDoctor }) => {
   const onDelete = async () => {
     setIsLoading(true);
     try {
-      const response = await handleDelete(
+      await handleDelete(
         "delete",
         `jadwal-dokter-spesialis/delete/${jadwal_id}`,
         queryClient,
