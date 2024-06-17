@@ -5,7 +5,7 @@ const CardFacilities = ({ data }) => {
   const { foto_fasilitas, judul, deskripsi } = data;
 
   return (
-    <Card className="d-flex flex-column align-items-center h-100">
+    <Card className="d-flex flex-column border-0 h-100 overflow-hidden">
       <Image
         src={`data:image/jpeg;base64,${foto_fasilitas}`}
         width="100%"

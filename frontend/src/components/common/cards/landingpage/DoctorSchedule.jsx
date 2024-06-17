@@ -1,7 +1,7 @@
 import React from "react";
 import { Card } from "react-bootstrap";
 import axios from "axios";
-import { useQuery, useQueryClient } from "react-query";
+import { useQuery} from "react-query";
 
 const fetchData = async (jadwalId) => {
   const response = await axios.get(

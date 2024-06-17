@@ -2,12 +2,14 @@ import { Card, Image, Button } from "react-bootstrap";
 import React, { useState } from "react";
 import FormConsul from "../../landingpage/FormConsul";
 import DoctorSchedule from "./DoctorSchedule";
-import axios from "axios";
-import { useQuery, useQueryClient } from "react-query";
+import { useQueryClient } from "react-query";
+import { formDataAddKonsul } from "../../../../utils/body";
+import { handleSubmit } from "../../../../utils/handleFunction";
+import { toast } from "react-toastify";
 
 const CardDoctor = ({ data }) => {
   const [showAddModal, setShowAddModal] = useState(false);
-  const { dokter_id, sip, nama_dokter, spesialis, foto_dokter } = data;
+  const { dokter_id, nama_dokter, spesialis, foto_dokter } = data;
   const queryClient = useQueryClient();
 
   const styleUnderline = {
@@ -19,42 +21,22 @@ const CardDoctor = ({ data }) => {
     borderBottom: "2px solid #58a399",
   };
 
-  const handleSubmit = async (values, { setSubmitting }) => {
-    const {
-      NIK,
-      nama,
-      alamat,
-      golonganDarah,
-      tanggalLahir,
-      nohp,
-      jadwalId,
-      dokterId,
-      jenisKelamin,
-    } = values;
+  const onSubmit = async (values, actions) => {
     try {
-      const response = {
-        nik: NIK,
-        nama_pasien: nama,
-        alamat: alamat,
-        gol_darah: golonganDarah,
-        tgl_lahir: tanggalLahir,
-        no_wa: nohp,
-        jadwal_id: jadwalId,
-        dokter_id: dokterId,
-        jenis_kelamin: jenisKelamin,
-      };
-
-      console.log(response);
-      await axios.post(
-        "http://localhost:3000/dashboard/jadwal-konsultasi/add",
-        response
+      await handleSubmit(
+        "post",
+        "jadwal-konsultasi/add",
+        formDataAddKonsul(values),
+        actions,
+        handleAddClose,
+        queryClient,
+        "konsultasiMasukData"
       );
-      queryClient.invalidateQueries("konsultasiMasukData");
-      handleAddClose();
+      // Display toast notification upon successful addition
+      toast.success("Berhasil mengirimkan konsultasi!");
     } catch (error) {
-      console.error("Failed to add consul:", error);
-    } finally {
-      setSubmitting(false);
+      console.error("Error adding consul:", error);
+      // Handle error
     }
   };
 
@@ -87,7 +69,7 @@ const CardDoctor = ({ data }) => {
         <FormConsul
           show={showAddModal}
           handleClose={handleAddClose}
-          handleAdd={handleSubmit}
+          handleAdd={onSubmit}
           dataDoctor={data}
         />
       </Card.Body>

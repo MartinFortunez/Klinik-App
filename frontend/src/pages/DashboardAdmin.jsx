@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { Navigate, Outlet } from "react-router-dom";
+import { Outlet } from "react-router-dom";
 import SideBar from "../components/common/admin/SideBar";
 import Topbar from "../components/common/admin/Topbar";
 import { Col, Container, Row } from "react-bootstrap";

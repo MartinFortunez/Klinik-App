@@ -1,17 +1,16 @@
 import { Formik } from "formik";
-import React, { useState } from "react";
+import React from "react";
 import { Button, Col, Form, Image, Modal, Row } from "react-bootstrap";
 import * as yup from "yup";
-import { useQuery, useQueryClient } from "react-query";
-import axios from "axios";
+import { useQueryClient } from "react-query";
 import { handleSubmit } from "../../../../utils/handleFunction";
 import { formDataFacilities } from "../../../../utils/body";
 import { toast } from "react-toastify";
 
 const validationSchema = yup.object().shape({
-  imageFile: yup.mixed().required(),
-  title: yup.string().required("judul wajib diisi"),
-  description: yup.string().required("deskripsi wajib diisi"),
+  imageFile: yup.mixed().required("Gambar/foto wajib diisi"),
+  title: yup.string().required("Judul wajib diisi"),
+  description: yup.string().required("Deskripsi wajib diisi"),
 });
 
 const Edit = ({ show, handleClose, data }) => {

@@ -1,9 +1,10 @@
-import React, { useState } from "react";
+import React from "react";
 import { Modal, Form, Button, Row, Col } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 import { Formik } from "formik"; // Import Formik
 import * as yup from "yup";
 import axios from "axios";
+import { toast } from "react-toastify";
 
 const validationSchema = yup.object().shape({
   username: yup.string().required("Username wajib diisi"),
@@ -11,14 +12,12 @@ const validationSchema = yup.object().shape({
 });
 
 const Login = ({ show, handleClose }) => {
-  const [error, setError] = useState(null);
   const navigate = useNavigate();
 
   const handleLogin = async (values) => {
     try {
       const response = await axios.post(
-        `http://localhost:3000/login
-`,
+        `${process.env.REACT_APP_BACKEND_URL}login`,
         {
           username: values.username,
           password: values.password,
@@ -28,10 +27,11 @@ const Login = ({ show, handleClose }) => {
       localStorage.setItem("token", token);
 
       handleClose();
-      navigate("/admin/dashboard");
+      navigate("/admin/konsultasi-masuk");
+      toast.success("Berhasil login!");
     } catch (error) {
       console.error("Login failed:", error);
-      setError("Login failed. Please try again.");
+      toast.error("Gagal login, silahkan masukkan data dengan benar!");
     }
   };
 
@@ -94,8 +94,6 @@ const Login = ({ show, handleClose }) => {
                   Lupa Password?
                 </a>
               </Form.Text>
-              {error && <div className="text-danger">{error}</div>}{" "}
-              {/* Display error message */}
               <Form.Group as={Row}>
                 <Col>
                   <Button

@@ -1,54 +1,35 @@
 import React from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
-import Col from "react-bootstrap/Col";
-import Row from "react-bootstrap/Row";
+import { Container, Col, Row, Spinner } from "react-bootstrap";
 import CardFacilities from "../cards/landingpage/CardFacilities.jsx";
-import dataFacilities from "../../../data/facilities.js";
-import { Container } from "react-bootstrap";
-import axios from "axios";
-import { useQuery, useQueryClient } from "react-query";
-import styled from 'styled-components';
-
-const fetchData = async () => {
-  const response = await axios.get("http://localhost:3000/dashboard/fasilitas");
-  return response.data;
-};
+import useFetch from "../../../hooks/useFetch.js";
 
 const Facilities = () => {
-  const { data, isSuccess } = useQuery("fasilitasData", fetchData, {
-    refetchOnWindowFocus: false, // Tidak merender ulang data saat jendela browser mendapatkan fokus
-    refetchOnMount: false, // Tidak merender ulang data saat komponen dipasang
-    staleTime: Infinity, // Data tidak dianggap kadaluwarsa
-  });
-
-  const CustomRow = styled(Row)`
-  text-align: center;
-
-  @media (max-width: 576px) {
-    text-align: left;
-    padding-left: 20px;
-  }
-`;
+  const { data, isLoading } = useFetch("fasilitas", "fasilitasData");
 
   return (
-    <Container fluid className="bg-secondary py-2">
-      <CustomRow>
-      <h1 className="text-primary">Fasilitas Klinik</h1>
-      <p>
-        Lorem ipsum dolor sit amet consectetur. Ullamcorper vulputate non in
-        lorem adipiscing tempor integer blandit commodo.
-      </p>
-    </CustomRow>
+    <Container id="Facilities" fluid className="bg-secondary p-4 p-md-5">
+      <Row>
+        <h1 className="text-primary text-md-center">Fasilitas Klinik</h1>
+        <p className="text-md-center">
+          Klinik kami dilengkapi dengan fasilitas modern dan nyaman untuk
+          memastikan Anda mendapatkan perawatan kesehatan terbaik.
+        </p>
+      </Row>
 
-      <Row xs={1} md={2} className="g-4 p-5">
-        {data ? (
+      <Row xs={1} md={2} className="g-4 py-3 px-lg-5">
+        {isLoading ? (
+          <Spinner animation="border" role="status">
+            <span className="visually-hidden">Loading...</span>
+          </Spinner>
+        ) : data && Array.isArray(data) && data.length > 0 ? (
           data.map((item) => (
             <Col lg={4} key={item.fasilitas_id}>
               <CardFacilities data={item} />
             </Col>
           ))
         ) : (
-          <p>loading bolo</p>
+          <p>Tidak ada data</p>
         )}
       </Row>
     </Container>
