@@ -54,7 +54,7 @@ const Footer = () => {
           <Col className="text-center">
             <hr className="border-light" />
             <p className="mb-0">
-              Created by Klinik App | &copy; 2024 All Rights Reserved by Law
+              Created by Klinik App | &copy; 2024 All Rights Reserved by Gamelab
             </p>
           </Col>
         </Row>
