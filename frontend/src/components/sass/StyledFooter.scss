@@ -79,15 +79,38 @@
   background-color: #d9d9d9;
   text-decoration: none;
 
-  &.bg-red {
-    background-color: red;
+  .social-icons {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px; 
+    margin-top: 10px; 
   }
 
-  &.bg-green {
-    background-color: green;
+  .SocialLink {
+    height: 43px;
+    width: 43px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: none;
+    border-radius: 50%;
+    background-color: #d9d9d9;
+    text-decoration: none;
+
+    &.bg-red {
+      background-color: red;
+    }
+
+    &.bg-green {
+      background-color: green;
+    }
+
+    &.bg-blue {
+      background-color: blue;
+    }
   }
 
-  &.bg-blue {
-    background-color: blue;
+  p {
+    margin-top: 20px;
   }
 }
