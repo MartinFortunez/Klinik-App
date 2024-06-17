@@ -1,45 +1,34 @@
 import React from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
-import Col from "react-bootstrap/Col";
-import Row from "react-bootstrap/Row";
 import CardDoctor from "../cards/landingpage/CardDoctor.jsx";
-import { Container } from "react-bootstrap";
-import axios from "axios";
-import { useQuery, useQueryClient } from "react-query";
-import styled from "styled-components";
+import { Container, Col, Row, Spinner } from "react-bootstrap";
 import useFetch from "../../../hooks/useFetch.js";
 
 const Doctor = () => {
-  const { data, isSuccess } = useFetch("dokter-klinik", "doctorData");
-
-  const CustomRow = styled(Row)`
-    text-align: center;
-
-    @media (max-width: 576px) {
-      text-align: left;
-      padding-left: 20px;
-    }
-  `;
+  const { data, isLoading } = useFetch("dokter-klinik", "doctorData");
 
   return (
-    <Container fluid className="py-5">
-      <CustomRow>
-        <h1 className="text-primary">Jadwal Praktek Dokter</h1>
-        <p>
-          Lorem ipsum dolor sit amet consectetur. Ullamcorper vulputate non in
-          lorem adipiscing tempor integer blandit commodo.
+    <Container id="Doctor" fluid className="p-4 p-md-5">
+      <Row>
+        <h1 className="text-primary text-md-center">Jadwal Praktek Dokter</h1>
+        <p className="text-md-center">
+          Atur janji temu Anda dengan dokter kami secara online untuk konsultasi
+          dan perawatan yang sesuai dengan kebutuhan kesehatan Anda.
         </p>
-      </CustomRow>
-
-      <Row xs={1} md={2} className="g-4 p-5">
-        {data ? (
+      </Row>
+      <Row xs={1} md={2} className="g-4 py-3 px-lg-5">
+        {isLoading ? (
+          <Spinner animation="border" role="status">
+            <span className="visually-hidden">Loading...</span>
+          </Spinner>
+        ) : data && Array.isArray(data) && data.length > 0 ? (
           data.map((item) => (
-            <Col lg={4} key={item.dokter_id}>
+            <Col xs lg={4} key={item.dokter_id}>
               <CardDoctor data={item} />
             </Col>
           ))
         ) : (
-          <p>loading bolo</p>
+          <p>Tidak ada data</p>
         )}
       </Row>
     </Container>

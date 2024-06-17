@@ -1,11 +1,10 @@
 import { Formik } from "formik";
 import React, { useState } from "react";
-import { Button, Col, Form, Modal, Row } from "react-bootstrap";
-import * as yup from "yup";
-import { useQuery, useQueryClient } from "react-query";
-import axios from "axios";
+import { Button, Col, Form, Modal, Row, Spinner } from "react-bootstrap";
+import { useQueryClient } from "react-query";
 import { handleSubmit } from "../../../../utils/handleFunction";
 import { formDataEditSchedule } from "../../../../utils/body";
+import { toast } from "react-toastify";
 
 const Edit = ({ show, handleClose, data, dataDoctor }) => {
   const { dokter_id, jadwal_id, sesi, nama_dokter, spesialis, status } = data;
@@ -18,17 +17,29 @@ const Edit = ({ show, handleClose, data, dataDoctor }) => {
   const jam = sesi.substring(startIndex + 1, endIndex).trim(); // Mengambil teks di antara tanda kurung dan menghapus spasi di sekitarnya
   const queryClient = useQueryClient();
   const [selectedDokter, setSelectedDokter] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
 
   const onSubmit = (values, actions) => {
-    handleSubmit(
-      "put",
-      `jadwal-dokter-spesialis/edit/${jadwal_id}`,
-      formDataEditSchedule(values),
-      actions,
-      handleClose,
-      queryClient,
-      "jadwalDokterData"
-    );
+    setIsLoading(true);
+    try {
+      handleSubmit(
+        "put",
+        `jadwal-dokter-spesialis/edit/${jadwal_id}`,
+        formDataEditSchedule(values),
+        actions,
+        handleClose,
+        queryClient,
+        "jadwalDokterData"
+      );
+      // Display toast notification upon successful addition
+      toast.success("Berhasil mengubah jadwal dokter!");
+    } catch (error) {
+      toast.warning("Gagal mengubah jadwal dokter!");
+      console.error("Error edit doctor schedule:", error);
+      // Handle error
+    } finally {
+      setIsLoading(false);
+    }
   };
   return (
     <Modal
@@ -90,13 +101,13 @@ const Edit = ({ show, handleClose, data, dataDoctor }) => {
                         },
                       });
                     }
-                    console.log(selected);
                   }}
                   isInvalid={touched.namaDokter && !!errors.namaDokter}
                 >
                   {" "}
                   <option value="">Pilih Dokter</option>
                   {dataDoctor &&
+                    Array.isArray(dataDoctor) &&
                     dataDoctor.map((item) => (
                       <option key={item.dokter_id} value={item.nama_dokter}>
                         {item.nama_dokter}
@@ -170,8 +181,13 @@ const Edit = ({ show, handleClose, data, dataDoctor }) => {
                     variant="primary"
                     type="submit"
                     className="w-100 text-light"
+                    disabled={isLoading}
                   >
-                    Konfirmasi
+                    {isLoading ? (
+                      <Spinner animation="border" size="sm" />
+                    ) : (
+                      "Konfirmasi"
+                    )}
                   </Button>
                 </Col>
               </Form.Group>

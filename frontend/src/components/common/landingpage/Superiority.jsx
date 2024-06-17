@@ -6,7 +6,7 @@ import "../../../sass/custom.scss";
 
 const Superiority = () => {
   return (
-    <Container fluid className="position-relative p-0">
+    <Container id="Superiority" fluid className="position-relative p-0">
       <div className="position-absolute h-50 bg-secondary w-100 bottom-0 z-negative"></div>
       <Row className="justify-content-center align-items-center g-0">
         <Col lg={10} className="p-5">

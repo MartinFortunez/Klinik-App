@@ -1,18 +1,32 @@
-import React from "react";
-import { Button, Col, Modal, Row } from "react-bootstrap";
+import React, { useState } from "react";
+import { Button, Col, Modal, Row, Spinner } from "react-bootstrap";
 import { useQueryClient } from "react-query";
 import { api } from "../../../../api/api";
+import { toast } from "react-toastify";
 
 const Accept = ({ data, show, handleClose }) => {
   const queryClient = useQueryClient();
+  const [isLoading, setIsLoading] = useState(false);
 
   const onSubmit = async () => {
-    api("put", `jadwal-konsultasi/${data}/setuju`, "");
-    await queryClient.invalidateQueries("konsultasiMasukData");
+    setIsLoading(true);
+    try {
+      api("put", `jadwal-konsultasi/${data}/setuju`, "");
+      await queryClient.invalidateQueries("reminderData");
+      await queryClient.invalidateQueries("konsultasiMasukData");
 
-    // Menunggu hingga refetch selesai
-    await queryClient.refetchQueries("konsultasiMasukData");
-    handleClose();
+      // Menunggu hingga refetch selesai
+      await queryClient.refetchQueries("reminderData");
+      await queryClient.refetchQueries("konsultasiMasukData");
+      handleClose();
+      // Display toast notification upon successful addition
+      toast.success("Berhasil menerima Konsultasi!");
+    } catch (error) {
+      console.error("Error adding doctor:", error);
+      // Handle error
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -38,8 +52,9 @@ const Accept = ({ data, show, handleClose }) => {
             variant="primary"
             className="w-100 text-light"
             onClick={onSubmit}
+            disabled={isLoading}
           >
-            Terima
+            {isLoading ? <Spinner animation="border" size="sm" /> : "Terima"}
           </Button>
         </Col>
       </Modal.Footer>

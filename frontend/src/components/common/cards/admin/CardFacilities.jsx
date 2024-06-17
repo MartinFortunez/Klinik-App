@@ -9,8 +9,10 @@ import { toast } from "react-toastify";
 const CardFacilities = ({ data }) => {
   const { fasilitas_id, foto_fasilitas, judul, deskripsi } = data;
   const queryClient = useQueryClient();
+  const [isLoading, setIsLoading] = useState(false);
 
   const onDelete = async () => {
+    setIsLoading(true);
     try {
       await handleDelete(
         "delete",
@@ -23,6 +25,8 @@ const CardFacilities = ({ data }) => {
     } catch (error) {
       console.error("Error deleting facility:", error);
       // Handle error
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -63,6 +67,7 @@ const CardFacilities = ({ data }) => {
             handleClose={handleDeleteClose}
             handleDelete={onDelete}
             data={data}
+            isLoading={isLoading}
           />
 
           <Edit

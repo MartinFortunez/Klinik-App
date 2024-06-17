@@ -2,21 +2,33 @@ import React, { useState } from "react";
 import { Button, Card, Col, Row } from "react-bootstrap";
 import Delete from "../../admin/doctor/Delete";
 import Edit from "../../admin/doctor/Edit";
-import axios from "axios";
 import { useQueryClient } from "react-query";
 import { handleDelete } from "../../../../utils/handleFunction";
+import { toast } from "react-toastify";
 
 const CardDoctor = ({ data }) => {
   const { dokter_id, sip, nama_dokter, spesialis, foto_dokter } = data;
   const queryClient = useQueryClient();
+  const [isLoading, setIsLoading] = useState(false);
 
-  const onDelete = () => {
-    handleDelete(
-      "delete",
-      `dokter-klinik/delete/${dokter_id}`,
-      queryClient,
-      "doctorData"
-    );
+  const onDelete = async () => {
+    setIsLoading(true);
+    try {
+      await handleDelete(
+        "delete",
+        `dokter-klinik/delete/${dokter_id}`,
+        queryClient,
+        "doctorData"
+      );
+      // Display toast notification upon successful deletion
+      toast.success("Berhasil menghapus dokter!");
+    } catch (error) {
+      toast.error(
+        "Gagal menghapus dokter. Dokter ini digunakan pada data lain!"
+      );
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   const [showDeleteModal, setShowDeleteModal] = useState(false);
@@ -30,26 +42,34 @@ const CardDoctor = ({ data }) => {
 
   return (
     <Col>
-      <Card className="border-0 d-flex flex-column">
-        <Card.Body>
+      <Card>
+        <Card.Body className="d-flex flex-column gap-3">
           <Row className="align-items-center">
-            <Col>
+            <Col xs="auto">
               <Card.Img
                 variant="left"
                 src={`data:image/jpeg;base64,${foto_dokter}`}
                 className="custom-card-img"
-                style={{ width: "100px", height: "100px", objectFit: "cover" }}
+                style={{
+                  width: "80px",
+                  height: "80px",
+                  objectFit: "cover",
+                }}
               />
             </Col>
             <Col>
               <Card.Subtitle className="opacity-50">Nama</Card.Subtitle>
               <Card.Text>{nama_dokter}</Card.Text>
             </Col>
-            <Col className="text-center">
-              <Card.Subtitle className="opacity-50">Id Dokter</Card.Subtitle>
+          </Row>
+          <Row>
+            <Col>
+              <Card.Subtitle className="opacity-50">SIP Dokter</Card.Subtitle>
               <Card.Text>{sip}</Card.Text>
             </Col>
-            <Col className="text-end">
+          </Row>
+          <Row>
+            <Col>
               <Card.Subtitle className="opacity-50">Spesialis</Card.Subtitle>
               <Card.Text>{spesialis}</Card.Text>
             </Col>
@@ -71,6 +91,7 @@ const CardDoctor = ({ data }) => {
             handleClose={handleDeleteClose}
             handleDelete={onDelete}
             data={data}
+            isLoading={isLoading}
           />
 
           <Edit

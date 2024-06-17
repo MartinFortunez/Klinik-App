@@ -1,5 +1,5 @@
 import axios from "axios";
-import React from "react";
+import React, { useEffect } from "react";
 import { Row, Col } from "react-bootstrap";
 import { PersonCircle } from "react-bootstrap-icons";
 import { useQuery } from "react-query";
@@ -16,6 +16,14 @@ const fetchProfileData = async () => {
 };
 
 const Topbar = () => {
+  useEffect(() => {
+    // Ambil token dari local storage
+    const token = localStorage.getItem("token");
+    // Atur header Authorization jika token ada
+    if (token) {
+      axios.defaults.headers.common["Authorization"] = `${token}`;
+    }
+  }, []);
   const { data } = useQuery("profileData", fetchProfileData);
 
   return (
@@ -24,7 +32,7 @@ const Topbar = () => {
         {data ? (
           <div className="d-flex flex-column align-items-end">
             <span className="fw-semibold text-primary">{data.username}</span>
-            <span>Klinik App</span>
+            <span>Akses</span>
           </div>
         ) : (
           <div className="d-flex flex-column align-items-end">

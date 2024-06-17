@@ -1,25 +1,42 @@
 import React, { useEffect, useState } from "react";
-import { Button, Col, Form, Modal, Row } from "react-bootstrap";
+import { Button, Col, Form, Modal, Row, Spinner } from "react-bootstrap";
 import { BsStarFill } from "react-icons/bs";
-import "../../sass/StyledFeedBack.scss";
 import { Formik } from "formik";
-import "../../sass/StyledFeedBack.scss";
 import axios from "axios";
 import { useMutation, useQueryClient } from "react-query";
+import { api } from "../../../api/api";
+import * as yup from "yup";
+import { toast } from "react-toastify";
+
+const validationSchema = yup.object().shape({
+  NIK: yup
+    .string()
+    .matches(/^[0-9]+$/, "NIK harus berupa angka")
+    .length(16, "NIK harus terdiri dari 16 digit")
+    .required("NIK wajib diisi"),
+  namaPasien: yup
+    .string()
+    .matches(/^[^0-9]+$/, "Nama tidak boleh mengandung angka")
+    .required("Nama wajib diisi"),
+  penilaian: yup.string().required("Penilaian wajib diisi"),
+  rating: yup
+    .number()
+    .moreThan(0, "Rating wajib diisi")
+    .required("Rating wajib diisi"),
+});
 
 const FormAddFeedBack = ({ data, show, handleClose }) => {
   const [ratingPasien, setRatingPasien] = useState(0);
   const queryClient = useQueryClient();
   const [appointmentData, setAppointmentData] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
+
   useEffect(() => {
-    // Panggil endpoint untuk mendapatkan data jadwal konsultasi
     const fetchData = async () => {
       try {
-        const response = await axios.get(
-          "http://localhost:3000/dashboard/reminder"
-        );
-        setAppointmentData(response.data);
-        console.log(appointmentData);
+        const result = await api("get", "riwayat");
+
+        setAppointmentData(result);
       } catch (error) {
         console.error("Error fetching appointment data:", error);
       }
@@ -35,46 +52,42 @@ const FormAddFeedBack = ({ data, show, handleClose }) => {
 
   const addFeedbackMutation = useMutation(
     (feedbackData) =>
-      axios.post("http://localhost:3000/dashboard/feedback/add", feedbackData),
+      axios.post(
+        `${process.env.REACT_APP_BACKEND_URL}dashboard/feedback/add`,
+        feedbackData
+      ),
     {
       onSuccess: () => {
         queryClient.invalidateQueries("feedbackData");
         handleClose();
+        toast.success(
+          "Berhasil menambahkan ulasan, perlu persetujuan admin untuk ditampilkan!"
+        );
       },
     }
   );
 
-  const checkPatientInAppointment = (NIK, namaPasien) => {
-    if (!Array.isArray(appointmentData.schedules)) {
-      console.error("Appointment schedules data is not an array.");
-      return false;
-    }
-
-    // Mencari objek dalam appointmentData.schedules yang sesuai dengan NIK dan namaPasien
-    const foundAppointment = appointmentData.schedules.find((appointment) => {
+  const getAppointmentStatus = (NIK, namaPasien) => {
+    const appointment = appointmentData.schedules.find((appointment) => {
       return appointment.nik === NIK && appointment.nama_pasien === namaPasien;
     });
 
-    // Mengembalikan true jika objek ditemukan, false jika tidak
-    return !!foundAppointment;
+    return appointment ? appointment.status : "";
   };
 
   const handleSubmit = async (values, { setSubmitting }) => {
     const { NIK, namaPasien, penilaian, rating } = values;
+    setIsLoading(true);
     try {
       if (!appointmentData) {
         console.error("Appointment data is not available yet.");
         return;
       }
-      // console.log(appointmentData.schedules);
 
-      const isPatientInAppointment = checkPatientInAppointment(NIK, namaPasien);
-      // console.log(isPatientInAppointment, NIK, namaPasien);
+      const appointmentStatus = getAppointmentStatus(NIK, namaPasien);
 
-      if (!isPatientInAppointment) {
-        console.log(
-          "Patient not found in appointment or status is not approved."
-        );
+      if (appointmentStatus !== "complete") {
+        toast.error("Data yang Anda masukkan belum melakukan konsultasi!");
         return;
       }
 
@@ -90,17 +103,17 @@ const FormAddFeedBack = ({ data, show, handleClose }) => {
       console.error("Failed to add feedback:", error);
     } finally {
       setSubmitting(false);
+      setIsLoading(false);
     }
   };
-
-  useEffect(() => {
-    console.log(ratingPasien); // Cetak nilai rating setelah perubahan
-  }, [ratingPasien]); // Menjalankan efek hanya jika rating berubah
 
   return (
     <Modal
       show={show}
-      onHide={handleClose}
+      onHide={() => {
+        setRatingPasien(0);
+        handleClose();
+      }}
       size="lg"
       aria-labelledby="contained-modal-title-vcenter"
       centered
@@ -112,7 +125,7 @@ const FormAddFeedBack = ({ data, show, handleClose }) => {
       </Modal.Header>
       <Modal.Body>
         <Formik
-          // validationSchema={validationSchema}
+          validationSchema={validationSchema}
           onSubmit={handleSubmit}
           initialValues={{
             NIK: "",
@@ -142,13 +155,17 @@ const FormAddFeedBack = ({ data, show, handleClose }) => {
               <Form.Group>
                 {[1, 2, 3, 4, 5].map((index) => (
                   <BsStarFill
+                    size={24}
                     key={index}
                     className={`star ${
-                      index <= ratingPasien ? "text-primary" : "text-secondary"
+                      index <= ratingPasien ? "star-color" : "text-secondary"
                     }`}
                     onClick={() => handleStarClick(index, setFieldValue)}
                   />
                 ))}
+                {touched.rating && errors.rating && (
+                  <div className="text-danger">{errors.rating}</div>
+                )}
               </Form.Group>
               <Form.Group>
                 <Form.Group controlId="validationNIK" className="mb-3">
@@ -206,6 +223,8 @@ const FormAddFeedBack = ({ data, show, handleClose }) => {
                     type="button"
                     className="w-100 bg-transparent border-0"
                     onClick={() => {
+                      setFieldValue("rating", 0);
+                      setRatingPasien(0);
                       handleReset();
                       handleClose();
                     }}
@@ -218,8 +237,13 @@ const FormAddFeedBack = ({ data, show, handleClose }) => {
                     variant="primary"
                     type="submit"
                     className="w-100 text-light"
+                    disabled={isLoading}
                   >
-                    Kirim Feedback
+                    {isLoading ? (
+                      <Spinner animation="border" size="sm" />
+                    ) : (
+                      "Kirim Feedback"
+                    )}
                   </Button>
                 </Col>
               </Form.Group>

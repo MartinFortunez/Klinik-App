@@ -1,24 +1,25 @@
 import { Formik } from "formik";
 import React, { useState } from "react";
-import { Button, Col, Form, Image, Modal, Row } from "react-bootstrap";
+import { Button, Col, Form, Image, Modal, Row, Spinner } from "react-bootstrap";
 import * as yup from "yup";
-import { useQuery, useQueryClient } from "react-query";
-import axios from "axios";
+import { useQueryClient } from "react-query";
 import { handleSubmit } from "../../../../utils/handleFunction";
 import { formDataFacilities } from "../../../../utils/body";
 import { toast } from "react-toastify";
 
 const validationSchema = yup.object().shape({
-  imageFile: yup.mixed().required(),
-  title: yup.string().required("judul wajib diisi"),
-  description: yup.string().required("deskripsi wajib diisi"),
+  imageFile: yup.mixed().required("Gambar/foto wajib diisi"),
+  title: yup.string().required("Judul wajib diisi"),
+  description: yup.string().required("Deskripsi wajib diisi"),
 });
 
 const Edit = ({ show, handleClose, data }) => {
   const { fasilitas_id, foto_fasilitas, judul, deskripsi } = data;
   const queryClient = useQueryClient();
+  const [isLoading, setIsLoading] = useState(false);
 
   const onSubmit = (values, actions) => {
+    setIsLoading(true);
     try {
       handleSubmit(
         "put",
@@ -33,6 +34,8 @@ const Edit = ({ show, handleClose, data }) => {
     } catch (error) {
       console.error("Error adding facility:", error);
       // Handle error
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -139,8 +142,13 @@ const Edit = ({ show, handleClose, data }) => {
                     variant="primary"
                     type="submit"
                     className="w-100 text-light"
+                    disabled={isLoading}
                   >
-                    Simpan
+                    {isLoading ? (
+                      <Spinner animation="border" size="sm" />
+                    ) : (
+                      "Simpan"
+                    )}
                   </Button>
                 </Col>
               </Form.Group>

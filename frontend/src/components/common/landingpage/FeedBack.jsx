@@ -1,87 +1,101 @@
 import React, { useState, useEffect } from "react";
-import { Modal, Button, Container, Carousel } from "react-bootstrap";
+import {
+  Button,
+  Container,
+  Carousel,
+  Col,
+  Row,
+  Spinner,
+} from "react-bootstrap";
 import CardFeedBack from "../cards/landingpage/CardFeedBack";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap/dist/js/bootstrap.bundle.min.js";
-import {
-  CarouselControlPrev,
-  CarouselControlNext,
-} from "./CarouselControlButton";
 import FormAddFeedBack from "./FormAddFeedBack";
-import "../../sass/StyledFeedBack.scss";
-import axios from "axios";
-import { useQuery, useQueryClient } from "react-query";
 import useFetch from "../../../hooks/useFetch";
 
 const FeedBack = () => {
   const [showAddModal, setShowAddModal] = useState(false);
   const [cardsPerSlide, setCardsPerSlide] = useState(2);
-  const { data, isSuccess } = useFetch("feedback", "feedbackData");
+  const { data, isLoading, isSuccess } = useFetch("feedback", "feedbackData");
+
+  const handleResize = () => {
+    const breakpoint = 900;
+    setCardsPerSlide(window.innerWidth > breakpoint ? 2 : 1);
+  };
 
   useEffect(() => {
-    const handleResize = () => {
-      if (window.innerWidth <= 1000) {
-        setCardsPerSlide(1);
-      } else {
-        setCardsPerSlide(2);
-      }
-    };
-
     handleResize();
     window.addEventListener("resize", handleResize);
 
-    return () => {
-      window.removeEventListener("resize", handleResize);
-    };
+    return () => window.removeEventListener("resize", handleResize);
   }, []);
 
   const handleAddClose = () => setShowAddModal(false);
   const handleAddShow = () => setShowAddModal(true);
 
   return (
-    <div className="StyledFeedBack">
-      <div className="Title">Ulasan Pasien</div>
-      <Container>
-        <Carousel
-          prevIcon={<CarouselControlPrev />}
-          nextIcon={<CarouselControlNext />}
-        >
-          {data ? (
-            Array.from(
-              { length: Math.ceil(data.length / cardsPerSlide) },
-              (_, i) => {
-                const startIndex = i * cardsPerSlide;
-                const endIndex = startIndex + cardsPerSlide;
-                const filteredData = data
-                  .slice(startIndex, endIndex)
-                  .filter((item) => item.status === "on");
-                return (
-                  <Carousel.Item key={i}>
-                    <div className="d-flex justify-content-around">
-                      {filteredData.map((item) => (
-                        <CardFeedBack key={item.ulasan_id} data={item} />
-                      ))}
-                    </div>
-                  </Carousel.Item>
-                );
-              }
-            )
-          ) : (
-            <p>Loading...</p>
-          )}
-        </Carousel>
-        <div className="d-flex justify-content-center mt-3">
-          <Button className="CustomButton" onClick={handleAddShow}>
-            Kirim Feedback
-          </Button>
-        </div>
+    <Container fluid id="Feedback" className="py-5">
+      <h1 className="text-primary text-center mb-5">Ulasan Pasien</h1>
+      <Row className="justify-content-center">
+        <Col xs={11} md={10} lg={8}>
+          <Carousel>
+            {isLoading ? (
+              <Carousel.Item>
+                <Spinner animation="border" role="status">
+                  <span className="visually-hidden">Loading...</span>
+                </Spinner>
+              </Carousel.Item>
+            ) : isSuccess && data && Array.isArray(data) && data.length > 0 ? (
+              data.filter((item) => item.status === "on").length > 0 ? (
+                data
+                  .filter((item) => item.status === "on")
+                  .reduce((acc, item, index) => {
+                    const chunkIndex = Math.floor(index / cardsPerSlide);
+                    if (!acc[chunkIndex]) {
+                      acc[chunkIndex] = [];
+                    }
+                    acc[chunkIndex].push(item);
+                    return acc;
+                  }, [])
+                  .map((chunk, index) => (
+                    <Carousel.Item key={index}>
+                      <Row>
+                        {chunk.map((feedback) => (
+                          <Col key={feedback.id} md={6}>
+                            <CardFeedBack data={feedback} />
+                          </Col>
+                        ))}
+                      </Row>
+                    </Carousel.Item>
+                  ))
+              ) : (
+                <Carousel.Item>
+                  <p className="text-center">Tidak ada ulasan</p>
+                </Carousel.Item>
+              )
+            ) : (
+              <Carousel.Item>
+                <p className="text-center">Tidak ada ulasan</p>
+              </Carousel.Item>
+            )}
+          </Carousel>
+          <Col className="mt-5  d-flex justify-content-center">
+            <Button
+              variant="primary"
+              className="text-light"
+              onClick={handleAddShow}
+            >
+              Kirim Feedback
+            </Button>
+          </Col>
+        </Col>
         <FormAddFeedBack
           show={showAddModal}
           handleClose={handleAddClose}
           data={data}
         />
-      </Container>
-    </div>
+      </Row>
+    </Container>
   );
 };
 

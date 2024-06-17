@@ -1,20 +1,24 @@
 import React, { useState } from "react";
-import { Modal, Form, Button, Row, Col } from "react-bootstrap";
+import { Modal, Form, Button, Row, Col, Spinner } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
-import { Formik } from "formik"; // Import Formik
+import { Formik } from "formik";
 import * as yup from "yup";
 import axios from "axios";
+import { toast } from "react-toastify";
 
+// Define custom error messages for Yup validation
 const validationSchema = yup.object().shape({
   username: yup.string().required("Username wajib diisi"),
   password: yup.string().required("Password wajib diisi"),
 });
 
 const Login = ({ show, handleClose }) => {
-  const [error, setError] = useState(null);
   const navigate = useNavigate();
+  const [isLoading, setLoading] = useState(false);
 
   const handleLogin = async (values) => {
+    setLoading(true);
+
     try {
       const response = await axios.post(
         `${process.env.REACT_APP_BACKEND_URL}login`,
@@ -23,14 +27,23 @@ const Login = ({ show, handleClose }) => {
           password: values.password,
         }
       );
+
       const token = response.data.token;
       localStorage.setItem("token", token);
 
       handleClose();
-      navigate("/admin/dashboard");
+      navigate("/admin/konsultasi-masuk");
+      toast.success("Berhasil login!");
     } catch (error) {
       console.error("Login failed:", error);
-      setError("Login failed. Please try again.");
+
+      if (error.response && error.response.status === 401) {
+        toast.error("Username atau password salah!");
+      } else {
+        toast.error("Gagal login, silahkan coba lagi.");
+      }
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -76,6 +89,7 @@ const Login = ({ show, handleClose }) => {
                   placeholder="Password"
                   value={values.password}
                   onChange={handleChange}
+                  isValid={touched.password && !errors.password}
                   isInvalid={touched.password && !!errors.password}
                 />
                 <Form.Control.Feedback type="invalid">
@@ -93,8 +107,6 @@ const Login = ({ show, handleClose }) => {
                   Lupa Password?
                 </a>
               </Form.Text>
-              {error && <div className="text-danger">{error}</div>}{" "}
-              {/* Display error message */}
               <Form.Group as={Row}>
                 <Col>
                   <Button
@@ -111,8 +123,13 @@ const Login = ({ show, handleClose }) => {
                     variant="primary"
                     type="submit"
                     className="w-100 text-light"
+                    disabled={isLoading}
                   >
-                    Login
+                    {isLoading ? (
+                      <Spinner animation="border" size="sm" />
+                    ) : (
+                      "Login"
+                    )}
                   </Button>
                 </Col>
               </Form.Group>

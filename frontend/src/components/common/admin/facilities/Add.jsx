@@ -1,30 +1,15 @@
 import { Formik } from "formik";
-import React, { useState } from "react";
-import { Button, Col, Form, Image, Modal, Row } from "react-bootstrap";
+import React from "react";
+import { Button, Col, Form, Image, Modal, Row, Spinner } from "react-bootstrap";
 import * as yup from "yup";
 
-const FILE_SIZE = 500 * 1024;
-const SUPPORTED_FORMATS = ["image/jpg", "image/jpeg", "image/gif", "image/png"];
-
 const validationSchema = yup.object().shape({
-  imageFile: yup
-    .mixed()
-    .required()
-    .test(
-      "fileSize",
-      "Ukuran file terlalu besar",
-      (value) => value && value.size <= FILE_SIZE
-    )
-    .test(
-      "fileFormat",
-      "Format file tidak didukung",
-      (value) => value && SUPPORTED_FORMATS.includes(value.type)
-    ),
-  title: yup.string().required("judul wajib diisi"),
-  description: yup.string().required("deskripsi wajib diisi"),
+  imageFile: yup.mixed().required("Gambar/foto wajib diisi"),
+  title: yup.string().required("Judul wajib diisi"),
+  description: yup.string().required("Deskripsi wajib diisi"),
 });
 
-const Add = ({ show, handleClose, handleAdd }) => {
+const Add = ({ show, handleClose, handleAdd, isLoading }) => {
   return (
     <Modal
       show={show}
@@ -126,8 +111,13 @@ const Add = ({ show, handleClose, handleAdd }) => {
                     variant="primary"
                     type="submit"
                     className="w-100 text-light"
+                    disabled={isLoading}
                   >
-                    Tambahkan
+                    {isLoading ? (
+                      <Spinner animation="border" size="sm" />
+                    ) : (
+                      "Tambahkan"
+                    )}
                   </Button>
                 </Col>
               </Form.Group>

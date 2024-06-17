@@ -1,41 +1,83 @@
 import { Formik } from "formik";
 import React, { useEffect, useState } from "react";
-import { Modal, Form, Button, Row, Col } from "react-bootstrap";
+import { Modal, Form, Button, Row, Col, Spinner } from "react-bootstrap";
 import * as yup from "yup";
-import axios from "axios";
-import { useQuery, useQueryClient } from "react-query";
-import useFetch from "../../../hooks/useFetch";
+import { api } from "../../../api/api";
 
-// const validationSchema = yup.object().shape({
-//   NIK: yup.string().required("NIK wajib diisi"),
-//   nama: yup.string().required("nama wajib diisi"),
-//   alamat: yup.string().required("alamat wajib diisi"),
-//   nohp: yup.number().required("no hp wajib diisi"),
-//   jeniskelamin: yup.string().required("jenis kelamin wajib diisi"),
-//   tanggallahir: yup.string().required("tanggal lahir wajib diisi"),
-//   golongandarah: yup.string().required("golongan darah wajib diisi"),
-//   spesialis: yup.string().required("spesialis wajib diisi"),
-//   dokter: yup.string().required("dokter wajib diisi"),
-//   sesi: yup.string().required("sesi wajib diisi"),
-// });
+const validationSchema = yup.object().shape({
+  NIK: yup
+    .string()
+    .matches(/^[0-9]+$/, "NIK harus berupa angka")
+    .length(16, "NIK harus terdiri dari 16 digit")
+    .required("NIK wajib diisi"),
+  nama: yup
+    .string()
+    .matches(/^[^0-9]+$/, "Nama tidak boleh mengandung angka")
+    .required("Nama wajib diisi"),
+  alamat: yup.string().required("Alamat wajib diisi"),
+  nohp: yup
+    .string()
+    .matches(/^[0-9]+$/, "Nomor Hp/Wa harus berupa angka")
+    .min(10, "Nomor Hp/Wa minimal terdiri dari 10 digit")
+    .max(12, "Nomor Hp/Wa maksimal terdiri dari 12 digit")
+    .required("Nomor Hp/Wa wajib diisi"),
+  tanggalLahir: yup.string().required("Tanggal lahir wajib diisi"),
+  golonganDarah: yup
+    .string()
+    .notOneOf(["Pilih Jenis Kelamin"], "Jenis kelamin harus dipilih")
+    .required("Golongan darah wajib diisi"),
+  spesialis: yup.string().required("Spesialis wajib diisi"),
+  namaDokter: yup.string().required("Nama dokter wajib diisi"),
+  jenisKelamin: yup
+    .string()
+    .notOneOf(["Pilih Golongan Darah"], "Jenis Golongan darah harus dipilih")
+    .required("Jenis kelamin wajib dipilih"),
+  jadwalId: yup.string().required("Sesi wajib dipilih"),
+});
 
-const FormConsul = ({ dataDoctor, show, handleClose, handleAdd }) => {
+const FormConsul = ({
+  dataDoctor,
+  show,
+  handleClose,
+  handleAdd,
+  isLoading,
+}) => {
   const { dokter_id, nama_dokter, spesialis } = dataDoctor;
   const [sesiData, setSesiData] = useState(null);
-
-  const { data, isSuccess } = useFetch(
-    `jadwal-dokter/${dokter_id}`,
-    "konsultasiMasukData"
-  );
+  const [bookedSessions, setBookedSessions] = useState([]);
 
   useEffect(() => {
-    if (isSuccess && data) {
-      // Memuat data sesi hanya jika data utama sudah dimuat
-      setSesiData(data);
-    } else {
-      console.log("Failed to fetch data");
-    }
-  }, [isSuccess, data, dokter_id]);
+    const fetchData = async () => {
+      try {
+        const jadwalKonsultasiData = await api("get", `jadwal-konsultasi`);
+        const reminderData = await api("get", `reminder`);
+
+        const bookedJadwalIds = [
+          ...jadwalKonsultasiData.schedules.map((item) => item.jadwal_id),
+          ...reminderData.schedules.map((item) => item.jadwal_id),
+        ];
+
+        setBookedSessions(bookedJadwalIds);
+      } catch (error) {
+        console.error("Error fetching booked session data:", error);
+      }
+    };
+
+    fetchData();
+  }, []);
+
+  useEffect(() => {
+    const fetchSesiData = async () => {
+      try {
+        const result = await api("get", `jadwal-dokter/${dokter_id}`);
+        setSesiData(result);
+      } catch (error) {
+        console.error("Error fetching session data:", error);
+      }
+    };
+
+    fetchSesiData();
+  }, [dokter_id]);
 
   return (
     <Modal
@@ -52,7 +94,7 @@ const FormConsul = ({ dataDoctor, show, handleClose, handleAdd }) => {
       </Modal.Header>
       <Modal.Body>
         <Formik
-          // validationSchema={validationSchema}
+          validationSchema={validationSchema}
           onSubmit={handleAdd}
           initialValues={{
             NIK: "",
@@ -64,7 +106,6 @@ const FormConsul = ({ dataDoctor, show, handleClose, handleAdd }) => {
             golonganDarah: "",
             spesialis: spesialis,
             namaDokter: nama_dokter,
-            sesi: "",
             dokterId: dokter_id,
             jadwalId: "",
           }}
@@ -88,7 +129,7 @@ const FormConsul = ({ dataDoctor, show, handleClose, handleAdd }) => {
                   <Form.Control
                     name="NIK"
                     type="text"
-                    placeholder="NIK"
+                    placeholder="Masukkan NIK"
                     value={values.NIK}
                     onChange={handleChange}
                     isValid={touched.NIK && !errors.NIK}
@@ -103,7 +144,7 @@ const FormConsul = ({ dataDoctor, show, handleClose, handleAdd }) => {
                   <Form.Control
                     name="nama"
                     type="text"
-                    placeholder="nama"
+                    placeholder="Masukkan nama sesuai KTP"
                     value={values.nama}
                     onChange={handleChange}
                     isValid={touched.nama && !errors.nama}
@@ -123,7 +164,7 @@ const FormConsul = ({ dataDoctor, show, handleClose, handleAdd }) => {
                     <Form.Control
                       name="alamat"
                       type="text"
-                      placeholder="masukkan alamat"
+                      placeholder="Masukkan alamat"
                       value={values.alamat}
                       onChange={handleChange}
                       isValid={touched.alamat && !errors.alamat}
@@ -141,8 +182,8 @@ const FormConsul = ({ dataDoctor, show, handleClose, handleAdd }) => {
                     <Form.Label>No Hp / WhatsApp</Form.Label>
                     <Form.Control
                       name="nohp"
-                      type="number"
-                      placeholder="masukkan no hp"
+                      type="text"
+                      placeholder="Masukkan no Hp / WhatsApp"
                       value={values.nohp}
                       onChange={handleChange}
                       isValid={touched.nohp && !errors.nohp}
@@ -162,16 +203,18 @@ const FormConsul = ({ dataDoctor, show, handleClose, handleAdd }) => {
                     <Form.Label>Jenis Kelamin</Form.Label>
                     <Form.Select
                       name="jenisKelamin"
-                      // value={values.jeniskelamin}
+                      value={values.jenisKelamin}
                       aria-label="Default select example"
                       onChange={handleChange}
+                      isValid={touched.jenisKelamin && !errors.jenisKelamin}
+                      isInvalid={touched.jenisKelamin && !!errors.jenisKelamin}
                     >
                       <option>Pilih Jenis Kelamin</option>
                       <option value="Laki-Laki">Laki-Laki</option>
                       <option value="Perempuan">Perempuan</option>
                     </Form.Select>
                     <Form.Control.Feedback type="invalid">
-                      {errors.jeniskelamin}
+                      {errors.jenisKelamin}
                     </Form.Control.Feedback>
                   </Form.Group>
                   <Form.Group
@@ -185,7 +228,7 @@ const FormConsul = ({ dataDoctor, show, handleClose, handleAdd }) => {
                       type="date"
                       value={values.tanggalLahir}
                       onChange={handleChange}
-                      // isValid={touched.tanggalLahir && !errors.tanggalLahir}
+                      isValid={touched.tanggalLahir && !errors.tanggalLahir}
                       isInvalid={touched.tanggalLahir && !!errors.tanggalLahir}
                     />
                     <Form.Control.Feedback type="invalid">
@@ -194,21 +237,30 @@ const FormConsul = ({ dataDoctor, show, handleClose, handleAdd }) => {
                   </Form.Group>
                   <Form.Group
                     as={Col}
-                    controlId="validationGolongandarah"
+                    controlId="validationGolonganDarah"
                     className="mb-3"
                   >
                     <Form.Label>Golongan Darah</Form.Label>
-                    <Form.Control
+                    <Form.Select
                       name="golonganDarah"
-                      type="text"
-                      placeholder="masukkan golongan darah"
                       value={values.golonganDarah}
+                      aria-label="Default select example"
                       onChange={handleChange}
                       isValid={touched.golonganDarah && !errors.golonganDarah}
                       isInvalid={
                         touched.golonganDarah && !!errors.golonganDarah
                       }
-                    />
+                    >
+                      <option>Pilih Golongan Darah</option>
+                      <option value="A+">A+</option>
+                      <option value="B+">B+</option>
+                      <option value="AB+">AB+</option>
+                      <option value="O+">O+</option>
+                      <option value="A-">A-</option>
+                      <option value="B-">B-</option>
+                      <option value="AB-">AB-</option>
+                      <option value="O-">O-</option>
+                    </Form.Select>
                     <Form.Control.Feedback type="invalid">
                       {errors.golonganDarah}
                     </Form.Control.Feedback>
@@ -264,18 +316,26 @@ const FormConsul = ({ dataDoctor, show, handleClose, handleAdd }) => {
                     <Form.Select
                       name="jadwalId"
                       aria-label="Default select example"
+                      value={values.jadwalId}
                       onChange={handleChange}
+                      isValid={touched.jadwalId && !errors.jadwalId}
+                      isInvalid={touched.jadwalId && !!errors.jadwalId}
                     >
                       <option>Pilih Sesi</option>
                       {sesiData &&
+                        Array.isArray(sesiData) &&
                         sesiData.map((item) => (
-                          <option key={item.jadwal_id} value={item.jadwal_id}>
+                          <option
+                            key={item.jadwal_id}
+                            value={item.jadwal_id}
+                            disabled={bookedSessions.includes(item.jadwal_id)}
+                          >
                             {item.sesi}
                           </option>
                         ))}
                     </Form.Select>
                     <Form.Control.Feedback type="invalid">
-                      {errors.sesi}
+                      {errors.jadwalId}
                     </Form.Control.Feedback>
                   </Form.Group>
                 </Row>
@@ -299,9 +359,13 @@ const FormConsul = ({ dataDoctor, show, handleClose, handleAdd }) => {
                     variant="primary"
                     type="submit"
                     className="w-100 text-light"
-                    // onClick={handleLogin}
+                    disabled={isLoading}
                   >
-                    Kirim Konsultasi
+                    {isLoading ? (
+                      <Spinner animation="border" size="sm" />
+                    ) : (
+                      "Kirim Konsultasi"
+                    )}
                   </Button>
                 </Col>
               </Form.Group>
