@@ -54,3 +54,19 @@ exports.getProfile = (req, res) => {
     res.json(admin);
   });
 };
+
+exports.editPasswordById = (req, res) => {
+  const { id } = req.params;
+  const { newPassword } = req.body;
+
+  console.log("Request to change password for ID:", id); // Log ID
+  console.log("New Password:", newPassword); // Log New Password
+
+  Jwt.updatePasswordById(id, newPassword, (err) => {
+    if (err) {
+      console.error("Error updating password:", err); // Log error
+      return res.status(500).json({ message: "Error updating password", error: err });
+    }
+    res.status(200).json({ message: "Password updated successfully" });
+  });
+};
