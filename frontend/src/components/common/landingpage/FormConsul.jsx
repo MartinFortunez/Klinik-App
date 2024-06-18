@@ -1,5 +1,5 @@
 import { Formik } from "formik";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Modal, Form, Button, Row, Col, Spinner } from "react-bootstrap";
 import * as yup from "yup";
 import { api } from "../../../api/api";
@@ -45,6 +45,7 @@ const FormConsul = ({
   const { dokter_id, nama_dokter, spesialis } = dataDoctor;
   const [sesiData, setSesiData] = useState(null);
   const [bookedSessions, setBookedSessions] = useState([]);
+  const nikRef = useRef(null);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -65,6 +66,12 @@ const FormConsul = ({
 
     fetchData();
   }, []);
+
+  useEffect(() => {
+    if (show && nikRef.current) {
+      nikRef.current.focus();
+    }
+  }, [show]);
 
   useEffect(() => {
     const fetchSesiData = async () => {
@@ -134,6 +141,7 @@ const FormConsul = ({
                     onChange={handleChange}
                     isValid={touched.NIK && !errors.NIK}
                     isInvalid={touched.NIK && !!errors.NIK}
+                    ref={nikRef}
                   />
                   <Form.Control.Feedback type="invalid">
                     {errors.NIK}

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { Modal, Form, Button, Row, Col, Spinner } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 import { Formik } from "formik";
@@ -6,7 +6,6 @@ import * as yup from "yup";
 import axios from "axios";
 import { toast } from "react-toastify";
 
-// Define custom error messages for Yup validation
 const validationSchema = yup.object().shape({
   username: yup.string().required("Username wajib diisi"),
   password: yup.string().required("Password wajib diisi"),
@@ -15,6 +14,13 @@ const validationSchema = yup.object().shape({
 const Login = ({ show, handleClose }) => {
   const navigate = useNavigate();
   const [isLoading, setLoading] = useState(false);
+  const usernameRef = useRef(null);
+
+  useEffect(() => {
+    if (show && usernameRef.current) {
+      usernameRef.current.focus();
+    }
+  }, [show]);
 
   const handleLogin = async (values) => {
     setLoading(true);
@@ -77,6 +83,7 @@ const Login = ({ show, handleClose }) => {
                   onChange={handleChange}
                   isValid={touched.username && !errors.username}
                   isInvalid={touched.username && !!errors.username}
+                  ref={usernameRef}
                 />
                 <Form.Control.Feedback type="invalid">
                   {errors.username}
@@ -96,16 +103,17 @@ const Login = ({ show, handleClose }) => {
                   {errors.password}
                 </Form.Control.Feedback>
               </Form.Group>
-              <Form.Text className="text-end d-block mb-3">
-                <a
-                  href="/"
-                  onClick={(e) => {
-                    e.preventDefault();
-                    alert("Silakan hubungi admin untuk reset password.");
+              <Form.Text className="text-end d-block mb-3 text-primary">
+                <Button
+                  variant="link"
+                  onClick={() => {
+                    toast.warning(
+                      "Silahkan hubungi pihak database untuk perubahan password!"
+                    );
                   }}
                 >
                   Lupa Password?
-                </a>
+                </Button>
               </Form.Text>
               <Form.Group as={Row}>
                 <Col>
