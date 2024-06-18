@@ -1,5 +1,5 @@
 import { Formik } from "formik";
-import React from "react";
+import React, { useEffect, useRef } from "react";
 import { Button, Col, Form, Image, Modal, Row, Spinner } from "react-bootstrap";
 import * as yup from "yup";
 
@@ -10,6 +10,13 @@ const validationSchema = yup.object().shape({
 });
 
 const Add = ({ show, handleClose, handleAdd, isLoading }) => {
+  const titleRef = useRef(null);
+
+  useEffect(() => {
+    if (show && titleRef.current) {
+      titleRef.current.focus();
+    }
+  }, [show]);
   return (
     <Modal
       show={show}
@@ -73,6 +80,7 @@ const Add = ({ show, handleClose, handleAdd, isLoading }) => {
                   value={values.title}
                   onChange={handleChange}
                   isInvalid={touched.title && !!errors.title}
+                  ref={titleRef}
                 />
                 <Form.Control.Feedback type="invalid">
                   {errors.title}

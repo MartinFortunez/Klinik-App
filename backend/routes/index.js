@@ -19,19 +19,19 @@ const verifyToken = require("../middleware/auth");
 router.get("/dashboard/admin", adminController.getAllAdmins);
 
 // CREATE
-router.post(
-  "/dashboard/admin/add",
-  upload.single("foto_admin"),
-  adminController.addAdmin
-);
+// router.post(
+//   "/dashboard/admin/add",
+//   upload.single("foto_admin"),
+//   adminController.addAdmin
+// );
 
 // UPDATE
 router.get("/dashboard/admin/edit/:id", adminController.getAdminById);
-router.put(
-  "/dashboard/admin/edit/:id",
-  upload.single("foto_admin"),
-  adminController.editAdmin
-);
+// router.put(
+//   "/dashboard/admin/edit/:id",
+//   upload.single("foto_admin"),
+//   adminController.editAdmin
+// );
 
 // DELETE
 router.delete("/dashboard/admin/delete/:id", adminController.deleteAdmin);
@@ -41,6 +41,8 @@ router.post("/register", jwtController.register);
 router.post("/login", jwtController.login);
 router.get("/profile", verifyToken, jwtController.getProfile);
 // End Admin Routes
+// Update password by ID
+router.put("/edit-password/:id", verifyToken, jwtController.editPasswordById);
 
 // Start Dokter Routes
 // READ hanya menampilkan 1 tabel dokter
