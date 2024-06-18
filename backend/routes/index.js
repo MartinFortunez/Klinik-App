@@ -42,6 +42,9 @@ router.post("/login", jwtController.login);
 router.get("/profile", verifyToken, jwtController.getProfile);
 // End Admin Routes
 
+// Update password by ID
+router.put("/edit-password/:id", verifyToken, jwtController.editPasswordById);
+
 // Start Dokter Routes
 // READ hanya menampilkan 1 tabel dokter
 router.get("/dashboard/dokter-klinik", dokterController.getAllDokter);
