@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Button, Col, Form, Modal, Row, Spinner } from "react-bootstrap";
 import { BsStarFill } from "react-icons/bs";
 import { Formik } from "formik";
@@ -30,6 +30,7 @@ const FormAddFeedBack = ({ data, show, handleClose }) => {
   const queryClient = useQueryClient();
   const [appointmentData, setAppointmentData] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
+  const nikRef = useRef(null);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -44,6 +45,12 @@ const FormAddFeedBack = ({ data, show, handleClose }) => {
 
     fetchData();
   }, []);
+
+  useEffect(() => {
+    if (show && nikRef.current) {
+      nikRef.current.focus();
+    }
+  }, [show]);
 
   const handleStarClick = (selectedRating, setFieldValue) => {
     setRatingPasien(selectedRating);
@@ -178,6 +185,7 @@ const FormAddFeedBack = ({ data, show, handleClose }) => {
                     onChange={handleChange}
                     isValid={touched.NIK && !errors.NIK}
                     isInvalid={touched.NIK && !!errors.NIK}
+                    ref={nikRef}
                   />
                   <Form.Control.Feedback type="invalid">
                     {errors.NIK}
