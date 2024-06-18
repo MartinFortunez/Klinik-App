@@ -1,5 +1,5 @@
 import { Formik } from "formik";
-import React, { useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Button, Col, Form, Image, Modal, Row, Spinner } from "react-bootstrap";
 import * as yup from "yup";
 import { useQueryClient } from "react-query";
@@ -24,6 +24,12 @@ const Edit = ({ show, handleClose, data }) => {
   const { dokter_id, nama_dokter, sip, spesialis, foto_dokter } = data;
   const queryClient = useQueryClient();
   const [isLoading, setIsLoading] = useState(false);
+  const namaDokterRef = useRef(null);
+  useEffect(() => {
+    if (show && namaDokterRef.current) {
+      namaDokterRef.current.focus();
+    }
+  }, [show]);
 
   const onSubmit = (values, actions) => {
     setIsLoading(true);
@@ -107,7 +113,7 @@ const Edit = ({ show, handleClose, data }) => {
               </Form.Group>
 
               <Form.Group controlId="validationNama" className="mb-3">
-                <Form.Label>Nama</Form.Label>
+                <Form.Label>Nama Dokter</Form.Label>
                 <Form.Control
                   name="namaDokter"
                   type="text"
@@ -116,6 +122,7 @@ const Edit = ({ show, handleClose, data }) => {
                   onChange={handleChange}
                   isValid={touched.namaDokter && !!errors.namaDokter}
                   isInvalid={touched.namaDokter && !!errors.namaDokter}
+                  ref={namaDokterRef}
                 />
                 <Form.Control.Feedback type="invalid">
                   {errors.namaDokter}
@@ -135,26 +142,27 @@ const Edit = ({ show, handleClose, data }) => {
                 <Form.Control.Feedback type="invalid">
                   {errors.sip}
                 </Form.Control.Feedback>
-                <Form.Group controlId="validationSpesialis" className="mb-3">
-                  <Form.Label>Spesialis</Form.Label>
-                  <Form.Select
-                    name="spesialis"
-                    value={values.spesialis}
-                    aria-label="Default select example"
-                    onChange={handleChange}
-                    isValid={touched.spesialis && !!errors.spesialis}
-                    isInvalid={touched.spesialis && !!errors.spesialis}
-                  >
-                    <option>Pilih Spesialis</option>
-                    <option value="Jantung">Jantung</option>
-                    <option value="Paru-Paru">Paru-Paru</option>
-                    <option value="Syaraf">Syaraf</option>
-                  </Form.Select>
-                  <Form.Control.Feedback type="invalid">
-                    {errors.spesialis}
-                  </Form.Control.Feedback>
-                </Form.Group>
               </Form.Group>
+              <Form.Group controlId="validationSpesialis" className="mb-3">
+                <Form.Label>Spesialis</Form.Label>
+                <Form.Select
+                  name="spesialis"
+                  value={values.spesialis}
+                  aria-label="Default select example"
+                  onChange={handleChange}
+                  isValid={touched.spesialis && !!errors.spesialis}
+                  isInvalid={touched.spesialis && !!errors.spesialis}
+                >
+                  <option>Pilih Spesialis</option>
+                  <option value="Jantung">Jantung</option>
+                  <option value="Paru-Paru">Paru-Paru</option>
+                  <option value="Syaraf">Syaraf</option>
+                </Form.Select>
+                <Form.Control.Feedback type="invalid">
+                  {errors.spesialis}
+                </Form.Control.Feedback>
+              </Form.Group>
+
               <Form.Group as={Row}>
                 <Col>
                   <Button

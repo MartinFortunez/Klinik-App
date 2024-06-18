@@ -1,5 +1,5 @@
 import { Formik } from "formik";
-import React, { useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Button, Col, Form, Image, Modal, Row, Spinner } from "react-bootstrap";
 import * as yup from "yup";
 import { useQueryClient } from "react-query";
@@ -17,6 +17,13 @@ const Edit = ({ show, handleClose, data }) => {
   const { fasilitas_id, foto_fasilitas, judul, deskripsi } = data;
   const queryClient = useQueryClient();
   const [isLoading, setIsLoading] = useState(false);
+  const titleRef = useRef(null);
+
+  useEffect(() => {
+    if (show && titleRef.current) {
+      titleRef.current.focus();
+    }
+  }, [show]);
 
   const onSubmit = (values, actions) => {
     setIsLoading(true);
@@ -107,6 +114,7 @@ const Edit = ({ show, handleClose, data }) => {
                   value={values.title}
                   onChange={handleChange}
                   isInvalid={touched.title && !!errors.title}
+                  ref={titleRef}
                 />
                 <Form.Control.Feedback type="invalid">
                   {errors.title}
