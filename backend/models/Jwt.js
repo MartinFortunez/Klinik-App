@@ -25,6 +25,14 @@ class Jwt {
       callback(null, results[0]);
     });
   }
+
+  static updatePasswordById(id, newPassword, callback) {
+    const query = "UPDATE admin SET password = ? WHERE admin_id = ?";
+    bcrypt.hash(newPassword, 10, (err, hashedPassword) => {
+      if (err) return callback(err);
+      connection.query(query, [hashedPassword, id], callback);
+    });
+  }
 }
 
 module.exports = Jwt;

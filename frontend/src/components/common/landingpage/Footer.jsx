@@ -1,3 +1,4 @@
+
 import React from "react";
 import { Container, Row, Col } from "react-bootstrap";
 import "bootstrap/dist/css/bootstrap.min.css";
@@ -54,8 +55,15 @@ const Footer = () => {
           <Col className="text-center">
             <hr className="border-light" />
             <p className="mb-0">
-              Created by Klinik App | &copy; 2024 All Rights Reserved by Law
+              Created by Klinik App | &copy; 2024 All Rights Reserved by Gamelab
             </p>
+
+          </Col>
+        </Row>
+        <Row className="mt-3">
+          <Col className="text-center">
+            <hr className="border-light" />
+            <p className="mb-0">Created by Klinik App | &copy; 2024 All Rights Reserved by Gamelab</p>
           </Col>
         </Row>
       </Container>
