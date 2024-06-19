@@ -23,11 +23,6 @@ const SideBar = ({ onLogout }) => {
       icon: <Bell size={24} />,
     },
     {
-      path: "/admin/jadwal-dokter",
-      label: "Jadwal Dokter",
-      icon: <CalendarWeek size={24} />,
-    },
-    {
       path: "/admin/reminder-pasien",
       label: "Reminder Pasien",
       icon: <Send size={24} />,
@@ -41,6 +36,11 @@ const SideBar = ({ onLogout }) => {
       path: "/admin/dokter",
       label: "Dokter",
       icon: <PersonVcard size={24} />,
+    },
+    {
+      path: "/admin/jadwal-dokter",
+      label: "Jadwal Dokter",
+      icon: <CalendarWeek size={24} />,
     },
     {
       path: "/admin/ulasan-pasien",
