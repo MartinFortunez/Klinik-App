@@ -3,14 +3,14 @@ const express = require("express");
 const bodyParser = require("body-parser");
 const connection = require("./config/database");
 const indexRouter = require("./routes/index");
-// const cors = require("cors"); // Import cors middleware
 const corsMiddleware = require("./middleware/corsMiddleware");
 
 const app = express();
 
 app.set("view engine", "ejs");
-app.use(bodyParser.urlencoded({ extended: false }));
 app.use(express.static("public"));
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
 
 // Log every request
 app.use((req, res, next) => {
@@ -24,14 +24,13 @@ app.use((req, res, next) => {
   next();
 });
 
-// Middleware
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: true }));
+// CORS Middleware
 app.use(corsMiddleware);
 
 app.get("/", (req, res) => {
   res.send("Selamat datang di aplikasi klinik!");
 });
+
 app.use("/features", indexRouter);
 
 // Handle 404 - Not Found
