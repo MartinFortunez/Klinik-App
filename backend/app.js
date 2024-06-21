@@ -24,11 +24,11 @@ app.use((req, res, next) => {
   next();
 });
 
-// CORS Middleware
+// CORS Middleware (letakkan di sini sebelum rute-rute lainnya)
 app.use(corsMiddleware);
 
 app.get("/", (req, res) => {
-  res.send("Selamat datang di aplikasi klinik!");
+  res.send("Selamat datang di aplikasi klinik! Update");
 });
 
 app.use("/features", indexRouter);
