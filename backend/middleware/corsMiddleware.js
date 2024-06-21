@@ -1,7 +1,7 @@
 const cors = require("cors");
 
 const corsOptions = {
-  origin: "https://fe-msib-6-klinik-app-01.educalab.id",
+  origin: "http://192.168.192.61:3000/",
   optionsSuccessStatus: 200,
   credentials: true,
 };
