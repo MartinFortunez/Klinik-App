@@ -28,7 +28,7 @@ app.use((req, res, next) => {
 app.use(corsMiddleware);
 
 app.get("/", (req, res) => {
-  res.send("Selamat datang di aplikasi klinik! Update");
+  res.send("Selamat datang di aplikasi klinik! Update lagi");
 });
 
 app.use("/features", indexRouter);
