@@ -2,7 +2,7 @@ import { useQuery } from "react-query";
 import { api } from "../api/api";
 
 const useFetch = (url, queryKey) => {
-  const { data, isSuccess, isLoading } = useQuery(
+  const { data, isSuccess, isLoading, isError, error } = useQuery(
     queryKey,
     () => api("get", url, ""),
     {
@@ -12,7 +12,7 @@ const useFetch = (url, queryKey) => {
     }
   );
 
-  return { data, isSuccess, isLoading };
+  return { data, isSuccess, isLoading, isError, error };
 };
 
 export default useFetch;

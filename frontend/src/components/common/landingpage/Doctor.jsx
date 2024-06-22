@@ -5,8 +5,12 @@ import { Container, Col, Row, Spinner } from "react-bootstrap";
 import useFetch from "../../../hooks/useFetch.js";
 
 const Doctor = () => {
-  const { data, isLoading } = useFetch("dokter-klinik", "doctorData");
+  const { data, isLoading, isError, error } = useFetch(
+    "dokter-klinik",
+    "doctorData"
+  );
   data && console.log("Dokter", data);
+  isError && console.log("dokter", error.message);
 
   return (
     <Container id="Doctor" fluid className="p-4 p-md-5">
