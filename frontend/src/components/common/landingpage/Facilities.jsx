@@ -9,8 +9,7 @@ const Facilities = () => {
     "fasilitas",
     "fasilitasData"
   );
-  data && console.log("Fasilitas", data);
-  isError && console.log("fasilitas", error.message);
+
 
   return (
     <Container id="Facilities" fluid className="bg-secondary p-4 p-md-5">

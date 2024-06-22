@@ -9,8 +9,7 @@ const Doctor = () => {
     "dokter-klinik",
     "doctorData"
   );
-  data && console.log("Dokter", data);
-  isError && console.log("dokter", error.message);
+
 
   return (
     <Container id="Doctor" fluid className="p-4 p-md-5">
