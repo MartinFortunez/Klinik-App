@@ -28,10 +28,10 @@ app.use((req, res, next) => {
 app.use(corsMiddleware);
 
 app.get("/", (req, res) => {
-  res.send("Selamat datang di aplikasi klinik! update dulu");
+  res.send("Selamat datang di aplikasi klinik!");
 });
 
-app.use("/", indexRouter);
+app.use("/features", indexRouter);
 
 // Handle 404 - Not Found
 app.use((req, res, next) => {
