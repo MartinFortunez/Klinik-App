@@ -1,9 +1,29 @@
-const Fasilitas = require('../models/Fasilitas');
+const Fasilitas = require("../models/Fasilitas");
+
+// exports.getAllFasilitas = (req, res) => {
+//   Fasilitas.getAll((err, results) => {
+//     if (err) {
+//       res.status(500).json({ error: 'Internal server error' });
+//       return;
+//     }
+//     res.status(200).json(results);
+//   });
+// };
 
 exports.getAllFasilitas = (req, res) => {
   Fasilitas.getAll((err, results) => {
     if (err) {
-      res.status(500).json({ error: 'Internal server error' });
+      // Log the error for server-side debugging (optional)
+      console.error("Error fetching data from Fasilitas:", err);
+
+      // Send a detailed error response
+      res.status(500).json({
+        error: "Internal Server Error",
+        message: "An error occurred while fetching the data from the database.",
+        details: err.message,
+        suggestion:
+          "Please check the server logs for more details and ensure the database is accessible.",
+      });
       return;
     }
     res.status(200).json(results);
@@ -17,7 +37,7 @@ exports.addFasilitas = (req, res) => {
 
   Fasilitas.create(newFasilitas, (err) => {
     if (err) {
-      res.status(500).json({ error: 'Failed to add facility' });
+      res.status(500).json({ error: "Failed to add facility" });
       return;
     }
     // res.redirect("/dashboard/fasilitas");
@@ -30,11 +50,11 @@ exports.getFasilitasById = (req, res) => {
 
   Fasilitas.getById(id, (err, result) => {
     if (err) {
-      res.status(500).json({ error: 'Internal server error' });
+      res.status(500).json({ error: "Internal server error" });
       return;
     }
     if (!result) {
-      res.status(404).json({ error: 'Facility not found' });
+      res.status(404).json({ error: "Facility not found" });
       return;
     }
     res.status(200).json(result);
@@ -49,7 +69,7 @@ exports.editFasilitas = (req, res) => {
 
   Fasilitas.update(id, updatedFasilitas, (err) => {
     if (err) {
-      res.status(500).json({ error: 'Failed to update facility' });
+      res.status(500).json({ error: "Failed to update facility" });
       return;
     }
     // res.redirect("/dashboard/fasilitas");
@@ -62,7 +82,7 @@ exports.deleteFasilitas = (req, res) => {
 
   Fasilitas.delete(id, (err) => {
     if (err) {
-      res.status(500).json({ error: 'Failed to delete facility' });
+      res.status(500).json({ error: "Failed to delete facility" });
       return;
     }
     // res.redirect("/dashboard/fasilitas");
