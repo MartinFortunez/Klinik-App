@@ -3,8 +3,7 @@ const express = require("express");
 const bodyParser = require("body-parser");
 const connection = require("./config/database");
 const indexRouter = require("./routes/index");
-const cors = require("cors");
-// const corsMiddleware = require("./middleware/corsMiddleware");
+const corsMiddleware = require("./middleware/corsMiddleware");
 
 const app = express();
 
@@ -25,13 +24,8 @@ app.use((req, res, next) => {
   next();
 });
 
-// Konfigurasi CORS
-const corsOptions = {
-  origin: true, // Ganti dengan domain frontend Anda
-  optionsSuccessStatus: 200,
-};
-
-app.use(cors(corsOptions));
+// CORS Middleware (letakkan di sini sebelum rute-rute lainnya)
+app.use(corsMiddleware);
 
 app.get("/", (req, res) => {
   res.send("Selamat datang di aplikasi klinik!");
