@@ -54,7 +54,7 @@ const { DataTypes } = require("sequelize");
 const sequelize = require("../config/database");
 
 const Fasilitas = sequelize.define(
-  "Fasilitas",
+  "fasilitas",
   {
     fasilitas_id: {
       type: DataTypes.INTEGER,
