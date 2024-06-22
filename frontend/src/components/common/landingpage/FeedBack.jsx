@@ -17,6 +17,7 @@ const FeedBack = () => {
   const [showAddModal, setShowAddModal] = useState(false);
   const [cardsPerSlide, setCardsPerSlide] = useState(2);
   const { data, isLoading, isSuccess } = useFetch("feedback", "feedbackData");
+  data && console.log("Feedback", data);
 
   const handleResize = () => {
     const breakpoint = 900;

@@ -6,6 +6,7 @@ import useFetch from "../../../hooks/useFetch.js";
 
 const Facilities = () => {
   const { data, isLoading } = useFetch("fasilitas", "fasilitasData");
+  data && console.log("Fasilitas", data);
 
   return (
     <Container id="Facilities" fluid className="bg-secondary p-4 p-md-5">
