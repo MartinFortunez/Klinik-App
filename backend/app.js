@@ -31,7 +31,7 @@ app.get("/", (req, res) => {
   res.send("Selamat datang di aplikasi klinik! update dulu");
 });
 
-app.use("/features", indexRouter);
+app.use("/", indexRouter);
 
 // Handle 404 - Not Found
 app.use((req, res, next) => {
