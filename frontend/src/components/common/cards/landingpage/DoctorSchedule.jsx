@@ -5,7 +5,7 @@ import { useQuery } from "react-query";
 
 const fetchData = async (jadwalId) => {
   const response = await axios.get(
-    `${process.env.REACT_APP_BACKEND_URL}dashboard/jadwal-dokter/${jadwalId}`
+    `${process.env.REACT_APP_BACKEND_URL}/features/dashboard/jadwal-dokter/${jadwalId}`
   );
   return response.data;
 };
