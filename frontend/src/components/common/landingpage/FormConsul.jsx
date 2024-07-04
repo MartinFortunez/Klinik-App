@@ -337,6 +337,11 @@ const FormConsul = ({
                             key={item.jadwal_id}
                             value={item.jadwal_id}
                             disabled={bookedSessions.includes(item.jadwal_id)}
+                            className={`${
+                              bookedSessions.includes(item.jadwal_id)
+                                ? "text-secondary"
+                                : "text-primary"
+                            }`}
                           >
                             {item.sesi}
                           </option>

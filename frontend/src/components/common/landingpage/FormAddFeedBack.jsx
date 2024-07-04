@@ -60,7 +60,7 @@ const FormAddFeedBack = ({ data, show, handleClose }) => {
   const addFeedbackMutation = useMutation(
     (feedbackData) =>
       axios.post(
-        `${process.env.REACT_APP_BACKEND_URL}dashboard/feedback/add`,
+        `${process.env.REACT_APP_BACKEND_URL}/features/dashboard/feedback/add`,
         feedbackData
       ),
     {

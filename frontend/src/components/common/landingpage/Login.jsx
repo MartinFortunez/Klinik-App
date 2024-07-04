@@ -27,7 +27,7 @@ const Login = ({ show, handleClose }) => {
 
     try {
       const response = await axios.post(
-        `${process.env.REACT_APP_BACKEND_URL}login`,
+        `${process.env.REACT_APP_BACKEND_URL}/features/login`,
         {
           username: values.username,
           password: values.password,
